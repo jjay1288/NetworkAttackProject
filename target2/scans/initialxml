@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///usr/bin/../share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.92 scan initiated Tue Nov  9 12:08:37 2021 as: nmap -sC -sV -p- -oX initial 192.168.1.210 -->
+<nmaprun scanner="nmap" args="nmap -sC -sV -p- -oX initial 192.168.1.210" start="1636477717" startstr="Tue Nov  9 12:08:37 2021" version="7.92" xmloutputversion="1.05">
+<scaninfo type="connect" protocol="tcp" numservices="65535" services="1-65535"/>
+<verbose level="0"/>
+<debugging level="0"/>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.1.210" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<host starttime="1636477717" endtime="1636477726"><status state="up" reason="syn-ack" reason_ttl="0"/>
+<address addr="192.168.1.210" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="65533">
+<extrareasons reason="conn-refused" count="65533" proto="tcp" ports="1-21,23-79,81-65535"/>
+</extraports>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ssh" product="OpenSSH" version="8.4p1 Ubuntu 5ubuntu1.1" extrainfo="Ubuntu Linux; protocol 2.0" ostype="Linux" method="probed" conf="10"><cpe>cpe:/a:openbsd:openssh:8.4p1</cpe><cpe>cpe:/o:linux:linux_kernel</cpe></service><script id="ssh-hostkey" output="&#xa;  3072 b0:86:56:a0:f4:e1:6f:89:db:c4:fc:ee:e1:09:02:90 (RSA)&#xa;  256 d2:fa:81:44:ab:90:b1:ff:30:2d:f6:05:8c:00:46:20 (ECDSA)&#xa;  256 1d:09:43:cd:cb:9c:09:f2:33:90:60:51:73:bd:df:81 (ED25519)"><table>
+<elem key="bits">3072</elem>
+<elem key="fingerprint">b08656a0f4e16f89dbc4fceee1090290</elem>
+<elem key="key">AAAAB3NzaC1yc2EAAAADAQABAAABgQCaxDfkL13Pgy4FJbOvo0ur0G/NR2ioVQav7uHGZ+L0wY4C4/n5uVqqFORTgHO8NtiONitqko5b/M22RAEsyiwNsbRWVKVMM2Mq6mnWCHgN3MqwfOaSyYohnVd8EhSChmN7ZbT4zOw9eJZpqQZ/laovIZ7iKYmNh4mc+B9zd4YD+nBzLAxoClI2c6T9KbHPAVrtwbQw4UqLTvm6YQ0xWs73hQzf3Ip7K/1ssXv3WKRPXcjL8gquK18mcHWkkrVLYBHIErvj2xJj3OJQgGU1/VfMtNkO22b7G0jD5v7DdDHSu6DBKGBR6vu6YCqh2nTGSs4U1fEQ8eGRhSfDyf322P7tX7QQ3e30HQ4tkxOTj5nTs5QgGaZpu0hpckcBLVqSZEHtdSOYGF8nB06k13sENCr3Q3FZnODVpPzXNVeYO2cqNW/ZXB8Yj4jmIgysPYy8jjb67Zu4ikeitFtdm0Sjg/8oh0xSODneclY/kdqX18njb1KZNTH6YGK2C69YQ7VoXLM=</elem>
+<elem key="type">ssh-rsa</elem>
+</table>
+<table>
+<elem key="bits">256</elem>
+<elem key="fingerprint">d2fa8144ab90b1ff302df6058c004620</elem>
+<elem key="key">AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPs3992+06vTsQ74W1LaqNmzLEyKFlJyVEZGqEZWK8Ap0VrNbS8unZ1sP5dnXbkPfCPeKneZqGHtT5/8mzOETS8=</elem>
+<elem key="type">ecdsa-sha2-nistp256</elem>
+</table>
+<table>
+<elem key="bits">256</elem>
+<elem key="fingerprint">1d0943cdcb9c09f23390605173bddf81</elem>
+<elem key="key">AAAAC3NzaC1lZDI1NTE5AAAAICYN3WaTcsAnmRVbCyo6FR7ZS78LzMMIMoq4txvx7zcn</elem>
+<elem key="type">ssh-ed25519</elem>
+</table>
+</script></port>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="Apache httpd" version="2.4.46" extrainfo="(Ubuntu)" method="probed" conf="10"><cpe>cpe:/a:apache:http_server:2.4.46</cpe></service><script id="http-robots.txt" output="1 disallowed entry &#xa;/"/><script id="http-git" output="&#xa;  192.168.1.210:80/.git/&#xa;    Git repository found!&#xa;    Repository description: Unnamed repository; edit this file &apos;description&apos; to name the...&#xa;    Remotes:&#xa;      https://github.com/digininja/DVWA.git&#xa;    Project type: PHP application (guessed from .gitignore)&#xa;"><table key="192.168.1.210:80/.git/">
+<table key="files-found">
+<elem key=".gitignore">true</elem>
+<elem key=".git/config">true</elem>
+<elem key=".git/description">true</elem>
+<elem key=".git/COMMIT_EDITMSG">false</elem>
+<elem key=".git/info/exclude">true</elem>
+</table>
+<elem key="repository-description">Unnamed repository; edit this file &apos;description&apos; to name the repository.&#xa;</elem>
+<table key="project-type">
+<table key=".gitignore">
+<elem>PHP application</elem>
+</table>
+</table>
+<table key="remotes">
+<elem>https://github.com/digininja/DVWA.git</elem>
+</table>
+</table>
+</script><script id="http-title" output="Login :: Damn Vulnerable Web Application (DVWA) v1.10 *Develop...&#xa;Requested resource was login.php"><elem key="title">Login :: Damn Vulnerable Web Application (DVWA) v1.10 *Development*</elem>
+<elem key="redirect_url">login.php</elem>
+</script><script id="http-cookie-flags" output="&#xa;  /: &#xa;    PHPSESSID: &#xa;      httponly flag not set"><table key="/">
+<table key="PHPSESSID">
+<elem>httponly flag not set</elem>
+</table>
+</table>
+</script><script id="http-server-header" output="Apache/2.4.46 (Ubuntu)"><elem>Apache/2.4.46 (Ubuntu)</elem>
+</script></port>
+</ports>
+<times srtt="288" rttvar="227" to="100000"/>
+</host>
+<runstats><finished time="1636477726" timestr="Tue Nov  9 12:08:46 2021" summary="Nmap done at Tue Nov  9 12:08:46 2021; 1 IP address (1 host up) scanned in 9.70 seconds" elapsed="9.70" exit="success"/><hosts up="1" down="0" total="1"/>
+</runstats>
+</nmaprun>

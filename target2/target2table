@@ -1,0 +1,11 @@
+()
+()
+#### 192.168.1.210
+
+| Port | State | Service | Version |
+|------|-------|---------|---------|
+| 22/tcp | open | ssh | OpenSSH 8.4p1 Ubuntu 5ubuntu1.1 |
+| 80/tcp | open | http | Apache httpd 2.4.46 |
+
+
+
