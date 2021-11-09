@@ -1,23 +1,30 @@
-# Networkattacksproject
+# Network Attacks Final Project
 
-Final Project for ITN 261 - Network Attacks and Hacking
+#### **ITN 261 - Network Attacks and Hacking**
+
+###### Ronald Phillips
 
 
-Topology
 
-target
+#### SECTION 1: Setup and Configuration
+
+<u>**Topology**</u>
+
+```
+![GitHub Logo](/Topology.png)
+Format: ![Topology](url)
+```
+
+**target**
 metasploitable
 192.168.1.209
 
-
-
-target2
+**target2**
 DamnVulnerableWebApp
 192.168.1.210
 dvwa:dvwa
 
-
-kali
+**kali**
 192.168.1.86
 kali:kali
 
