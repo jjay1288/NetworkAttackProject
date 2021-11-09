@@ -1,0 +1,3 @@
+[submodule "Useful Scripts/nmap2md"]
+	path = Useful Scripts/nmap2md
+	url = https://github.com/vdjagilev/nmap2md
