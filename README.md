@@ -14,25 +14,18 @@
 
 
 
+| target                                                       | target2                                        | kali                                |
+| ------------------------------------------------------------ | ---------------------------------------------- | ----------------------------------- |
+| [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html) | [Damn Vulnerable Web App](https://dvwa.co.uk/) | [Kali Linux](https://www.kali.org/) |
+| 192.168.1.209                                                | 192.168.1.210                                  | 192.168.1.86                        |
+| msfadmin:msfadmin                                            | dvwa:dvwa                                      | kali:kali                           |
 
 
-**target**
 
-metasploitable
+#### SECTION 2: Scanning and Enumeration
 
-192.168.1.209
+##### 1) Nmap
 
-**target2**
+Target:
 
-DamnVulnerableWebApp
-
-192.168.1.210
-
-dvwa:dvwa
-
-**kali**
-
-192.168.1.86
-
-kali:kali
-
+Target2:
