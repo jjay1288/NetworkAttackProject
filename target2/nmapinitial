@@ -1,0 +1,31 @@
+# Nmap 7.92 scan initiated Tue Nov  9 01:12:01 2021 as: nmap -sC -sV -p- -oN initial 192.168.1.210
+Nmap scan report for 192.168.1.210
+Host is up (0.00031s latency).
+Not shown: 65533 closed tcp ports (conn-refused)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.4p1 Ubuntu 5ubuntu1.1 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 b0:86:56:a0:f4:e1:6f:89:db:c4:fc:ee:e1:09:02:90 (RSA)
+|   256 d2:fa:81:44:ab:90:b1:ff:30:2d:f6:05:8c:00:46:20 (ECDSA)
+|_  256 1d:09:43:cd:cb:9c:09:f2:33:90:60:51:73:bd:df:81 (ED25519)
+80/tcp open  http    Apache httpd 2.4.46 ((Ubuntu))
+| http-robots.txt: 1 disallowed entry 
+|_/
+| http-git: 
+|   192.168.1.210:80/.git/
+|     Git repository found!
+|     Repository description: Unnamed repository; edit this file 'description' to name the...
+|     Remotes:
+|       https://github.com/digininja/DVWA.git
+|_    Project type: PHP application (guessed from .gitignore)
+| http-title: Login :: Damn Vulnerable Web Application (DVWA) v1.10 *Develop...
+|_Requested resource was login.php
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+|_http-server-header: Apache/2.4.46 (Ubuntu)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Tue Nov  9 01:12:11 2021 -- 1 IP address (1 host up) scanned in 10.21 seconds
