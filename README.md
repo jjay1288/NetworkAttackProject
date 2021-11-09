@@ -10,8 +10,8 @@
 
 <u>**Topology**</u>
 
-```
-![GitHub Logo](/Topology.png)
+```markdown
+![Topology](/Topology.png)
 Format: ![Topology](url)
 ```
 
