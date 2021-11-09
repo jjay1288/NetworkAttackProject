@@ -10,10 +10,11 @@
 
 <u>**Topology**</u>
 
-```markdown
 ![Topology](/Topology.png)
-Format: ![Topology](url)
-```
+
+
+
+
 
 **target**
 metasploitable
