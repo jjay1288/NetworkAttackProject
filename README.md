@@ -40,7 +40,7 @@
 
 ##### 192.168.1.209
 
-The initial Nmap scan with default scripts can be found [here](\\target\\scans\\nmapinitial)
+The initial Nmap scan with default scripts can be found [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target/scans/nmapinitial)
 
 | Port      | State | Service     | Version                             |
 | --------- | ----- | ----------- | ----------------------------------- |
