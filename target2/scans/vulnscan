@@ -1,0 +1,42 @@
+# Nmap 7.92 scan initiated Mon Nov 15 16:18:18 2021 as: nmap --script=VULN -oN vulnscan 192.168.1.210
+Pre-scan script results:
+| broadcast-avahi-dos: 
+|   Discovered hosts:
+|     224.0.0.251
+|   After NULL UDP avahi packet DoS (CVE-2011-1002).
+|_  Hosts are all up (not vulnerable).
+Nmap scan report for 192.168.1.210
+Host is up (0.00098s latency).
+Not shown: 998 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+|_http-dombased-xss: Couldn't find any DOM based XSS.
+|_http-csrf: Couldn't find any CSRF vulnerabilities.
+| http-git: 
+|   192.168.1.210:80/.git/
+|     Git repository found!
+|     Repository description: Unnamed repository; edit this file 'description' to name the...
+|     Remotes:
+|       https://github.com/digininja/DVWA.git
+|_    Project type: PHP application (guessed from .gitignore)
+| http-enum: 
+|   /login.php: Possible admin folder
+|   /robots.txt: Robots file
+|   /.gitignore: Revision control ignore file
+|   /.git/HEAD: Git folder
+|   /config/: Potentially interesting directory w/ listing on 'apache/2.4.46 (ubuntu)'
+|   /database/: Potentially interesting directory w/ listing on 'apache/2.4.46 (ubuntu)'
+|   /docs/: Potentially interesting directory w/ listing on 'apache/2.4.46 (ubuntu)'
+|   /external/: Potentially interesting directory w/ listing on 'apache/2.4.46 (ubuntu)'
+|_  /tests/: Potentially interesting directory w/ listing on 'apache/2.4.46 (ubuntu)'
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|       httponly flag not set
+|   /login.php: 
+|     PHPSESSID: 
+|_      httponly flag not set
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.
+
+# Nmap done at Mon Nov 15 16:19:14 2021 -- 1 IP address (1 host up) scanned in 56.16 seconds
