@@ -8,7 +8,13 @@
 
 #### I. Introduction
 
-​	
+​	This scenario will demonstrate an attack against two target machines.  The machines are installed per the source instructions in default configurations.  Due to the nature of the process, the root username and passwords are known ahead of time, but will not be used unless they can be extracted from the machines themselves.
+
+​	The target IP addresses were obtained by a simple Nmap scan.
+
+​	The attack box has the latest release of Kali Linux, and has had Nessus, armitage, and a few other extra utilities installed.  If possible, I plan to restrict the use of the msfconsole or armitage, and try to identify vulnerabilities and develop my own attacks.  The use of the MSF framework would make exploitation of both machines trivial. 
+
+
 
 <u>**Topology**</u>
 
@@ -24,13 +30,17 @@
 
 
 
-#### SECTION 2: Scanning and Enumeration
+#### II. Target 1: Metasploitable
 
-##### 1) Nmap
+​	This machine is an imported Virtual Machine imported  into ESXi of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  It is an intentionally vulnerable Linux machine designed for Penetration Testing.
 
-#### target:
+ 
+
+##### Nmap
 
 ##### 192.168.1.209
+
+The initial Nmap scan with default scripts can be found [here](\target\scans\nmapinitial)
 
 | Port      | State | Service     | Version                             |
 | --------- | ----- | ----------- | ----------------------------------- |
@@ -65,7 +75,9 @@
 | 8180/tcp  | open  | http        | Apache Tomcat/Coyote JSP engine 1.1 |
 | 8787/tcp  | open  | drb         | Ruby DRb RMI                        |
 
-#### target2:
+#### II. Target 2: Damn Vulnerable Web Application (DVWA)
+
+​	This machine is running the latest Ubuntu (21.04), and has had [Damn Vulnerable Web App](https://dvwa.co.uk/) installed in its default configuration.  
 
 ##### 192.168.1.210
 
