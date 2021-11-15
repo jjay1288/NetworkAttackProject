@@ -32,15 +32,17 @@
 
 #### II. Target 1: Metasploitable
 
-​	This machine is an imported Virtual Machine imported  into ESXi of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  It is an intentionally vulnerable Linux machine designed for Penetration Testing.
+​	This machine is an imported Virtual Machine imported  into ESXi of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  It is an intentionally vulnerable Linux machine designed for Penetration Testing.  The goal for this target will be to explore some of the more interesting vulnerabilities (because SMB is too easy to break).
 
  
 
-##### Nmap
+##### A) Enumeration
 
 ##### 192.168.1.209
 
-The initial Nmap scan with default scripts can be found [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target/scans/nmapinitial)
+To begin, I usually start with a basic script scan using Nmap.  The output file containing results can be found [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target/scans/nmapinitial).
+
+
 
 | Port      | State | Service     | Version                             |
 | --------- | ----- | ----------- | ----------------------------------- |
@@ -75,13 +77,35 @@ The initial Nmap scan with default scripts can be found [here](https://git.rjphi
 | 8180/tcp  | open  | http        | Apache Tomcat/Coyote JSP engine 1.1 |
 | 8787/tcp  | open  | drb         | Ruby DRb RMI                        |
 
+​	There are many open ports with at first glance looks like many different attack vectors.  In order to help decide where to start, we scan once more with Nmap, this time using the "--script=VULN" parameter.  This will apply a set of scripts to the machine that will attempt to identify known vulnerabilites 
+
+
+
+
+
 #### II. Target 2: Damn Vulnerable Web Application (DVWA)
 
-​	This machine is running the latest Ubuntu (21.04), and has had [Damn Vulnerable Web App](https://dvwa.co.uk/) installed in its default configuration.  
+​	This machine is running the latest Ubuntu (21.04), and has had [Damn Vulnerable Web App](https://dvwa.co.uk/) installed in its default configuration.  
+
+##### A) Enumeration
 
 ##### 192.168.1.210
+
+​	Once again, I will start with a default script scan on the target through Nmap.  The results can be found [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target2/scans/nmapinitial). This time, the results are drasticly different. 
 
 | Port   | State | Service | Version                         |
 | ------ | ----- | ------- | ------------------------------- |
 | 22/tcp | open  | ssh     | OpenSSH 8.4p1 Ubuntu 5ubuntu1.1 |
 | 80/tcp | open  | http    | Apache httpd 2.4.46             |
+
+​	We find only two ports, SSH on 22 and http on 80.  Obviously this is a web server, and must enumerate on the machine through other means.  Navigating to http:\\\192.168.1.210 in the browser presents us with a login screen:
+
+![login](\target\screens\login.png) 
+
+​	The next step is to find out if there are any interesting directories on this web app.  We will start a  [DirBuster](https://www.kali.org/tools/dirbuster/) loaded with the directory-list-medium that comes in kali and scan. The results of this scan can be found [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target2/scans/DirBusterReport-192.168.1.210-80.txt).  Dirbuster does this by tracking responses from the web server.  A "Not Found" reply means nothing exists there, while "Permission Denied" will indicate that the directory exists.
+
+
+
+##### B) Attacking the login page
+
+​	The first step in attacking this machine is to get past the login page.  We must login to be able t
