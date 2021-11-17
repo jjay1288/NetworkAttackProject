@@ -160,13 +160,33 @@ Now we are ready.  We pass the PID into the exploit and run it with:
 
 ![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/stabileroot.PNG)
 
+​	Next, we dump the /etc/shadow file to a text file, and pass that file into John the Ripper.
+
+![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/creds.PNG)
+
+Success!  We have admin credentials!
+
+#### msfadmin:msfadmin
+
+​	Now we can simply ssh into the system and see what else we can explore.
+
+![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/ssh.PNG)
+
+##### D) Persistence
+
+​	Now that we are connected to our machine with root access, we will attempt to add a new root user to give us our own root account on the machine.  We will use the following code:
+
+```bash
+useradd -u0 -g0 -o -s /bin/bash -p `pwnd' pwnd
+```
+
+​	This will add a new root user with the credentials pwnd:pwnd.
 
 
-##### D) Enumeration and Persistence
 
-​	Next we will upload [LinEnum](https://github.com/rebootuser/LinEnum) and run it, even though my expectation is this machine is that it is still riddled with vulnerabilities.  
 
-![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/enumsetup.PNG)
+
+
 
 
 
