@@ -1,10 +1,12 @@
 # Network Attacks Final Project
 
-#### **ITN 261 - Network Attacks and Hacking**
+#### **ITN 261-002N - Network Attacks and Hacking - Fall 2021**
 
-###### Ronald Phillips
+#### Ronald Phillips
 
+###### Northern Virginia Community College
 
+###### Prof. Necmi Mutlu PhD
 
 #### I. Introduction
 
