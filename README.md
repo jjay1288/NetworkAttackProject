@@ -12,7 +12,7 @@
 
 ​	The target IP addresses were obtained by a simple Nmap scan.
 
-​	The attack box has the latest release of Kali Linux, and has had Nessus, armitage, and a few other extra utilities installed.  If possible, I plan to restrict the use of the msfconsole or armitage, and try to identify vulnerabilities and develop my own attacks.  The exception will be when venturing to set up persistent backdoors into the system.
+​	The attack box has the latest release of Kali Linux, and has had Nessus, armitage, and a few other extra utilities installed. 
 
 
 
@@ -32,7 +32,7 @@
 
 #### II. Target 1: Metasploitable
 
-​	This machine is an imported Virtual Machine imported  into ESXi of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  It is an intentionally vulnerable Linux machine designed for Penetration Testing.  The goal for this target will be to explore some of the more interesting vulnerabilities (because SMB is too easy to break).
+​	This machine is an imported Virtual Machine imported  into ESXi of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  It is an intentionally vulnerable Linux machine designed for Penetration Testing.  The goal for this target will be to explore some of the more interesting vulnerabilities (because FTP and Samba are too easy to break).
 
  
 
@@ -77,13 +77,15 @@ To begin, I usually start with a basic script scan using Nmap.  The output file 
 | 8180/tcp  | open  | http        | Apache Tomcat/Coyote JSP engine 1.1 |
 | 8787/tcp  | open  | drb         | Ruby DRb RMI                        |
 
-​	There are many open ports with at first glance looks like many different attack vectors.  In order to help decide where to start, we scan once more with Nmap, this time using the "--script=VULN" parameter.  This will apply a set of scripts to the machine that will attempt to identify known vulnerabilites 
+​	There are many open ports with at first glance looks like many different attack vectors.  In order to help decide where to start, we scan once more with Nmap, this time using the "--script=VULN" parameter.  This will apply a set of scripts to the machine that will attempt to identify known vulnerabilites.
+
+​	One vulnerability that I had little prior knowledge of was "distccd" on port 3632/TCP.  Distcc, or distributed C/C++ compiler, is a platform that speeds up compilation of C and C++ programs by using resources across a network.  
 
 
 
 
 
-#### II. Target 2: Damn Vulnerable Web Application (DVWA)
+#### III. Target 2: Damn Vulnerable Web Application (DVWA)
 
 ​	This machine is running the latest Ubuntu (21.04), and has had [Damn Vulnerable Web App](https://dvwa.co.uk/) installed in its default configuration.  
 
