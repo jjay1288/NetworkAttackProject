@@ -122,4 +122,7 @@ Using Burp Suite, The initial connection will also return a response from the se
 
 ![cookie](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/setcookie.PNG)
 
-​	My initial instinct is that the basic security feature at play here is a server-side check to compare the PHPSESSID to the user_token.
+​	My initial instinct is that the basic security feature at play here is a server-side check to compare the PHPSESSID to the user_token.  Using Burp to intercept the traffic, we confirm this is the case.
+
+![cookie](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/post.PNG)![cookie](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/postresult.PNG)
+
