@@ -32,9 +32,9 @@
 
 #### II. Target 1: Metasploitable
 
-​	This machine is an imported Virtual Machine imported  into ESXi of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  It is an intentionally vulnerable Linux machine designed for Penetration Testing.  The goal for this target will be to explore some of the more interesting vulnerabilities (because SMB is too easy to break).
+​	This machine is an imported Virtual Machine imported  into ESXi of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  It is an intentionally vulnerable Linux machine designed for Penetration Testing.  The goal for this target will be to explore some of the more interesting vulnerabilities (because SMB is too easy to break).
 
- 
+ 
 
 ##### A) Enumeration
 
@@ -100,7 +100,7 @@ To begin, I usually start with a basic script scan using Nmap.  The output file 
 
 ​	We find only two ports, SSH on 22 and http on 80.  Obviously this is a web server, and must enumerate on the machine through other means.  Navigating to http:\\\192.168.1.210 in the browser presents us with a login screen:
 
-![login](\target\screens\login.png) 
+![login]() 
 
 ​	The next step is to find out if there are any interesting directories on this web app.  We will start a  [DirBuster](https://www.kali.org/tools/dirbuster/) loaded with the directory-list-medium that comes in kali and scan. The results of this scan can be found [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target2/scans/DirBusterReport-192.168.1.210-80.txt).  Dirbuster does this by tracking responses from the web server.  A "Not Found" reply means nothing exists there, while "Permission Denied" will indicate that the directory exists.
 
@@ -120,6 +120,6 @@ To begin, I usually start with a basic script scan using Nmap.  The output file 
 
 Using Burp Suite, The initial connection will also return a response from the server setting up a cookie:
 
-![cookie](\target2\screens\setcookie.PNG)
+![cookie](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/setcookie.PNG)
 
 ​	My initial instinct is that the basic security feature at play here is a server-side check to compare the PHPSESSID to the user_token.
