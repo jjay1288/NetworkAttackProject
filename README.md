@@ -79,7 +79,21 @@ To begin, I usually start with a basic script scan using Nmap.  The output file 
 
 ​	There are many open ports with at first glance looks like many different attack vectors.  In order to help decide where to start, we scan once more with Nmap, this time using the "--script=VULN" parameter.  This will apply a set of scripts to the machine that will attempt to identify known vulnerabilites.
 
-​	One vulnerability that I had little prior knowledge of was "distccd" on port 3632/TCP.  Distcc, or distributed C/C++ compiler, is a platform that speeds up compilation of C and C++ programs by using resources across a network.  
+​	One vulnerability that I hadn't seen before was the "distccd" service on port 3632/TCP.  Distcc, or distributed C/C++ compiler, is a platform that speeds up the compilation of C and C++ programs by using resources across a network.  This was used in a time in which computer systems were much slower, and compiling a C program could take hours or even days.
+
+##### B) Exploiting distcc using Armitage
+
+​	On examination of the Metasploit module [source code](https://github.com/rapid7/metasploit-framework/blob/master//modules/exploits/unix/misc/distcc_exec.rb), I will use Armitage to simplify the process instead of developing a new exploit. 
+
+![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/armsetup.PNG)
+
+![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/shell.PNG)
+
+![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/shell2.PNG)![root](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/root.PNG)
+
+​	Oh, whoops. That is a root shell. That is a serious exploit. Next I convert this basic shell into a meterpreter shell.
+
+![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/metsetup.PNG)![root](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/metresult.PNG)
 
 
 
