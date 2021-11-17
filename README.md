@@ -89,11 +89,38 @@ To begin, I usually start with a basic script scan using Nmap.  The output file 
 
 ![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/shell.PNG)
 
-![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/shell2.PNG)![root](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/root.PNG)
+​	We now have a basic shell under the user "daemon".  Next we will stabilize our shell (make it a full fledged TTY interface).  With a guess that python was installed, I stabilized with a one-liner of code
 
-​	Oh, whoops. That is a root shell. That is a serious exploit. Next I convert this basic shell into a meterpreter shell.
+```python
+python -c ‘import pty; pty.spawn(“/bin/sh”)’
+```
 
-![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/metsetup.PNG)![root](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/metresult.PNG)
+![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/stable.PNG)
+
+​	The next step is to escalate our privileges to root.  
+
+##### C) Obtaining root access
+
+​	We will switch back to the console driven msfconsole, and redo our attack to get a better terminal experience.  By executing the following lines on our terminal, we can find some valuable information about the system.
+
+```bash
+uname -a
+lsb_release -a
+```
+
+![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/uname.PNG)
+
+
+
+
+
+##### D) Enumeration and Persistence
+
+​	Next we will upload [LinEnum](https://github.com/rebootuser/LinEnum) and run it, even though my expectation is this machine is riddled with vulnerabilities.  
+
+![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/enumsetup.PNG)
+
+
 
 
 
