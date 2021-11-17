@@ -210,7 +210,16 @@ I guess this Brute Force section would have been much easier to exploit.
 
 ##### C. Obtaining a reverse shell
 
-​	After testing the form, we find that you can enter an IP address and then follow it with a semicolon to execute shell commands on the target. We will start up Metasploit and set up our attack. We will get setup to use the [web_delivery](https://www.offensive-security.com/metasploit-unleashed/web-delivery/) module withing msf
+​	After testing the form, we find that you can enter an IP address and then follow it with a semicolon to execute shell commands on the target. We will start up Metasploit and set up our attack. We will get setup to use the [web_delivery](https://www.offensive-security.com/metasploit-unleashed/web-delivery/) module withing msf
 
 ![msf](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/msfsetup.PNG)
 
+Then we copy the command at the bottom and submit to get our reverse shell!
+
+![shell](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/shell.PNG)
+
+![shell](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/meterp.PNG)
+
+##### D. Privilege Escalation
+
+​	First we will try to upload [LinEnum](https://github.com/rebootuser/LinEnum) and run it. 
