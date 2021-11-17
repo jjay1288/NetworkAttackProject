@@ -108,4 +108,18 @@ To begin, I usually start with a basic script scan using Nmap.  The output file 
 
 ##### B) Attacking the login page
 
-​	The first step in attacking this machine is to get past the login page.  We must login to be able t
+​	The first step in attacking this machine is to get past the login page.  We must login to enumerate further.  For now, we can only infer that pages exist based on the return code of the dirbuster requests.  The first step is to have a look at the source code of [login.php](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target2/loginpage/source.txt).
+
+​	Immediately we see the fields for username and password, and we also see something that appears to be an anti-CSRF token:
+
+```html
+<input type='hidden' name='user_token' value='b57304890574bb9053c0c4f48d307773' />
+```
+
+​	These types of tokens are meant to prevent Cross Site Request Forgeries by ensuring that the client that is requesting or posting http content to the site is the same one that opened the initial connection.  The web app will generate a random token and present it to the client on the first load of login.php.  
+
+Using Burp Suite, The initial connection will also return a response from the server setting up a cookie:
+
+![cookie](\target2\screens\setcookie.PNG)
+
+​	My initial instinct is that the basic security feature at play here is a server-side check to compare the PHPSESSID to the user_token.
