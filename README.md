@@ -100,7 +100,7 @@ To begin, I usually start with a basic script scan using Nmap.  The output file 
 
 ​	We find only two ports, SSH on 22 and http on 80.  Obviously this is a web server, and must enumerate on the machine through other means.  Navigating to http:\\\192.168.1.210 in the browser presents us with a login screen:
 
-![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/login.PNG) 
+​											![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/login.PNG) 
 
 ​	The next step is to find out if there are any interesting directories on this web app.  We will start a  [DirBuster](https://www.kali.org/tools/dirbuster/) loaded with the directory-list-medium that comes in kali and scan. The results of this scan can be found [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target2/scans/DirBusterReport-192.168.1.210-80.txt).  Dirbuster does this by tracking responses from the web server.  A "Not Found" reply means nothing exists there, while "Permission Denied" will indicate that the directory exists.
 
@@ -220,6 +220,24 @@ Then we copy the command at the bottom and submit to get our reverse shell!
 
 ![shell](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/meterp.PNG)
 
-##### D. Privilege Escalation
+##### D. Enumeration
 
-​	First we will try to upload [LinEnum](https://github.com/rebootuser/LinEnum) and run it. 
+​	Because this web app is installed on a fully up to date LAMP stack, further exploitation is unlikely.  The apache configs that come standard will still only allow a user to operate within the set confines of the web user (which is very restrictive).  Any further exploitation of this target would probably constitute 0-Day status for the Ubuntu OS itself.  Using Metasploit's exploit suggester we can confirm this.
+
+![msf](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/suggest.PNG)
+
+​	We can do some other basic enumeration, and we do find an interesting entry in the user list; "dvwa".  This user has the UID of 1000, so we can infer that it is the first non-root user created on the system.  Best practices on installing linux are to leave the root account disabled, and give another user the superuser privileges (this happens by default on Ubuntu).
+
+![msf](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/uid.PNG)
+
+​	By manually attempting to ssh into the box as this user using some common weak passwords, we are rewarded with a new account!
+
+![msf](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/root1.PNG)
+
+#### dvwa:dvwa
+
+​	Now we can dump the password hashes, and have full control of the machine.
+
+##### E. Conclusion
+
+Importance of secure passwords even in up to date systems
