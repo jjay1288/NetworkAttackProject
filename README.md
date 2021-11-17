@@ -236,7 +236,7 @@ Then we copy the command at the bottom and submit to get our reverse shell!
 
 #### dvwa:dvwa
 
-​	Now we can dump the password hashes, and have full control of the machine.
+​	Now we can dump the password hashes, and have full control of the machine.  For good measure, we run the [LinEnum](https://github.com/rebootuser/LinEnum) script and dump the contents [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target2/enum/linenum).
 
 ##### E. Conclusion
 
