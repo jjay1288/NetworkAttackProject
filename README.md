@@ -42,7 +42,7 @@
 
 ##### 192.168.1.209
 
-To begin, I usually start with a basic script scan using Nmap.  The output file containing results can be found [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target/scans/nmapinitial).
+To begin, I usually start with a basic script scan using Nmap.  The output file containing results can be found [here](https://github.com/jjay1288/netattacksproj/blob/main/target/scans/nmapinitial).
 
 
 
@@ -204,7 +204,7 @@ useradd -u0 -g0 -o -s /bin/bash -p `pwnd' pwnd
 
 ##### 192.168.1.210
 
-​	Once again, I will start with a default script scan on the target through Nmap.  The results can be found [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target2/scans/nmapinitial). This time, the results are drasticly different. 
+​	Once again, I will start with a default script scan on the target through Nmap.  The results can be found [here](https://github.com/jjay1288/netattacksproj/blob/main/target2/scans/nmapinitial). This time, the results are drasticly different. 
 
 | Port   | State | Service | Version                         |
 | ------ | ----- | ------- | ------------------------------- |
@@ -215,13 +215,13 @@ useradd -u0 -g0 -o -s /bin/bash -p `pwnd' pwnd
 
 ​											![login](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/login.PNG) 
 
-​	The next step is to find out if there are any interesting directories on this web app.  We will start a  [DirBuster](https://www.kali.org/tools/dirbuster/) loaded with the directory-list-medium that comes in kali and scan. The results of this scan can be found [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target2/scans/DirBusterReport-192.168.1.210-80.txt).  Dirbuster does this by tracking responses from the web server.  A "Not Found" reply means nothing exists there, while "Permission Denied" will indicate that the directory exists.
+​	The next step is to find out if there are any interesting directories on this web app.  We will start a  [DirBuster](https://www.kali.org/tools/dirbuster/) loaded with the directory-list-medium that comes in kali and scan. The results of this scan can be found [here](https://github.com/jjay1288/netattacksproj/blob/main/target2/scans/DirBusterReport-192.168.1.210-80.txt).  Dirbuster does this by tracking responses from the web server.  A "Not Found" reply means nothing exists there, while "Permission Denied" will indicate that the directory exists.
 
 
 
 ##### B) Attacking the login page
 
-​	The first step in attacking this machine is to get past the login page.  We must login to enumerate further.  For now, we can only infer that pages exist based on the return code of the dirbuster requests.  The first step is to have a look at the source code of [login.php](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target2/loginpage/source.txt).
+​	The first step in attacking this machine is to get past the login page.  We must login to enumerate further.  For now, we can only infer that pages exist based on the return code of the dirbuster requests.  The first step is to have a look at the source code of [login.php](https://github.com/jjay1288/netattacksproj/blob/main/target2/loginpage/source.txt).
 
 ​	Immediately we see the fields for username and password, and we also see something that appears to be an anti-CSRF token:
 
@@ -349,7 +349,7 @@ Then we copy the command at the bottom and submit to get our reverse shell!
 
 #### dvwa:dvwa
 
-​	Now we can dump the password hashes, and have full control of the machine.  For good measure, we run the [LinEnum](https://github.com/rebootuser/LinEnum) script and dump the contents [here](https://git.rjphillips.online/main/networkattacksproject/-/blob/main/target2/enum/linenum).
+​	Now we can dump the password hashes, and have full control of the machine.  For good measure, we run the [LinEnum](https://github.com/rebootuser/LinEnum) script and dump the contents [here](https://github.com/jjay1288/netattacksproj/blob/main/target2/enum/linenum).
 
 ##### E. Conclusion
 
