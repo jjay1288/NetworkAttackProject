@@ -12,7 +12,7 @@
 
 ​	This scenario will demonstrate an attack against two target machines.  The machines are installed per the source instructions in default configurations.  Due to the nature of the process, the root username and passwords are known ahead of time, but will not be used unless they can be extracted from the machines themselves.
 
-​	The target IP addresses were obtained by a simple Nmap scan.
+​	The target IP addresses were obtained by an Nmap host scan.
 
 ​	The attack box has the latest release of Kali Linux, and has had Nessus, armitage, and a few other extra utilities installed. 
 
@@ -34,7 +34,7 @@
 
 #### II. Target 1: Metasploitable
 
-​	This machine is an imported Virtual Machine imported  into ESXi of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  Metasploitable is an intentionally vulnerable Linux machine designed for Penetration Testing.  The goal for this target will be to explore some of the more interesting vulnerabilities (because FTP and Samba are too easy to break).
+​	This machine is an imported Virtual Machine imported  into ESXi of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  Metasploitable is an intentionally vulnerable Linux machine designed for Penetration Testing.  The goal for this target will be to explore some of the more interesting vulnerabilities included in these distributions (because there are some very quick and easy attack vectors available throughout this project).
 
  
 
@@ -42,7 +42,7 @@
 
 ##### 192.168.1.209
 
-To begin, I usually start with a basic script scan using Nmap.  The output file containing results can be found [here](https://github.com/jjay1288/netattacksproj/blob/main/target/scans/nmapinitial).
+To begin, we start with a basic script scan using Nmap.  The output file containing the results can be found [here](https://github.com/jjay1288/netattacksproj/blob/main/target/scans/nmapinitial).  Nmap is a network scanning tool used to enumerate networks.  It has the capability 
 
 
 
@@ -323,7 +323,7 @@ We will start up Metasploit and set up our attack. We will use the [web_delivery
 
 ![msf](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/msfsetup.PNG)
 
-Then we copy the command at the bottom and submit to get our reverse shell!
+Then we copy the command (with a small edit for my specific version of php) at the bottom and submit it to the web app to get our reverse shell!
 
 ![shell](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/inject.PNG)
 
@@ -357,4 +357,35 @@ Then we copy the command at the bottom and submit to get our reverse shell!
 
 #### IV. Nessus Examination
 
-​	Finally, we will use the  [Nessus Virtual Appliance](https://www.tenable.com/downloads/tenable-appliance?loginAttempted=true) to examine the machines.  Nessus is a vulnerability scanner that allows network administrators to easily identify critical vulnerabilities in their networks.  
+​	Finally, we will use the  [Nessus Virtual Appliance](https://www.tenable.com/downloads/tenable-appliance?loginAttempted=true) to examine the machines.  Nessus is a vulnerability scanner that allows network administrators to easily identify critical vulnerabilities in their networks.  After the initial setup, we configure for a full scan on our target systems.  We have enabled almost every scan option included in Nessus, so this scan will take some time.
+
+![msf](https://github.com/jjay1288/netattacksproj/blob/main/nessus/root1.PNG)
+
+A complete detailed report can be found here:
+
+[Nessus Detailed Report](https://github.com/jjay1288/netattacksproj/blob/main/nessus/Full_Scan.pdf)
+
+​	As expected, the Metasploitable system is riddled with vulnerable applications.  Nessus even discovered a version of UnrealIRCd that included a backdoor!
+
+![msf](https://github.com/jjay1288/netattacksproj/blob/main/nessus/t21.PNG)
+
+![msf](https://github.com/jjay1288/netattacksproj/blob/main/nessus/irc.PNG)
+
+​	Almost every one of the critical severity vulnerabilities would quickly result in full root access. The DVWA instance. also as expected, had far fewer vulnerabilities.  Any real attacker would have a field day on a system like this.
+
+![msf](https://github.com/jjay1288/netattacksproj/blob/main/nessus/t22.PNG)
+
+​	All of the high severity items on this list are related to the intentionally vulnerable web stack, and almost nothing pertaining to services outside of that scope.  Nessus is even able to identify web directories and backup files that are accessible to anyone.  
+
+
+
+#### V. General Conclusion
+
+​	In short, these systems fulfilled the objectives for which they were created.  They provided an opportunity to learn various techniques for attacking a computer system, and some were even quite challenging.  
+
+​	Generally, the main learning points from this project are:
+
+1. Using a strong password is probably the most effective method of securing a system.  To improve upon that, one could implement multi-factor authentication for even more security
+2. Updating system and application software is the only way to ensure that discovered exploits in the wild will not affect your system
+
+​	Personally, even though I have segregated these virtual machines from the rest of my network through a pfSense appliance, and have my entire network sitting behind a NAT router, I will still be happy to be able to remove these machines from my network!
