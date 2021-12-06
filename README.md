@@ -24,17 +24,17 @@
 
 
 
-| target                                                       | target2                                        | kali                                |
-| ------------------------------------------------------------ | ---------------------------------------------- | ----------------------------------- |
-| [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html) | [Damn Vulnerable Web App](https://dvwa.co.uk/) | [Kali Linux](https://www.kali.org/) |
-| 192.168.1.209                                                | 192.168.1.210                                  | 192.168.1.86                        |
-| msfadmin:msfadmin                                            | dvwa:dvwa                                      | kali:kali                           |
+| target                                                       | target2                                        | kali                                | nessus                                                       |
+| ------------------------------------------------------------ | ---------------------------------------------- | ----------------------------------- | ------------------------------------------------------------ |
+| [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html) | [Damn Vulnerable Web App](https://dvwa.co.uk/) | [Kali Linux](https://www.kali.org/) | [Nessus Virtual Appliance](https://www.tenable.com/downloads/tenable-appliance?loginAttempted=true) |
+| 192.168.1.209                                                | 192.168.1.210                                  | 192.168.1.86                        | 192.168.1.188                                                |
+| msfadmin:msfadmin                                            | dvwa:dvwa                                      | kali:kali                           | ---------------------------                                  |
 
 
 
 #### II. Target 1: Metasploitable
 
-​	This machine is an imported Virtual Machine imported  into ESXi of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  It is an intentionally vulnerable Linux machine designed for Penetration Testing.  The goal for this target will be to explore some of the more interesting vulnerabilities (because FTP and Samba are too easy to break).
+​	This machine is an imported Virtual Machine imported  into ESXi of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  Metasploitable is an intentionally vulnerable Linux machine designed for Penetration Testing.  The goal for this target will be to explore some of the more interesting vulnerabilities (because FTP and Samba are too easy to break).
 
  
 
@@ -174,23 +174,9 @@ Success!  We have admin credentials!
 
 ![enumsetup](https://github.com/jjay1288/netattacksproj/blob/main/target/screens/ssh.PNG)
 
-##### D) Persistence
+##### D) Conclusion
 
-​	Now that we are connected to our machine with root access, we will attempt to add a new root user to give us our own root account on the machine.  We will use the following code:
-
-```bash
-useradd -u0 -g0 -o -s /bin/bash -p `pwnd' pwnd
-```
-
-​	This will add a new root user with the credentials pwnd:pwnd.
-
-
-
-
-
-
-
-
+​	This machine was understandably riddled with attack vectors.  Some of the key takeaways are the importance of updating software and services on important systems.  Most of the exploits found on this server are due specifically to outdated and unpatched software.  This specific system is probably too far gone however.  The distribution is way out of date, and the ability to connect to ubuntu repositories has been intentionally disabled.
 
 
 
@@ -198,7 +184,9 @@ useradd -u0 -g0 -o -s /bin/bash -p `pwnd' pwnd
 
 #### III. Target 2: Damn Vulnerable Web Application (DVWA)
 
-​	This machine is running the latest Ubuntu (21.04), and has had [Damn Vulnerable Web App](https://dvwa.co.uk/) installed in its default configuration.  
+​	This machine is running the latest Ubuntu (21.04), and has had [Damn Vulnerable Web App](https://dvwa.co.uk/) installed in its default configuration.  DVWA is an intentionally vulnerable web stack that has built in attack vectors.
+
+
 
 ##### A) Enumeration
 
@@ -323,11 +311,21 @@ I guess this Brute Force section would have been much easier to exploit.
 
 ##### C. Obtaining a reverse shell
 
-​	After testing the form, we find that you can enter an IP address and then follow it with a semicolon to execute shell commands on the target. We will start up Metasploit and set up our attack. We will get setup to use the [web_delivery](https://www.offensive-security.com/metasploit-unleashed/web-delivery/) module withing msf
+​	To obtain a shell, we will use the "Command Injection" sub-page in DVWA.
+
+![shell](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/commandinjectpage.PNG)
+
+​	After doing some testing the form, we find that you can enter an IP address and then follow it with a semicolon to execute shell commands on the target. 
+
+![shell](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/poc.PNG)
+
+We will start up Metasploit and set up our attack. We will use the [web_delivery](https://www.offensive-security.com/metasploit-unleashed/web-delivery/) module within msfconsole.  
 
 ![msf](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/msfsetup.PNG)
 
 Then we copy the command at the bottom and submit to get our reverse shell!
+
+![shell](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/inject.PNG)
 
 ![shell](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/shell.PNG)
 
@@ -353,4 +351,10 @@ Then we copy the command at the bottom and submit to get our reverse shell!
 
 ##### E. Conclusion
 
-Importance of secure passwords even in up to date systems
+​	One point that stood out prominently to me is the fact that a secure password is very important, even with other somewhat strong security measures.  The initial login page was not using the best security policies in the world; it could have locked me out after the initial work with burp suite.  However, because the root password was the same string as the username, and reasonable attacker would have access in a negligible amount of time.
+
+
+
+#### IV. Nessus Examination
+
+​	Finally, we will use the  [Nessus Virtual Appliance](https://www.tenable.com/downloads/tenable-appliance?loginAttempted=true) to examine the machines.  Nessus is a vulnerability scanner that allows network administrators to easily identify critical vulnerabilities in their networks.  
