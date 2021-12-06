@@ -359,7 +359,7 @@ Then we copy the command (with a small edit for my specific version of php) at t
 
 ​	Finally, we will use the  [Nessus Virtual Appliance](https://www.tenable.com/downloads/tenable-appliance?loginAttempted=true) to examine the machines.  Nessus is a vulnerability scanner that allows network administrators to easily identify critical vulnerabilities in their networks.  After the initial setup, we configure for a full scan on our target systems.  We have enabled almost every scan option included in Nessus, so this scan will take some time.
 
-![msf](https://github.com/jjay1288/netattacksproj/blob/main/nessus/root1.PNG)
+![msf](https://github.com/jjay1288/netattacksproj/blob/main/nessus/inprog.PNG)
 
 A complete detailed report can be found here:
 
